@@ -39,11 +39,11 @@ const getAllScrums = async (req, res) => {
         {
           model: models.FE_ScrumsList,
           as: "lists"
-        },
+        }/*,
         {
           model: models.MS_Member,
           as: "members"
-        }
+        }*/
       ]
     });
     return res.status(200).json({ scrums });
@@ -173,16 +173,25 @@ const getScrumById = async (req, res) => {
   }
 };
 
+
 const getAllScrumsByMember = async (req, res) => {
   try {
     const { memberId } = req.params;
     const scrum = await models.FE_Scrum.findOne({
       include: [
         {
+          model: models.FE_ScrumsSetting,
+          as: "settings"
+        },
+        {
+          model: models.FE_ScrumsList,
+          as: "lists"
+        }/*,
+        {
           model: models.MS_Member,
           as: "members",
           where: { id: memberId }
-        }
+        }*/
       ]
     });
     if (scrum) {

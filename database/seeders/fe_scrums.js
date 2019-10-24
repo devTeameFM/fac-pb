@@ -19,6 +19,33 @@ module.exports = {
         uri: "",
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        id: "performance",
+        name: 'ANALYZE',
+        description: 'Monitor your service and contract results and kpi',
+        imageURL: "myspot-icons/scrumboards/business-graph-2.png",
+        uri: "",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: "management",
+        name: 'MANAGEMENT',
+        description: 'Facility Management System',
+        imageURL: "myspot-icons/scrumboards/desktop-imac-chart.png",
+        uri: "",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: "strategy",
+        name: 'IMPROVE',
+        description: 'Define your budget and plan the maintenance activities',
+        imageURL: "myspot-icons/scrumboards/calendar.png",
+        uri: "",
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ],
     {},

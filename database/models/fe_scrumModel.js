@@ -29,11 +29,16 @@ module.exports = (sequelize, DataTypes) => {
           as: 'lists',
           onDelete: 'CASCADE',
         });
+    FE_Scrum.belongsTo(models.MS_Member, {
+        foreignKey: 'id',
+        onDelete: 'CASCADE',
+      });
+    /*
     FE_Scrum.hasMany(models.MS_Member, {
           foreignKey: 'idScrum',
           as: 'members',
           onDelete: 'CASCADE',
-        });
+        });*/
   };
   return FE_Scrum;
 };
