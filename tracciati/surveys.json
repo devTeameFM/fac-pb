@@ -1,0 +1,2885 @@
+surveys: [
+                {
+                id: 1231232,
+                name: 'Building info',
+                code: 'buildingInfo',
+                nextStatus: 'SLA',
+                imageURL: 'myspot-icons/line/building.png',
+                sections: [
+                    {
+                        name: 'Building Information',
+                        code: 'buildingInformation',
+                        tooltip: '',
+                        nameI98n: '',
+                        tooltipI18n: '',
+                        imageURL: 'myspot-icons/line/building-info.png',
+                        questions: [
+                            {
+                                id: 100001,
+                                code: 'code',
+                                name: 'Building',
+                                tooltip: 'Select building location in the scope of work',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'SELECT',
+                                icon: 'business',
+                                required: true,
+                                flow: true,
+                                options: [
+                                    {
+                                        name: '51 Melcher St',
+                                        defaultValue: '51 Melcher St',
+                                    },
+                                    {
+                                        name: '625 Massachusetts Ave',
+                                        defaultValue: '625 Massachusetts Ave',
+                                    }
+                                ]
+                            },
+                            {
+                                id: 100002,
+                                code: 'address',
+                                name: 'Building Address',
+                               tooltip: 'Building address for geo-referenzing',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'code',
+                                    questionId: 100001,
+                                    questionSection: 'buildingInformation',
+                                    questionSurvey: 1231232,
+                                    values: {
+                                        '51 Melcher St': '51 Melcher Street Boston, MA 02210',
+                                        '625 Massachusetts Ave': '625 Massachusetts Avenue, Cambridge MA 02139'
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 100003,
+                                code: 'area',
+                                name: 'Total Served Area (sqft)',
+                                tooltip: 'Define the gross total area that must be served',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                icon: 'tab_unselected',
+                                type: 'NUMBER',
+                                flow: true,
+                                required: true,
+                            },
+                            {
+                                id: 100004,
+                                code: 'floors',
+                                name: 'Number of Floors',
+                                tooltip: 'Define the number of floors involved in the service',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                icon: 'view_agenda',
+                                type: 'NUMBER',
+                                flow: true,
+                                required: true,
+                            },
+                            {
+                                id: 100005,
+                                code: 'serviceHours',
+                                name: 'Service Hours',
+                                tooltip: 'Select the contract service hours',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                icon: 'access_time',
+                                type: 'SELECT',
+                                required: true,
+                                flow: true,
+                                options: [
+                                    {
+                                        name: '9 am to 7 pm - Monday to Friday',
+                                        defaultValue: '9 am to 7 pm - Monday to Friday'
+                                    },
+                                    {
+                                        name: '8 am to 8 pm - Monday to Sunday',
+                                        defaultValue: '9 am to 7 pm - Monday to Sunday',
+                                        disabled: true,
+                                    }
+                                ],
+
+                            },
+                        ]
+                    },
+
+                    {
+                        name: 'Contract Period',
+                        code: 'contractPeriod',
+                        tooltip: '',
+                        nameI98n: '',
+                        tooltipI18n: '',
+                        imageURL: 'myspot-icons/line/contract-time.png',
+                        questions: [
+                            {
+                                id: 100009,
+                                code: 'startDate',
+                                name: 'Start date',
+                                tooltip: 'Select the contract’s date start',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                icon: 'today',
+                                type: 'DATE',
+                                flow: true,
+                                required: true,
+                                defaultValue: '',
+                            },
+                            {
+                                id: 100007,
+                                code: 'duration',
+                                name: 'Duration',
+                                tooltip: 'Insert the contract duration',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                icon: 'today',
+                                type: 'SELECT',
+                                flow: true,
+                                required: true,
+                                options: [
+                                    {
+                                        name: '12 months',
+                                        defaultValue: '12 month',
+                                    },
+                                    {
+                                        name: '24 months',
+                                        defaultValue: '24 month',
+                                        disabled: true,
+                                    },
+                                    {
+                                        name: '36 months',
+                                        defaultValue: '36 month',
+                                        disabled: true,
+                                    },
+                                    {
+                                        name: '48 months',
+                                        defaultValue: ' month',
+                                        disabled: true
+                                    }
+                                ]
+                            },
+                            {
+                                id: 100008,
+                                code: 'extension',
+                                name: 'Contract extension rule',
+                                tooltip: 'Define the contract extension rule',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                icon: 'refresh',
+                                type: 'SELECT',
+                                flow: false,
+                                required: false,
+                                defaultValue: 'Upon request 30 days before the termination',
+                                options: [
+                                    {
+                                        name: 'Upon request 30 days before the termination',
+                                        defaultValue: 'Upon request 30 days before the termination',
+                                        icon: 'fast'
+                                    }
+                                ]
+                            },
+
+                        ]
+                    },
+
+                    {
+                        name: 'Service in Scope',
+                        code: 'serviceInScope',
+                        imageURL: 'myspot-icons/line/service.png',
+                        tooltip: 'Select the requested Service',
+                        nameI98n: '',
+                        tooltipI18n: '',
+                        questions: [
+                            {
+                                id: 110009,
+                                code: 'facilityService',
+                                name: 'Service type',
+                                tooltip: 'Select the Macro-Service in the scope of work',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'SELECT',
+                                required: true,
+                                flow: true,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'code',
+                                    questionId: 100001,
+                                    questionSection: 'buildingInformation',
+                                    questionSurvey: 1231232,
+                                    options: {
+                                        '51 Melcher St' : [{
+                                                name: 'Hard service',
+                                                defaultValue: 'Hard service',
+                                            },
+                                            {
+                                                name: 'Soft service',
+                                                defaultValue: 'Soft service',
+                                                disabled: true,
+                                            }
+                                        ],
+                                        '625 Massachusetts Ave' : [{
+                                                name: 'Hard service',
+                                                defaultValue: 'Hard service',
+                                                disabled: true,
+                                            },
+                                            {
+                                                name: 'Soft service',
+                                                defaultValue: 'Soft service',
+                                            }
+                                        ]
+                                    }
+                                },
+                            },
+                            {
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                icon: 'airport_shuttle',
+                                type: 'TABLE',
+                                defaultValue: '',
+                                tableHeader: ['Select the service that must be provided', 'Select the average facility condition of your physical assets'],
+                                tableRows: [
+                                    [{
+                                        id: 110010,
+                                        code: 'system1Name',
+                                        name: 'Name',
+                                        tooltip: 'Select the systems that must be provided',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        type: 'SELECT',
+                                        flow: true,
+                                        required: true,
+                                        conditional: true,
+                                        condition: {
+                                            questionCode: 'facilityService',
+                                            questionId: 110009,
+                                            questionSection: 'serviceInScope',
+                                            questionSurvey: 1231232,
+                                            options: {
+                                                'Hard service': [
+                                                    {
+                                                        name: 'Heating, ventilating and air conditioning (HVAC)',
+                                                        defaultValue: 'Heating, ventilating and air conditioning (HVAC)',
+                                                    },
+                                                    {
+                                                        name: 'Fire & Safety systems',
+                                                        defaultValue: 'Fire & Safety systems',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'Plumbing',
+                                                        defaultValue: 'Plumbing',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'Elevator',
+                                                        defaultValue: 'Elevator',
+                                                        disabled: true,
+                                                    },
+                                                ],
+                                                'Soft service' : [
+                                                    {
+                                                        name: 'Plants',
+                                                        defaultValue: 'Plants',
+                                                    },
+                                                    {
+                                                        name: 'Cleaning & Janitorial',
+                                                        defaultValue: 'Cleaning & Janitorial',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'Mail',
+                                                        defaultValue: 'Mail',
+                                                       disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'Waste',
+                                                        defaultValue: 'Waste',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                       name: 'Catering',
+                                                        defaultValue: 'Catering',
+                                                        disabled: true,
+                                                    },
+
+                                                ]
+                                            }
+
+
+                                        }
+
+                                    },
+                                    {
+                                        id: 110011,
+                                        code: 'facilityServiceCondition',
+                                        name: 'Facility Condition value',
+                                        tooltip: 'Select the average facility condition of your physical assets',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        icon: 'signal_cellular_alt',
+                                        type: 'SELECT',
+                                        flow: false,
+                                        required: false,
+                                        conditional: true,
+                                        condition: {
+                                            questionId: 110010,
+                                            questionCode: 'system1Name',
+                                            questionSection: 'serviceInScope',
+                                            questionSurvey: 1231232,
+                                            options: {
+                                                'Heating, ventilating and air conditioning (HVAC)': [
+                                                    {
+                                                        name: 'New',
+                                                        defaultValue: 'New',
+                                                        icon: 'sentiment_very_satisfied',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'Good',
+                                                        defaultValue: 'Good',
+                                                        icon: 'mood',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'Fair',
+                                                        defaultValue: 'Fair',
+                                                        icon: 'sentiment_satisfied_alt',
+                                                    },
+                                                    {
+                                                        name: 'Poor',
+                                                        defaultValue: 'Poor',
+                                                        icon: 'sentiment_dissatisfied',
+                                                        disabled: true,
+                                                    }
+                                                ],
+
+                                                'Plants': [
+                                                    {
+                                                        name: 'NA',
+                                                        defaultValue: 'NA',
+                                                        icon: '',
+                                                    },
+                                                ]
+                                            }
+
+                                        }
+
+                                    }
+                                    ],
+                                ]
+                            },
+                            {
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                icon: 'airport_shuttle',
+                                type: 'TABLE',
+                                defaultValue: '',
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'system1Name',
+                                    questionId: 110010,
+                                    questionSection: 'serviceInScope',
+                                    questionSurvey: 1231232,
+                                    tables: {
+                                        'Plants': {
+                                            tableHeader: ['System',               'Component', '# of components of served area sf', 'Add any other useful information'],
+                                            tableRows: [
+                                                ['PLANT', 'Dracaena', {
+                                                    id: 101010,
+                                                    code: 'dracaena',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 101011,
+                                                    code: 'dracaenaNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['PLANT', 'Philodendron', {
+                                                    id: 101012,
+                                                    code: 'philodendron',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 101013,
+                                                    code: 'philodendronNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['PLANT', 'Pothos', {
+                                                    id: 101014,
+                                                    code: 'pothos',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 101015,
+                                                    code: 'pothosNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['PLANT', 'Sansevieria', {
+                                                    id: 101016,
+                                                    code: 'sansevieria',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 101017,
+                                                    code: 'sansevieriaNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                            ]
+
+                                        },
+                                        'Heating, ventilating and air conditioning (HVAC)': {
+                                            tableHeader: ['System',               'Component', 'Indicate the number of assets/elements', 'Add any other useful information'],
+                                            tableRows: [
+                                                ['HVAC', 'Technical rooms', {
+                                                    id: 100010,
+                                                    code: 'technicalRoomsNumber',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100011,
+                                                    code: 'technicalRoomsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Fuel Piping Systems', {
+                                                    id: 100012,
+                                                    code: 'fuelPipingSystems',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100013,
+                                                    code: 'fuelPipingSystemsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Fuel Pumps', {
+                                                    id: 100014,
+                                                    code: 'fuelPumps',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100015,
+                                                    code: 'fuelPumpsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Fuel Storage Tank', {
+                                                    id: 100016,
+                                                    code: 'fuelStorageTank',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100017,
+                                                    code: 'fuelStorageTanksNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Expansion Tanks', {
+                                                    id: 100018,
+                                                    code: 'expansionTanks',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100019,
+                                                    code: 'expansionTanksNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Hydronic Piping System', {
+                                                    id: 100020,
+                                                    code: 'hydronicPipingSystem',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100021,
+                                                    code: 'hydronicPipingSystemNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Hydronic Pumps', {
+                                                    id: 100022,
+                                                    code: 'hydronicPumps',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100023,
+                                                    code: 'hydronicPumpsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Steam Piping Systems', {
+                                                    id: 100024,
+                                                    code: 'steamPipingSystems',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100025,
+                                                    code: 'steamPipingSystemsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Condensate Piping Systems', {
+                                                    id: 100026,
+                                                    code: 'condensatePipingSystems',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100027,
+                                                    code: 'condensatePipingSystemsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Steam Pumps', {
+                                                    id: 100028,
+                                                    code: 'steamPumps',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100029,
+                                                    code: 'steamPumpsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Refrigerant Piping Systems', {
+                                                    id: 100030,
+                                                    code: 'refrigerantPipingSystems',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100031,
+                                                    code: 'refrigerantPipingSystemsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'HVAC Water Treatment', {
+                                                    id: 100032,
+                                                    code: 'hvacWaterTreatment',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100033,
+                                                    code: 'hvacWaterTreatmentNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'HVAC Ducts', {
+                                                    id: 100034,
+                                                    code: 'hvacDucts',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100035,
+                                                    code: 'hvacDuctsNotes',
+                                                   name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Dampers', {
+                                                    id: 100036,
+                                                    code: 'dampers',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100037,
+                                                    code: 'dampersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Fire Dampers', {
+                                                    id: 100038,
+                                                    code: 'fireDampers',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100039,
+                                                    code: 'fireDampersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Duct Silencers', {
+                                                    id: 100040,
+                                                    code: 'ductSilencers',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100041,
+                                                    code: 'ductSilencersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Flexible Ducts', {
+                                                    id: 100042,
+                                                    code: 'flexibleDucts',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100043,
+                                                    code: 'flexibleDuctsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'HVAC Fans', {
+                                                    id: 100044,
+                                                    code: 'hvacFans',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100045,
+                                                    code: 'hvacFansNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Air Terminal Units - Ducted', {
+                                                    id: 100046,
+                                                    code: 'airTerminalUnitsDucted',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100047,
+                                                    code: 'airTerminalUnitsDuctedNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Air Terminal Units - Cassette', {
+                                                    id: 100048,
+                                                    code: 'airTerminalUnitsCassette',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100049,
+                                                    code: 'airTerminalUnitsCassetteNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Air Terminal Units - Wall mounted', {
+                                                    id: 100050,
+                                                    code: 'airTerminalUnitsWallmounted',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100051,
+                                                    code: 'airTerminalUnitsWallmountedNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Diffusers, Registers, and Grilles', {
+                                                    id: 100052,
+                                                    code: 'diffusersRegistersGrilles',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100053,
+                                                    code: 'diffusersRegistersGrillesNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Ventilation Hoods', {
+                                                    id: 100054,
+                                                    code: 'ventilationHoods',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100055,
+                                                    code: 'ventilationHoodsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Air Filtration Units', {
+                                                    id: 100056,
+                                                    code: 'airFiltrationUnits',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100057,
+                                                    code: 'airFiltrationUnitsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'electronicAirCleaners', {
+                                                    id: 100058,
+                                                    code: 'Electronic Air Cleaners',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100059,
+                                                    code: 'electronicAirCleanersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Heating Boilers', {
+                                                    id: 100060,
+                                                    code: 'heatingBoilers',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100061,
+                                                    code: 'heatingBoilersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Furnace', {
+                                                    id: 100062,
+                                                    code: 'furnace',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100063,
+                                                    code: 'furnaceNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Solar Energy Heating Equipment', {
+                                                    id: 100064,
+                                                    code: 'solarEnergyHeatingEquipment',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100065,
+                                                    code: 'solarEnergyHeatingEquipmentNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Heat Exchangers', {
+                                                    id: 100066,
+                                                    code: 'heatExchangers',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100067,
+                                                    code: 'heatExchangersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Air-Cooled Refrigerant Condesers', {
+                                                    id: 100068,
+                                                    code: 'airCooledRefrigerantCondesers',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100069,
+                                                    code: 'airCooledRefrigerantCondesersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Water-Cooled Refrigerant Condesers', {
+                                                    id: 100070,
+                                                    code: 'waterCooledRefrigerantCondesers',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100071,
+                                                    code: 'waterCooledRefrigerantCondesersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Air Cooled water chillers', {
+                                                    id: 100072,
+                                                    code: 'airCooledWaterChillers',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100073,
+                                                    code: 'airCooledWaterChillersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Cooling Tower', {
+                                                    id: 100074,
+                                                    code: 'coolingTower',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100075,
+                                                    code: 'coolingTowerNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Thermal Heat Storage', {
+                                                    id: 100076,
+                                                    code: 'thermalHeatStorage',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100077,
+                                                    code: 'thermalHeatStorageNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Custom-Packaged, Rooftop Air-Conditioning Units', {
+                                                    id: 100078,
+                                                    code: 'customPackagedRooftopAirConditioningUnits',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100079,
+                                                    code: 'customPackagedRooftopAirConditioningUnitsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Conditioners', {
+                                                    id: 100080,
+                                                    code: 'conditioners',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100081,
+                                                    code: 'conditionersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Packaged Terminal Air-Conditioners', {
+                                                    id: 100082,
+                                                    code: 'packagedTerminalAirConditioners',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100083,
+                                                    code: 'packagedTerminalAirConditionersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Split-System Air-Conditioners', {
+                                                    id: 100084,
+                                                    code: 'splitSystemAirConditioners',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100085,
+                                                    code: 'splitSystemAirConditionersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Chilled Beams', {
+                                                    id: 100086,
+                                                    code: 'chilledBeams',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100087,
+                                                    code: 'chilledBeamsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Fan Coil Units', {
+                                                    id: 100088,
+                                                    code: 'fanCoilUnits',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100089,
+                                                    code: 'fanCoilUnitsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Electric-Resistance Air Coils', {
+                                                    id: 100090,
+                                                    code: 'electricResistanceAirCoils',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100091,
+                                                    code: 'electricResistanceAirCoilsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Radiators', {
+                                                    id: 100092,
+                                                    code: 'radiators',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100093,
+                                                    code: 'radiatorsNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+                                                ['HVAC', 'Humidifiers', {
+                                                    id: 100094,
+                                                    code: 'humidifiers',
+                                                    name: '# of elements',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                },
+                                                {
+                                                    id: 100095,
+                                                    code: 'humidifiersNotes',
+                                                    name: 'Information or comments',
+                                                    tooltip: '',
+                                                    nameI98n: '',
+                                                    tooltipI18n: '',
+                                                    type: 'STRING',
+                                                    defaultValue: '',
+                                                }
+                                                ],
+
+                                            ]
+
+                                        }
+                                    }
+                                }
+                            },
+                        ]
+                    },
+                ]
+            },  {
+                id: 1231233,
+                name: 'SLA',
+                code: 'sla',
+                nextStatus: 'REVIEW',
+                imageURL: 'myspot-icons/line/building.png',
+                sections: [
+                    {
+                        name: 'Activities in Scope',
+                        code: 'activitiesInScope',
+                        tooltip: '',
+                        nameI98n: '',
+                        tooltipI18n: '',
+                        imageURL: 'myspot-icons/line/activities-in-scope.png',
+                        questions: [
+                            {
+                                id: 100101,
+                                code: 'contractSla',
+                                name: 'Service Level',
+                                tooltip: 'Select the Level of Service required',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'SELECT',
+                                icon: 'sentiment_satisfied_alt',
+                                flow: true,
+                                required: true,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'system1Name',
+                                    questionId: 110010,
+                                    questionSection: 'serviceInScope',
+                                    questionSurvey: 1231232,
+                                    options: {
+                                        'Heating, ventilating and air conditioning (HVAC)' : [
+                                            {
+                                                name: 'High',
+                                                defaultValue: 'High',
+                                            },
+                                            {
+                                                name: 'Basic',
+                                                defaultValue: 'Basic',
+                                            },
+                                            {
+                                                name: 'Low',
+                                                defaultValue: 'Low',
+                                                disabled: true,
+                                            }
+                                        ],
+                                        'Plants' : [
+                                            {
+                                                name: 'High',
+                                                defaultValue: 'High',
+                                                disabled: true,
+                                            },
+                                            {
+                                                name: 'Basic',
+                                                defaultValue: 'Basic',
+                                                disabled: true,
+                                            },
+                                            {
+                                                name: 'Low',
+                                                defaultValue: 'Low',
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            {
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                icon: 'airport_shuttle',
+                                type: 'TABLE',
+                                flow: true,
+                                required: true,
+                                tableHeader: ['Type of activities',         'Preventive Maintenance', 'Type of remuneration'],
+                                tableRows: [
+                                    ['Preventive Maintenance', {
+                                        id: 100110,
+                                        code: 'sAActive',
+                                        name: 'Preventive Maintenance',
+                                        tooltip: 'Define if the «Preventive Maintenance» (time-based scheduled activities) is required and the remuneration method',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        type: 'SELECT',
+                                        flow: true,
+                                        required: true,
+                                        defaultValue: undefined,
+                                        conditional: true,
+                                        condition: {
+                                            questionId: 100101,
+                                            questionCode: 'contractSla',
+                                            questionSection: 'activitiesInScope',
+                                            questionSurvey: 1231233,
+                                            options: {
+                                                'High': [
+                                                    {
+                                                        name: 'Out of scope',
+                                                        defaultValue: 'Out of scope',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee',
+                                                        defaultValue: 'In scope - fixed fee',
+                                                    }
+                                                ],
+                                                'Basic': [
+                                                    {
+                                                        name: 'Out of scope',
+                                                        defaultValue: 'Out of scope',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee',
+                                                        defaultValue: 'In scope - fixed fee',
+                                                    }
+                                                ],
+                                                'Low': [
+                                                    {
+                                                        name: 'Out of scope',
+                                                        defaultValue: 'Out of scope',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee',
+                                                        defaultValue: 'In scope - fixed fee',
+                                                    }
+                                                ],
+
+                                            }
+                                        }
+
+                                    },
+                                    {
+                                        id: 100111,
+                                        code: 'sARemuneration',
+                                        name: 'Scheduled Activities - Remuneration',
+                                        tooltip: '',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        type: 'STRING',
+                                        flow: false,
+                                        required: false,
+                                        conditional: true,
+                                        condition: {
+                                            questionCode: 'sAActive',
+                                            questionId: 100110,
+                                            questionSection: 'activitiesInScope',
+                                            questionSurvey: 1231233,
+                                            values: {
+                                                'Out of scope': 'Out of scope',
+                                                'In scope - fixed fee': 'Fixed Fee'
+                                            }
+                                        }
+
+
+                                    }
+                                    ],
+                                    ['Corrective Activities', {
+                                        id: 100112,
+                                        code: 'cAActive',
+                                        name: 'Corrective Activities',
+                                        tooltip: 'Define if the «Corrective Activities» (on demand request for failures or malfunctions) are included and the remuneration method',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        type: 'SELECT',
+                                        flow: true,
+                                        required: true,
+                                        conditional: true,
+                                        condition: {
+                                            questionId: 100101,
+                                            questionCode: 'contractSla',
+                                            questionSection: 'activitiesInScope',
+                                            questionSurvey: 1231233,
+                                            options: {
+                                                'High': [
+                                                    {
+                                                        name: 'Out of scope',
+                                                        defaultValue: 'Out of scope',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee',
+                                                        defaultValue: 'In scope - fixed fee',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee with threshold',
+                                                        defaultValue: 'In scope - fixed fee with threshold',
+                                                    },
+                                                    {
+                                                        name: 'In scope - extra fee',
+                                                        defaultValue: 'In scope - extra fee',
+                                                        disabled: true,
+                                                    }
+                                                ],
+                                                'Basic': [
+                                                    {
+                                                        name: 'Out of scope',
+                                                        defaultValue: 'Out of scope',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee',
+                                                        defaultValue: 'In scope - fixed fee',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee with threshold',
+                                                        defaultValue: 'In scope - fixed fee with threshold',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - extra fee',
+                                                        defaultValue: 'In scope - extra fee',
+                                                    }
+                                                ],
+                                                'Low': [
+                                                    {
+                                                        name: 'Out of scope',
+                                                        defaultValue: 'Out of scope',
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee',
+                                                        defaultValue: 'In scope - fixed fee',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee with threshold',
+                                                        defaultValue: 'In scope - fixed fee with threshold',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - extra fee',
+                                                        defaultValue: 'In scope - extra fee',
+                                                        disabled: true
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    {
+                                        id: 100113,
+                                        code: 'cARemuneration',
+                                        name: 'Corrective Activities - Remuneration',
+                                        tooltip: 'Select the remuneration system for the selected activity type',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        type: 'STRING',
+                                        flow: false,
+                                        required: false,
+                                        conditional: true,
+                                        condition: {
+                                            questionCode: 'cAActive',
+                                            questionId: 100112,
+                                            questionSection: 'activitiesInScope',
+                                            questionSurvey: 1231233,
+                                            values: {
+                                                'Out of scope': 'Out of scope',
+                                                'In scope - fixed fee': 'Fixed Fee',
+                                                'In scope - fixed fee with threshold': 'Fixed Fee with threshold',
+                                                'In scope - extra fee': 'Extra Fee'
+                                            }
+                                        }
+                                    }
+                                    ],
+                                    ['Service Request', {
+                                        id: 100114,
+                                        code: 'eAActive',
+                                        name: 'Service Request',
+                                        tooltip: 'Define if the «Service Request» (on demand request of services) are included and the remuneration method',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        type: 'SELECT',
+                                        flow: true,
+                                        required: true,
+                                        options: [
+                                            {
+                                                name: 'Out of scope',
+                                                defaultValue: 'Out of scope',
+                                                disabled: true,
+                                            },
+                                            {
+                                                name: 'In scope - fixed fee',
+                                                defaultValue: 'In scope - fixed fee',
+                                                disabled: true,
+                                            },
+                                            {
+                                                name: 'In scope - extra fee',
+                                                defaultValue: 'In scope - extra fee',
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        id: 100115,
+                                        code: 'eARemuneration',
+                                        name: 'Extraordinary Activities - Remuneration',
+                                        tooltip: 'Remuneration system based on a variable cost that depend on the activity and on a budget estimated subjected to client\'s approval',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        type: 'STRING',
+                                        flow: false,
+                                        required: false,
+                                        conditional: true,
+                                        condition: {
+                                            questionCode: 'eAActive',
+                                            questionId: 100114,
+                                            questionSection: 'activitiesInScope',
+                                            questionSurvey: 1231233,
+                                            values: {
+                                                'Out of scope': 'Out of scope',
+                                                'In scope - fixed fee': 'Fixed Fee',
+                                                'In scope - extra fee': 'Extra Fee'
+                                            }
+                                        }
+                                    }
+                                    ],
+                                    ['On site team', {
+                                        id: 101114,
+                                        code: 'osAActive',
+                                        name: 'On site team',
+                                        tooltip: 'Define if the «On site presence» (dedicated team in the building) are included and the remuneration method',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        type: 'SELECT',
+                                        flow: true,
+                                        required: true,
+                                        conditional: true,
+                                        condition: {
+                                            questionId: 100101,
+                                            questionCode: 'contractSla',
+                                            questionSection: 'activitiesInScope',
+                                            questionSurvey: 1231233,
+                                            options: {
+                                                'High': [
+                                                    {
+                                                        name: 'Out of scope',
+                                                        defaultValue: 'Out of scope',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'On demand - extra fee',
+                                                        defaultValue: 'On demand - extra fee',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee',
+                                                        defaultValue: 'In scope - fixed fee',
+                                                    }
+                                                ],
+                                                'Basic': [
+                                                    {
+                                                        name: 'Out of scope',
+                                                        defaultValue: 'Out of scope',
+                                                    },
+                                                    {
+                                                        name: 'On demand - extra fee',
+                                                       defaultValue: 'On demand - extra fee',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee',
+                                                        defaultValue: 'In scope - fixed fee',
+                                                        disabled: true,
+                                                    }
+                                                ],
+                                                'Low': [
+                                                    {
+                                                        name: 'Out of scope',
+                                                        defaultValue: 'Out of scope',
+                                                    },
+                                                    {
+                                                        name: 'On demand - extra fee',
+                                                        defaultValue: 'On demand - extra fee',
+                                                        disabled: true,
+                                                    },
+                                                    {
+                                                        name: 'In scope - fixed fee',
+                                                        defaultValue: 'In scope - fixed fee',
+                                                        disabled: true,
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    {
+                                        id: 101115,
+                                        code: 'osARemuneration',
+                                        name: 'Extraordinary Activities - Remuneration',
+                                        tooltip: '',
+                                        nameI98n: '',
+                                        tooltipI18n: '',
+                                        type: 'STRING',
+                                        flow: false,
+                                        required: false,
+                                        conditional: true,
+                                        condition: {
+                                            questionCode: 'osAActive',
+                                            questionId: 101114,
+                                            questionSection: 'activitiesInScope',
+                                            questionSurvey: 1231233,
+                                            values: {
+                                                'Out of scope': 'Out of scope',
+                                                'On demand - extra fee': 'Extra Fee',
+                                                'In scope - fixed fee': 'Fixed Fee'
+                                            }
+                                        }
+                                    }
+                                    ],
+                                ]
+                            },
+                        ]
+                    },
+              /*      {
+                        name: 'Service Hours',
+                        code: 'serviceHours',
+                        tooltip: '',
+                        nameI98n: '',
+                        tooltipI18n: '',
+                        imageURL: 'myspot-icons/line/service-hours.png',
+                        questions: [
+                            {
+                                id: 100116,
+                                code: 'openingTime',
+                                name: 'Opening Time',
+                                tooltip: 'Select standard Service Hours',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'SELECT',
+                                icon: 'alarm_add',
+                                defaultValue: '8 am',
+                                flow: false,
+                                required: false,
+                                options: [
+                                    {
+                                        name: '8 am',
+                                        defaultValue: '8 am',
+                                    },
+                                ]
+                            },
+                            {
+                                id: 100117,
+                                code: 'closingTime',
+                                name: 'Closing Time',
+                                tooltip: 'Select the closing time',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'SELECT',
+                                icon: 'alarm_add',
+                                flow: false,
+                                defaultValue: '7 pm',
+                                required: false,
+                                options: [
+                                    {
+                                        name: '7 pm',
+                                        defaultValue: '7 pm',
+                                    },
+                                ]
+                            },
+                            {
+                                id: 100118,
+                                code: 'satSunHoliday',
+                                name: 'Sat-Sun-Holiday',
+                                tooltip: 'Select the days of service activation',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'SELECT',
+                                icon: 'today',
+                                flow: false,
+                                required: false,
+                                options: [
+                                    {
+                                        name: 'Monday to Friday',
+                                        defaultValue: 'Monday to Friday',
+                                    },
+                                    {
+                                        name: 'Monday to Sunday',
+                                        defaultValue: 'Monday to Sunday',
+                                        disabled: true,
+                                    },
+                                    {
+                                        name: 'Monday to Sunday and Holidays',
+                                        defaultValue: 'Monday to Sunday and Holidays',
+                                        disabled: true,
+                                    },
+                                ]
+                            },
+                        ]
+                    }, */
+
+                ]
+            },
+            {
+                id: 1231234,
+                name: 'Review',
+                code: 'review',
+                nextStatus: 'PB_READY',
+                imageURL: 'myspot-icons/line/building.png',
+                sections: [
+                    {
+                        name: 'Review',
+                        code: 'review',
+                        tooltip: '',
+                        nameI98n: '',
+                        tooltipI18n: '',
+                        imageURL: 'myspot-icons/line/activities-in-scope.png',
+                        questions: [
+                            {
+                                id: 200001,
+                                code: 'r1',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '< 2 hours',
+                                        'Basic': '< 2 hours',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200002,
+                                code: 'r2',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '< 6 hours',
+                                        'Basic': '< 6 hours',
+                                        'Low': '< 72 hours',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200003,
+                                code: 'r3',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '< 12 hours',
+                                        'Basic': '< 12 hours',
+                                        'Low': '< 2 weeks',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200004,
+                                code: 'r4',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '< 8 hours',
+                                        'Basic': '< 12 hours',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200005,
+                                code: 'r5',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '< 16 hours',
+                                        'Basic': '< 24 hours',
+                                        'Low': 'Proposed by the Provider and approved by the Client',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200006,
+                                code: 'r6',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                   questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                   values: {
+                                        'High': 'Proposed by the provider and approved by the client',
+                                        'Basic': 'Proposed by the provider and approved by the client',
+                                        'Low': 'Proposed by the Provider and approved by the Client',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200007,
+                                code: 'r7',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'NA',
+                                        'Basic': 'NA',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200008,
+                                code: 'r8',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '< 4 hours',
+                                        'Basic': '< 8 hours',
+                                        'Low': '< 1 week',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200009,
+                                code: 'r9',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '< 8 hours',
+                                        'Basic': '< 16 hours',
+                                        'Low': '< 2 weeks',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200010,
+                                code: 'r10',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '11',
+                                        'Basic': '11',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200011,
+                                code: 'r11',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '260',
+                                        'Basic': '260',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200012,
+                                code: 'r12',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '2860',
+                                        'Basic': '2860',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200013,
+                                code: 'r13',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                               condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '8',
+                                        'Basic': '12',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200014,
+                                code: 'r14',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '16',
+                                        'Basic': '24',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200015,
+                                code: 'r15',
+                                name: '',
+                                tooltip: '',
+                               nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                   questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '89%',
+                                        'Basic': '84%',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200016,
+                                code: 'r16',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '90%',
+                                        'Basic': '75%',
+                                        'Low': '75%',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200017,
+                                code: 'r17',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '90%',
+                                        'Basic': '75%',
+                                        'Low': '75%',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200018,
+                                code: 'r18',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '95%',
+                                        'Basic': '80%',
+                                        'Low': '75%',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200019,
+                                code: 'r19',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                   questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '89%',
+                                        'Basic': '84%',
+                                        'Low': '75%',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200020,
+                                code: 'r20',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '90%',
+                                        'Basic': '75%',
+                                        'Low': '80%',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200021,
+                                code: 'r21',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '90%',
+                                        'Basic': '75%'
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200022,
+                                code: 'r22',
+                                name: '',
+                               tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                   questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '95%',
+                                        'Basic': '80%',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 2000022,
+                                code: 'r022',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '95%',
+                                        'Basic': '80%',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 2000023,
+                                code: 'r023',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '95%',
+                                        'Basic': '80%',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                               id: 2000024,
+                                code: 'r024',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '95%',
+                                        'Basic': '75%',
+                                        'Low': 'NA',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200023,
+                                code: 'r23',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                   questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': 'Weekly',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200024,
+                                code: 'r24',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': '',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200025,
+                                code: 'r25',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': 'Semi-annual',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200026,
+                                code: 'r26',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': 'Semi-annual',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200027,
+                                code: 'r27',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': '',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200028,
+                                code: 'r28',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': 'Monthly',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200029,
+                                code: 'r29',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': 'Twice a month',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200030,
+                                code: 'r30',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': 'Weekly',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200031,
+                                code: 'r31',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': '',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200032,
+                                code: 'r32',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Monthly',
+                                        'Basic': 'Quarterly',
+                                        'Low': 'Monthly',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200033,
+                                code: 'r33',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Bi-annual',
+                                        'Basic': 'Yearly',
+                                        'Low': 'Semi-annual',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200034,
+                                code: 'r34',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Bi-annual',
+                                        'Basic': 'Yearly',
+                                        'Low': 'Weekly',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200035,
+                                code: 'r35',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': 'Bi-annual',
+                                        'Basic': 'Yearly',
+                                        'Low': 'Quarterly',
+                                    }
+                                }
+
+                            },
+                            {
+                                id: 200036,
+                                code: 'r36',
+                                name: '',
+                                tooltip: '',
+                                nameI98n: '',
+                                tooltipI18n: '',
+                                type: 'STRING',
+                                icon: 'place',
+                                flow: false,
+                                required: false,
+                                conditional: true,
+                                condition: {
+                                    questionCode: 'contractSla',
+                                    questionId: 100101,
+                                    questionSection: 'activitiesInScope',
+                                    questionSurvey: 1231233,
+                                    values: {
+                                        'High': '',
+                                        'Basic': '',
+                                        'Low': '',
+                                    }
+                                }
+
+                            },
+                        ]
+                    },
+                ]
+            }
+
+        ],

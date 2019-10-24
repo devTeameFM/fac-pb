@@ -1,0 +1,402 @@
+{
+	id      : 'analysis',
+	name      : 'DEMAND',
+	description    : 'Create your market analysis and select the vendors',
+	imageURL : 'myspot-icons/scrumboards/business-team.png',
+	uri     : '',
+	settings: {
+		color          : 'fuse-dark',
+		subscribed     : false,
+		cardCoverImages: true
+	},
+	lists   : [
+		{
+			id     : '56027cf5a2ca3839a5d36103',
+			name   : 'Profile',
+			description : 'Define your service needs',
+			status :  'DEFINE_SERVICE',
+			imageURL : 'myspot-icons/simple/file_question_mark_1.png',
+			action : {
+				code : 'define-sevice',
+				name : 'Define service',
+			},
+			idCards: [
+			]
+		},
+		{
+			id     : '56127cf2a2ca3539g7d36103',
+			name   : 'Demand',
+			description : 'Select the scope of work',
+			status : 'SCOPE_WORK',
+			imageURL : 'myspot-icons/simple/file_view_2.png',
+			action : {
+				code : 'select-scope',
+				name : 'Select the scope',
+			},
+			idCards: [
+			]
+		},
+		{
+			id     : 'faf244627326f1249525763d',
+			name   : 'Review',
+			description : 'Check the pool of vendors',
+			status : 'POOL',
+			imageURL : 'myspot-icons/simple/content_view_list.png',
+			action : {
+				code : 'select-pool',
+				name : 'Select vendors',
+			},
+			idCards: [
+			]
+		},
+		{
+			id     : 'ad7d.9fffac5dff412.c83bca6853767.8fd7549b2b1ca.ceda8a01774c4.a5cf3976e87e4.ce79eeeea',
+			name   : 'Select',
+			description : 'Select the best vendor\'s offer',
+			status : 'REVIEW_VENDORS',
+			imageURL : 'myspot-icons/simple/business_man.png',
+			action : {
+				code : 'review-vendors',
+				name : 'Review vendors',
+			},
+			idCards: [
+			]
+		}
+	],
+	cards   : [
+		{
+			id               : '5603a2a3cab0c8300f6096b3',
+			contractId       : '29493',
+			name             : 'We Work',
+			description      : '',
+			idAttachmentCover: '',
+			idMembers        : [
+				'76027g1930450d8bf7b10958'
+			],
+			idLabels         : [],
+			attachments      : [],
+			subscribed       : true,
+			checklists       : [],
+			checkItems       : 7,
+			checkItemsChecked: 2,
+			comments         : [],
+			activities       : [],
+			due              : '2017-08-29T10:16:34.000Z'
+		}, 
+	],
+	members : [
+		{
+			id    : '76027g1930450d8bf7b10958',
+			name  : 'Daniele Appetito',
+			avatar: '6a85310a-e642-42f0-99d6-9a1134f7a5cc_jidd4l.jpg'
+		},
+	],
+	labels  : []
+},
+{
+	id      : 'creation',
+	name    : 'DESIGN',
+	description : 'Establish your baseline technical requirements',
+	uri     : '',
+	imageURL : 'myspot-icons/scrumboards/document-approve.png',
+	type    : 'contract',
+	settings: {
+		color          : 'fuse-dark',
+		subscribed     : false,
+		cardCoverImages: true
+	},
+	lists   : [
+		{
+			id     : '56027cf5a2ca3839a5d36103',
+			name   : 'Describe',
+			description : 'Define your asset portfolio',
+			status :  'BUILDING_INFO',
+			imageURL : 'myspot-icons/simple/building_16.png',
+			action : {
+				code : 'building-info',
+				name : 'Insert info',
+			},
+			idCards: [
+				'5603a2a3cab0c8300f6096b3',
+			]
+		},
+		{
+			id     : '56127cf2a2ca3539g7d36103',
+			name   : 'Choose',
+			description : 'Select Target Service & SLA',
+			status : 'SLA',
+			imageURL : 'myspot-icons/simple/projector_screen_graph_line.png',
+			action : {
+				code : 'sla',
+				name : 'Choose SLA',
+			},
+			idCards: [
+			]
+		},
+		{
+			id     : 'faf244627326f1249525763d',
+			name   : 'Finalize',
+			description : 'Review the technical specification',
+			status : 'REVIEW',
+			imageURL : 'myspot-icons/simple/file_edit_2.png',
+			action : {
+				code : 'review',
+				name : 'Review & confirm',
+			},
+			idCards: [
+			]
+		},
+		{
+			id     : 'ad7d.9fffac5dff412.c83bca6853767.8fd7549b2b1ca.ceda8a01774c4.a5cf3976e87e4.ce79eeeea',
+			name   : 'Publish',
+			description : 'Dowload the contract template',
+			status : 'PB_READY',
+			imageURL : 'myspot-icons/simple/file_check_2.png',
+			action : {
+				code : 'playbook',
+				name : 'Download & share',
+			},
+			idCards: [
+			]
+		}
+	],
+	cards   : [
+		{
+			id               : '5603a2a3cab0c8300f6096b3',
+			contractId       : '29493',
+			name             : 'We Work',
+			description      : '',
+			idAttachmentCover: '',
+			idMembers        : [
+				'76027g1930450d8bf7b10958'
+			],
+			idLabels         : [],
+			attachments      : [],
+			subscribed       : true,
+			checklists       : [],
+			checkItems       : 7,
+			checkItemsChecked: 2,
+			comments         : [],
+			activities       : [],
+			due              : '2017-08-29T10:16:34.000Z'
+		}, 
+	],
+	members : [
+		{
+			id    : '76027g1930450d8bf7b10958',
+			name  : 'Daniele Appetito',
+			avatar: '6a85310a-e642-42f0-99d6-9a1134f7a5cc_jidd4l.jpg'
+		},
+	],
+	labels  : []
+},
+{
+	id      : 'performance',
+	name : 'ANALYZE',
+	description    : 'Monitor your service and contract results and kpi',
+	uri     : '',
+	imageURL : 'myspot-icons/scrumboards/business-graph-2.png',
+	settings: {
+		color          : 'fuse-dark',
+		subscribed     : false,
+		cardCoverImages: true
+	},
+	lists   : [
+		{
+			id     : '56027cf5a2ca3839a5d36103',
+			name   : 'Check',
+			description: 'Connect contracts & transactions',
+			status :  'UPLOAD',
+			imageURL : 'myspot-icons/simple/credit_card_sync.png',
+			action : {
+				code : 'upload-contract',
+				name : 'Upload',
+			},
+			idCards: [
+				
+			]
+		},
+		{
+			id     : '56127cf2a2ca3539g7d36103',
+			name   : 'Assess',
+			description : 'Analize the surveys',
+			status : 'ANALYZE',
+			imageURL : 'myspot-icons/simple/file_view_2.png',
+			action : {
+				code : 'analyze-surveys',
+				name : 'Analyze',
+			},
+			idCards: [
+			]
+		},
+		{
+			id     : 'faf244627326f1249525763d',
+			name   : 'Report',
+			description : 'Monitor Kpi dashboard',
+			status : 'MONITOR',
+			imageURL : 'myspot-icons/simple/window_graph_pie.png',
+			action : {
+				code : 'monitor',
+				name : 'Monitor',
+			},
+			idCards: [
+				'5603a2a3cab0c8300f6096b3'
+			]
+		},
+		{
+			id     : 'ad7d.9fffac5dff412.c83bca6853767.8fd7549b2b1ca.ceda8a01774c4.a5cf3976e87e4.ce79eeeea',
+			name   : 'Change',
+			description : 'Download recommendations',
+			status : 'DOWNLOAD',
+			imageURL : 'myspot-icons/simple/list_number.png',
+			action : {
+				code : 'download',
+				name : 'Download',
+			},
+			idCards: [
+			]
+		}
+	],
+	cards   : [
+		{
+			id               : '5603a2a3cab0c8300f6096b3',
+			contractId       : '29494',
+			name             : '51 Melcher St',
+			description      : '',
+			idAttachmentCover: '',
+			idMembers        : [
+				'76027g1930450d8bf7b10958'
+			],
+			idLabels         : [],
+			attachments      : [],
+			subscribed       : true,
+			checklists       : [],
+			checkItems       : 7,
+			checkItemsChecked: 2,
+			comments         : [],
+			activities       : [],
+			due              : ''
+		}, 
+	],
+	members : [
+		{
+			id    : '76027g1930450d8bf7b10958',
+			name  : 'Daniele Appetito',
+			avatar: '6a85310a-e642-42f0-99d6-9a1134f7a5cc_jidd4l.jpg'
+		},
+	],
+	labels  : []
+},
+
+{
+	id      : 'strategy',
+	name      : 'IMPROVE',
+	description    : 'Define your budget and plan the maintenance activities',
+	type: 'improve',
+	uri     : '',
+	imageURL : 'myspot-icons/scrumboards/calendar.png',
+	settings: {
+		color          : 'fuse-dark',
+		subscribed     : false,
+		cardCoverImages: true
+	},
+	lists   : [
+		{
+			id     : '56027cf5a2ca3839a5d36103',
+			name   : 'Profile',
+			description : 'Your building info',
+			status :  'DIGITALIZE',
+			imageURL : 'myspot-icons/simple/construction_blueprint_1.png',
+			action : {
+				code : 'digitalize',
+				name : 'Digitalize',
+			},
+			idCards: [
+
+				'5603a2a3cab0c8300f6096b3'
+			]
+		},
+		{
+			id     : 'faf24462733226f1249525763d',
+			name   : 'Assessment',
+			description : 'Update the technical requirements',
+			status : 'REVIEW_EXPENSES',
+			imageURL : 'myspot-icons/simple/file_edit_2.png',
+			action : {
+				code : 'review-expenses',
+				name : 'Review',
+			},
+			idCards: [
+			]
+		},
+		{
+			id     : 'faf244627326f1249525763d',
+			name   : 'Check',
+			description : 'We are working on your raccomandations',
+			status : 'REVIEW_EXPENSES',
+			imageURL : 'myspot-icons/simple/file_edit_2.png',
+			action : {
+				code : 'review-expenses',
+				name : 'Review',
+			},
+			idCards: [
+			]
+		}, 
+		{
+			id     : '56127cf2a2ca3539g7d36103',
+			name   : 'Target',
+			description : 'Identify the expenses and availabilty gap',
+			status : 'ANALYZE',
+			imageURL : 'myspot-icons/simple/target_cash.png',
+			action : {
+				code : 'analyze-assets',
+				name : 'Analyze',
+			},
+			idCards: [
+			]
+		}, 
+		
+		{
+			id     : 'ad7d.9fffac5dff412.c83bca6853767.8fd7549b2b1ca.ceda8a01774c4.a5cf3976e87e4.ce79eeeea',
+			name   : 'Plan',
+			description : 'Define budget and design a program',
+			status : 'CREATE_MPB',
+			imageURL : 'myspot-icons/simple/calendar_dollar_1.png',
+			action : {
+				code : 'create-mbp',
+				name : 'create',
+			},
+			idCards: [
+			]
+		}
+	],
+	cards   : [
+		{
+			id               : '5603a2a3cab0c8300f6096b3',
+			contractId       : '29493',
+			name             : 'We Work',
+			description      : '',
+			idAttachmentCover: '',
+			idMembers        : [
+				'76027g1930450d8bf7b10958'
+			],
+			idLabels         : [],
+			attachments      : [],
+			subscribed       : true,
+			checklists       : [],
+			checkItems       : 7,
+			checkItemsChecked: 2,
+			comments         : [],
+			activities       : [],
+			due              : '2017-08-29T10:16:34.000Z'
+		}, 
+	],
+	members : [
+		{
+			id    : '76027g1930450d8bf7b10958',
+			name  : 'Daniele Appetito',
+			avatar: '6a85310a-e642-42f0-99d6-9a1134f7a5cc_jidd4l.jpg'
+		},
+	],
+	labels  : []
+}

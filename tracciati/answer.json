@@ -1,0 +1,758 @@
+"answers": ﻿{
+  "_id": "5d97185cdda9820017c995f0",
+  "templateName": "wework-playbook.docx",
+  "fileName": "wework-playbook2019-Oct-04.docx",
+  "context": {
+    "name": "We Work",
+    "id": 29493,
+    "status": "PB_READY",
+    "dueDate": "2017-08-29T10:16:34.000Z",
+    "answers": {
+      "1231232": {
+        "buildingInformation": {
+          "code": {
+            "questionId": 100001,
+            "value": "51 Melcher St"
+          },
+          "address": {
+            "questionId": 100002,
+            "value": "51 Melcher Street Boston, MA 02210"
+          },
+          "area": {
+            "questionId": 100003,
+            "value": 34
+          },
+          "floors": {
+            "questionId": 100004,
+            "value": 34
+          },
+          "serviceHours": {
+            "questionId": 100005,
+            "value": "9 am to 7 pm - Monday to Friday"
+          }
+        },
+        "contractPeriod": {
+          "startDate": {
+            "questionId": 100009,
+            "value": "2019-10-03T22:00:00.000Z"
+          },
+          "duration": {
+            "questionId": 100007,
+            "value": "12 month"
+          },
+          "extension": {
+            "questionId": 100008,
+            "value": "Upon request 30 days before the termination"
+          }
+        },
+        "serviceInScope": {
+          "facilityService": {
+            "questionId": 110009,
+            "value": "Hard service"
+          },
+          "system1Name": {
+            "questionId": 110010,
+            "value": "Heating, ventilating and air conditioning (HVAC)"
+          },
+          "facilityServiceCondition": {
+            "questionId": 110011,
+            "value": "Fair"
+          },
+          "technicalRoomsNumber": {
+            "questionId": 100010,
+            "value": "34"
+          }
+        },
+        "activitiesInScope": {
+          "contractSla": {
+            "questionId": 100101,
+            "value": "Basic"
+          },
+          "sAActive": {
+            "questionId": 100110,
+            "value": "In scope - fixed fee"
+          },
+          "sARemuneration": {
+            "questionId": 100111,
+            "value": "Fixed Fee"
+          },
+          "cAActive": {
+            "questionId": 100112,
+            "value": "In scope - extra fee"
+          },
+          "cARemuneration": {
+            "questionId": 100113,
+            "value": "Extra Fee"
+          },
+          "eAActive": {
+            "questionId": 100114,
+            "value": "In scope - extra fee"
+          },
+          "eARemuneration": {
+            "questionId": 100115,
+            "value": "Extra Fee"
+          },
+          "osAActive": {
+            "questionId": 101114,
+            "value": "Out of scope"
+          },
+          "osARemuneration": {
+            "questionId": 101115,
+            "value": "Out of scope"
+          }
+        },
+        "review": {
+          "r1": {
+            "questionId": 200001,
+            "value": "< 2 hours"
+          },
+          "r2": {
+            "questionId": 200002,
+            "value": "< 6 hours"
+          },
+          "r3": {
+            "questionId": 200003,
+            "value": "< 12 hours"
+          },
+          "r4": {
+            "questionId": 200004,
+            "value": "< 12 hours"
+          },
+          "r5": {
+            "questionId": 200005,
+            "value": "< 24 hours"
+          },
+          "r6": {
+            "questionId": 200006,
+            "value": "Proposed by the provider and approved by the client"
+          },
+          "r7": {
+            "questionId": 200007,
+            "value": "NA"
+          },
+          "r8": {
+            "questionId": 200008,
+            "value": "< 8 hours"
+          },
+          "r9": {
+            "questionId": 200009,
+            "value": "< 16 hours"
+          },
+          "r10": {
+            "questionId": 200010,
+            "value": "11"
+          },
+          "r11": {
+            "questionId": 200011,
+            "value": "260"
+          },
+          "r12": {
+            "questionId": 200012,
+            "value": "2860"
+          },
+          "r13": {
+            "questionId": 200013,
+            "value": "12"
+          },
+          "r14": {
+            "questionId": 200014,
+            "value": "24"
+          },
+          "r15": {
+            "questionId": 200015,
+            "value": "84%"
+          },
+          "r16": {
+            "questionId": 200016,
+            "value": "75%"
+          },
+          "r17": {
+            "questionId": 200017,
+            "value": "75%"
+          },
+          "r18": {
+            "questionId": 200018,
+            "value": "80%"
+          },
+          "r19": {
+            "questionId": 200019,
+            "value": "84%"
+          },
+          "r20": {
+            "questionId": 200020,
+            "value": "75%"
+          },
+          "r21": {
+            "questionId": 200021,
+            "value": "75%"
+          },
+          "r22": {
+            "questionId": 200022,
+            "value": "80%"
+          },
+          "r022": {
+            "questionId": 2000022,
+            "value": "80%"
+          },
+          "r023": {
+            "questionId": 2000023,
+            "value": "80%"
+          },
+          "r024": {
+            "questionId": 2000024,
+            "value": "75%"
+          },
+          "r23": {
+            "questionId": 200023,
+            "value": "Quarterly"
+          },
+          "r24": {
+            "questionId": 200024,
+            "value": "Quarterly"
+          },
+          "r25": {
+            "questionId": 200025,
+            "value": "Quarterly"
+          },
+          "r26": {
+            "questionId": 200026,
+            "value": "Quarterly"
+          },
+          "r27": {
+            "questionId": 200027,
+            "value": "Quarterly"
+          },
+          "r28": {
+            "questionId": 200028,
+            "value": "Quarterly"
+          },
+          "r29": {
+            "questionId": 200029,
+            "value": "Quarterly"
+          },
+          "r30": {
+            "questionId": 200030,
+            "value": "Quarterly"
+          },
+          "r31": {
+            "questionId": 200031,
+            "value": "Quarterly"
+          },
+          "r32": {
+            "questionId": 200032,
+            "value": "Quarterly"
+          },
+          "r33": {
+            "questionId": 200033,
+            "value": "Yearly"
+          },
+          "r34": {
+            "questionId": 200034,
+            "value": "Yearly"
+          },
+          "r35": {
+            "questionId": 200035,
+            "value": "Yearly"
+          }
+        }
+      },
+      "1231233": {
+        "buildingInformation": {
+          "code": {
+            "questionId": 100001,
+            "value": "51 Melcher St"
+          },
+          "address": {
+            "questionId": 100002,
+            "value": "51 Melcher Street Boston, MA 02210"
+          },
+          "area": {
+            "questionId": 100003,
+            "value": 34
+          },
+          "floors": {
+            "questionId": 100004,
+            "value": 34
+          },
+          "serviceHours": {
+            "questionId": 100005,
+            "value": "9 am to 7 pm - Monday to Friday"
+          }
+        },
+        "contractPeriod": {
+          "startDate": {
+            "questionId": 100009,
+            "value": "2019-10-03T22:00:00.000Z"
+          },
+          "duration": {
+            "questionId": 100007,
+            "value": "12 month"
+          },
+          "extension": {
+            "questionId": 100008,
+            "value": "Upon request 30 days before the termination"
+          }
+        },
+        "serviceInScope": {
+          "facilityService": {
+            "questionId": 110009,
+            "value": "Hard service"
+          },
+          "system1Name": {
+            "questionId": 110010,
+            "value": "Heating, ventilating and air conditioning (HVAC)"
+          },
+          "facilityServiceCondition": {
+            "questionId": 110011,
+            "value": "Fair"
+          },
+          "technicalRoomsNumber": {
+            "questionId": 100010,
+            "value": "34"
+          }
+        },
+        "activitiesInScope": {
+          "contractSla": {
+            "questionId": 100101,
+            "value": "Basic"
+          },
+          "sAActive": {
+            "questionId": 100110,
+            "value": "In scope - fixed fee"
+          },
+          "sARemuneration": {
+            "questionId": 100111,
+            "value": "Fixed Fee"
+          },
+          "cAActive": {
+            "questionId": 100112,
+            "value": "In scope - extra fee"
+          },
+          "cARemuneration": {
+            "questionId": 100113,
+            "value": "Extra Fee"
+          },
+          "eAActive": {
+            "questionId": 100114,
+            "value": "In scope - extra fee"
+          },
+          "eARemuneration": {
+            "questionId": 100115,
+            "value": "Extra Fee"
+          },
+          "osAActive": {
+            "questionId": 101114,
+            "value": "Out of scope"
+          },
+          "osARemuneration": {
+            "questionId": 101115,
+            "value": "Out of scope"
+          }
+        },
+        "review": {
+          "r1": {
+            "questionId": 200001,
+            "value": "< 2 hours"
+          },
+          "r2": {
+            "questionId": 200002,
+            "value": "< 6 hours"
+          },
+          "r3": {
+            "questionId": 200003,
+            "value": "< 12 hours"
+          },
+          "r4": {
+            "questionId": 200004,
+            "value": "< 12 hours"
+          },
+          "r5": {
+            "questionId": 200005,
+            "value": "< 24 hours"
+          },
+          "r6": {
+            "questionId": 200006,
+            "value": "Proposed by the provider and approved by the client"
+          },
+          "r7": {
+            "questionId": 200007,
+            "value": "NA"
+          },
+          "r8": {
+            "questionId": 200008,
+            "value": "< 8 hours"
+          },
+          "r9": {
+            "questionId": 200009,
+            "value": "< 16 hours"
+          },
+          "r10": {
+            "questionId": 200010,
+            "value": "11"
+          },
+          "r11": {
+            "questionId": 200011,
+            "value": "260"
+          },
+          "r12": {
+            "questionId": 200012,
+            "value": "2860"
+          },
+          "r13": {
+            "questionId": 200013,
+            "value": "12"
+          },
+          "r14": {
+            "questionId": 200014,
+            "value": "24"
+          },
+          "r15": {
+            "questionId": 200015,
+            "value": "84%"
+          },
+          "r16": {
+            "questionId": 200016,
+            "value": "75%"
+          },
+          "r17": {
+            "questionId": 200017,
+            "value": "75%"
+          },
+          "r18": {
+            "questionId": 200018,
+            "value": "80%"
+          },
+          "r19": {
+            "questionId": 200019,
+            "value": "84%"
+          },
+          "r20": {
+            "questionId": 200020,
+            "value": "75%"
+          },
+          "r21": {
+            "questionId": 200021,
+            "value": "75%"
+          },
+          "r22": {
+            "questionId": 200022,
+            "value": "80%"
+          },
+          "r022": {
+            "questionId": 2000022,
+            "value": "80%"
+          },
+          "r023": {
+            "questionId": 2000023,
+            "value": "80%"
+          },
+          "r024": {
+            "questionId": 2000024,
+            "value": "75%"
+          },
+          "r23": {
+            "questionId": 200023,
+            "value": "Quarterly"
+          },
+          "r24": {
+            "questionId": 200024,
+            "value": "Quarterly"
+          },
+          "r25": {
+            "questionId": 200025,
+            "value": "Quarterly"
+          },
+          "r26": {
+            "questionId": 200026,
+            "value": "Quarterly"
+          },
+          "r27": {
+            "questionId": 200027,
+            "value": "Quarterly"
+          },
+          "r28": {
+            "questionId": 200028,
+            "value": "Quarterly"
+          },
+          "r29": {
+            "questionId": 200029,
+            "value": "Quarterly"
+          },
+          "r30": {
+            "questionId": 200030,
+            "value": "Quarterly"
+          },
+          "r31": {
+            "questionId": 200031,
+            "value": "Quarterly"
+          },
+          "r32": {
+            "questionId": 200032,
+            "value": "Quarterly"
+          },
+          "r33": {
+            "questionId": 200033,
+            "value": "Yearly"
+          },
+          "r34": {
+            "questionId": 200034,
+            "value": "Yearly"
+          },
+          "r35": {
+            "questionId": 200035,
+            "value": "Yearly"
+          }
+        }
+      },
+      "1231234": {
+        "buildingInformation": {
+          "code": {
+            "questionId": 100001,
+            "value": "51 Melcher St"
+          },
+          "address": {
+            "questionId": 100002,
+            "value": "51 Melcher Street Boston, MA 02210"
+          },
+          "area": {
+            "questionId": 100003,
+            "value": 34
+          },
+          "floors": {
+            "questionId": 100004,
+            "value": 34
+          },
+          "serviceHours": {
+            "questionId": 100005,
+            "value": "9 am to 7 pm - Monday to Friday"
+          }
+        },
+        "contractPeriod": {
+          "startDate": {
+            "questionId": 100009,
+            "value": "2019-10-03T22:00:00.000Z"
+          },
+          "duration": {
+            "questionId": 100007,
+            "value": "12 month"
+          },
+          "extension": {
+            "questionId": 100008,
+            "value": "Upon request 30 days before the termination"
+          }
+        },
+        "serviceInScope": {
+          "facilityService": {
+            "questionId": 110009,
+            "value": "Hard service"
+          },
+          "system1Name": {
+            "questionId": 110010,
+            "value": "Heating, ventilating and air conditioning (HVAC)"
+          },
+          "facilityServiceCondition": {
+            "questionId": 110011,
+            "value": "Fair"
+          },
+          "technicalRoomsNumber": {
+            "questionId": 100010,
+            "value": "34"
+          }
+        },
+        "activitiesInScope": {
+          "contractSla": {
+            "questionId": 100101,
+            "value": "Basic"
+          },
+          "sAActive": {
+            "questionId": 100110,
+            "value": "In scope - fixed fee"
+          },
+          "sARemuneration": {
+            "questionId": 100111,
+            "value": "Fixed Fee"
+          },
+          "cAActive": {
+            "questionId": 100112,
+            "value": "In scope - extra fee"
+          },
+          "cARemuneration": {
+            "questionId": 100113,
+            "value": "Extra Fee"
+          },
+          "eAActive": {
+            "questionId": 100114,
+            "value": "In scope - extra fee"
+          },
+          "eARemuneration": {
+            "questionId": 100115,
+            "value": "Extra Fee"
+          },
+          "osAActive": {
+            "questionId": 101114,
+            "value": "Out of scope"
+          },
+          "osARemuneration": {
+            "questionId": 101115,
+            "value": "Out of scope"
+          }
+        },
+        "review": {
+          "r1": {
+            "questionId": 200001,
+            "value": "< 2 hours"
+          },
+          "r2": {
+            "questionId": 200002,
+            "value": "< 6 hours"
+          },
+          "r3": {
+            "questionId": 200003,
+            "value": "< 12 hours"
+          },
+          "r4": {
+            "questionId": 200004,
+            "value": "< 12 hours"
+          },
+          "r5": {
+            "questionId": 200005,
+            "value": "< 24 hours"
+          },
+          "r6": {
+            "questionId": 200006,
+            "value": "Proposed by the provider and approved by the client"
+          },
+          "r7": {
+            "questionId": 200007,
+            "value": "NA"
+          },
+          "r8": {
+            "questionId": 200008,
+            "value": "< 8 hours"
+          },
+          "r9": {
+            "questionId": 200009,
+            "value": "< 16 hours"
+          },
+          "r10": {
+            "questionId": 200010,
+            "value": "11"
+          },
+          "r11": {
+            "questionId": 200011,
+            "value": "260"
+          },
+          "r12": {
+            "questionId": 200012,
+            "value": "2860"
+          },
+          "r13": {
+            "questionId": 200013,
+            "value": "12"
+          },
+          "r14": {
+            "questionId": 200014,
+            "value": "24"
+          },
+          "r15": {
+            "questionId": 200015,
+            "value": "84%"
+          },
+          "r16": {
+            "questionId": 200016,
+            "value": "75%"
+          },
+          "r17": {
+            "questionId": 200017,
+            "value": "75%"
+          },
+          "r18": {
+            "questionId": 200018,
+            "value": "80%"
+          },
+          "r19": {
+            "questionId": 200019,
+            "value": "84%"
+          },
+          "r20": {
+            "questionId": 200020,
+            "value": "75%"
+          },
+          "r21": {
+            "questionId": 200021,
+            "value": "75%"
+          },
+          "r22": {
+            "questionId": 200022,
+            "value": "80%"
+          },
+          "r022": {
+            "questionId": 2000022,
+            "value": "80%"
+          },
+          "r023": {
+            "questionId": 2000023,
+            "value": "80%"
+          },
+          "r024": {
+            "questionId": 2000024,
+            "value": "75%"
+          },
+          "r23": {
+            "questionId": 200023,
+            "value": "Quarterly"
+          },
+          "r24": {
+            "questionId": 200024,
+            "value": "Quarterly"
+          },
+          "r25": {
+            "questionId": 200025,
+            "value": "Quarterly"
+          },
+          "r26": {
+            "questionId": 200026,
+            "value": "Quarterly"
+          },
+          "r27": {
+            "questionId": 200027,
+            "value": "Quarterly"
+          },
+          "r28": {
+            "questionId": 200028,
+            "value": "Quarterly"
+          },
+          "r29": {
+            "questionId": 200029,
+            "value": "Quarterly"
+          },
+          "r30": {
+            "questionId": 200030,
+            "value": "Quarterly"
+          },
+          "r31": {
+            "questionId": 200031,
+            "value": "Quarterly"
+          },
+          "r32": {
+            "questionId": 200032,
+            "value": "Quarterly"
+          },
+          "r33": {
+            "questionId": 200033,
+            "value": "Yearly"
+          },
+          "r34": {
+            "questionId": 200034,
+            "value": "Yearly"
+          },
+          "r35": {
+            "questionId": 200035,
+            "value": "Yearly"
+          }
+        }
+      }
+    }
+  },
+  "__v": 0
+}
