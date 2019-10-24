@@ -158,6 +158,27 @@ const getSurveyById = async (req, res) => {
   }
 };
 
+const getAllScrumsByMember = async (req, res) => {
+  try {
+    const { memberId } = req.params;
+    const scrum = await models.FE_Scrum.findOne({
+      include: [
+        {
+          model: models.MS_Member,
+          as: "members",
+          where: { id: memberId }
+        }
+      ]
+    });
+    if (scrum) {
+      return res.status(200).json({ scrum });
+    }
+    return res.status(404).send("This member doesn't have scrums");
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 const getAllSurveySection = async (req, res) => {
   try {
     const surveySection = await models.SM_SurveySection.findAll({
@@ -365,5 +386,6 @@ module.exports = {
   getAllSurveyQuestionsOptions,
   getAllMembers,
   getAllPlaybooks,
-  getAllScrums
+  getAllScrums,
+  getAllScrumsByMember
 };
