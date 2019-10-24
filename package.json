@@ -5,12 +5,12 @@
   "author": "orie chinedu",
   "license": "MIT",
   "scripts": {
-    "start2": "nodemon index.js",
+    "start": "nodemon index.js",
     "migrate": "npx sequelize-cli db:migrate",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
     "migrate:remove": "npx sequelize-cli db:migrate:undo:all",
-    "start": "npx sequelize-cli db:seed:all",
+    "seeders": "npx sequelize-cli db:seed:all",
     "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
     "coverage": "npm run pretest && jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
