@@ -158,6 +158,21 @@ const getSurveyById = async (req, res) => {
   }
 };
 
+const getScrumById = async (req, res) => {
+  try {
+    const { scrumId } = req.params;
+    const scrum = await models.FE_Scrum.findOne({
+      where: { id: scrumId }
+    });
+    if (scrum) {
+      return res.status(200).json({ scrum });
+    }
+    return res.status(404).send("This member doesn't have scrums");
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 const getAllScrumsByMember = async (req, res) => {
   try {
     const { memberId } = req.params;
@@ -387,5 +402,6 @@ module.exports = {
   getAllMembers,
   getAllPlaybooks,
   getAllScrums,
-  getAllScrumsByMember
+  getAllScrumsByMember,
+  getScrumById
 };

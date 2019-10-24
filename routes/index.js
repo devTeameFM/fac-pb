@@ -6,6 +6,7 @@ const router = Router();
 
 router.get('/', (req, res) => res.send('Welcome'))
 router.get('/scrums/:memberId',controllers.getAllScrumsByMember);
+router.get('/scrum/:scrumId',controllers.getScrumById);
 router.get('/scrums',controllers.getAllScrums);
 router.get('/members',controllers.getAllMembers);
 router.get('/playbooks',controllers.getAllPlaybooks);
