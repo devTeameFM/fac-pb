@@ -4,6 +4,7 @@ const controllers = require('../controllers');
 
 const router = Router();
 
+
 router.get('/', (req, res) => res.send('Welcome'))
 router.get('/scrums/:memberId',controllers.getAllScrumsByMember);
 router.get('/scrum/:scrumId',controllers.getScrumById);
