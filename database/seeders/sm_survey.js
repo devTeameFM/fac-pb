@@ -8,7 +8,8 @@ module.exports = {
         nextStatus: "SLA",
         imageURL: "myspot-icons/line/building.png",
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        surveyType: "PLAYBOOK"
       },
       {
         name: 'SLA',
@@ -16,7 +17,8 @@ module.exports = {
         nextStatus: "REVIEW",
         imageURL: "myspot-icons/line/building.png",
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        surveyType: "PLAYBOOK"
       },
       {
         name: 'REVIEW',
@@ -24,7 +26,8 @@ module.exports = {
         nextStatus: "PB_READY",
         imageURL: "myspot-icons/line/building.png",
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        surveyType: "PLAYBOOK"
       }
     ],
     {},

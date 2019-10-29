@@ -8,15 +8,32 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      idMembers: {
+      name: {
+        allowNull: true,
+        type:Sequelize.STRING
+      },
+      description: {
+        allowNull: true,
+        type:Sequelize.STRING
+      },
+      idMember: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      typeTask: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
+      status:{
+        allowNull: true,
         type: Sequelize.STRING
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       }
     });

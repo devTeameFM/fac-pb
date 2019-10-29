@@ -8,9 +8,14 @@ router.get('/', (req, res) => res.send('Welcome'))
 router.get('/scrums/:memberId',controllers.getAllScrumsByMember);
 router.get('/scrum/:scrumId',controllers.getScrumById);
 router.get('/scrums',controllers.getAllScrums);
+
 router.get('/members',controllers.getAllMembers);
+
 router.get('/playbooks',controllers.getAllPlaybooks);
-//router.get('/surveys', controllers.getAllSurveyDynamics);
+router.post('/playbook',controllers.createPlaybook);
+
+router.get('/surveys', controllers.getAllSurveyDynamics);
+router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
 //router.get('/surveys/:surveyId', controllers.getSurveyById);
 //router.get('/surveysSections', controllers.getAllSurveySection);
 //router.get('/surveysSections/:sectionId', controllers.getAllSurveySectionById);

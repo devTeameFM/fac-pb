@@ -2,6 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   const FE_Scrum = sequelize.define('FE_Scrum', {
     id: {
+      allowNull: false,
+      autoIncrement: true,
       type : DataTypes.INTEGER,
       primaryKey: true
     },
@@ -29,16 +31,11 @@ module.exports = (sequelize, DataTypes) => {
           as: 'lists',
           onDelete: 'CASCADE',
         });
-    FE_Scrum.belongsTo(models.MS_Member, {
-        foreignKey: 'id',
-        onDelete: 'CASCADE',
-      });
-    /*
-    FE_Scrum.hasMany(models.MS_Member, {
-          foreignKey: 'idScrum',
-          as: 'members',
-          onDelete: 'CASCADE',
-        });*/
+    FE_Scrum.belongsToMany(models.MS_Member, {
+      through: 'FE_MembersScrums',
+      as: 'members',
+      foreignKey: 'idScrum'
+    });
   };
   return FE_Scrum;
 };

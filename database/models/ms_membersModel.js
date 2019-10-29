@@ -10,16 +10,16 @@ module.exports = (sequelize, DataTypes) => {
     avatar: DataTypes.STRING
   }, {});
   MS_Member.associate = function(models) {
-    MS_Member.hasMany(models.FE_Scrum, {
-          foreignKey: 'id',
-        //  as: 'members',
-          onDelete: 'CASCADE',
-        });
-    /*
-    MS_Member.belongsTo(models.FE_Scrum, {
-        foreignKey: 'id',
+    MS_Member.belongsToMany(models.FE_Scrum, {
+      through: 'FE_MembersScrums',
+      as: 'scrums',
+      foreignKey: 'idMember'
+    });
+    MS_Member.hasMany(models.PB_Playbook, {
+        foreignKey: 'idMember',
+        as: 'playbooks',
         onDelete: 'CASCADE',
-      });*/
+      });      
   };
   return MS_Member;
 };

@@ -38,12 +38,18 @@ const getAllScrums = async (req, res) => {
         },
         {
           model: models.FE_ScrumsList,
-          as: "lists"
-        }/*,
+          as: "lists",/*
+          include: [
+            {
+              model: models.PB_Playbook,
+              as: "cards",
+            }
+          ]*/
+        },
         {
           model: models.MS_Member,
           as: "members"
-        }*/
+        }
       ]
     });
     return res.status(200).json({ scrums });
@@ -54,8 +60,17 @@ const getAllScrums = async (req, res) => {
 
 const getAllPlaybooks = async (req, res) => {
   try {
-    const playbooks = await models.PB_Playbook.findAll();
-    return res.status(200).json({ playbooks });
+    const playbooks = await models.PB_Playbook.findAll({
+      include: [
+        {
+          model:models.SM_Survey,
+          as: "surveys"
+        }
+      ]
+    });
+
+    return res.status(200).json({ playbooks })
+
   } catch (error) {
     return res.status(500).send(error.message);
   }
@@ -64,8 +79,15 @@ const getAllPlaybooks = async (req, res) => {
 
 const getAllMembers = async (req, res) => {
   try {
-    const members = await models.MS_Member.findAll();
-    myData();
+    const members = await models.MS_Member.findAll({
+      include: [
+        {
+          model:models.PB_Playbook,
+          as: "playbooks"
+        }
+      ]
+  });
+
     return res.status(200).json({ members });
   } catch (error) {
     return res.status(500).send(error.message);
@@ -103,6 +125,36 @@ const getAllSurveyDynamics = async (req, res) => {
        }
 
 
+    return res.status(200).json({ surveys });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
+const getAllSurveyByType = async (req, res) => {
+  try {
+    const { surveyType } = req.params;
+    const surveys = await models.SM_Survey.findAll(/*{
+      where: { surveyType: surveyType },
+      include: [
+        {
+          model: models.SM_SurveySection,
+          as: "sections",
+          include: [
+            {
+              model: models.SM_SurveySectionQuestion,
+              as: "questions",
+              include: [
+                {
+                  model: models.SM_SurveySectionQuestionOption,
+                  as: "options"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }*/);
     return res.status(200).json({ surveys });
   } catch (error) {
     return res.status(500).send(error.message);
@@ -291,7 +343,19 @@ const getAllSurveyQuestionsOptions = async (req, res) => {
   }
 };
 
-
+const createPlaybook = async (req, res) => {
+  try {
+    var  pb=req.body;
+    pb["typeTask"]="PLAYBOOK";
+    pb["status"]="BUILDING_INFO";
+    const post = await models.PB_Playbook.create(pb);
+    return res.status(201).json({
+      post
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 
 
 
@@ -412,5 +476,7 @@ module.exports = {
   getAllPlaybooks,
   getAllScrums,
   getAllScrumsByMember,
-  getScrumById
+  getScrumById,
+  getAllSurveyByType,
+  createPlaybook
 };

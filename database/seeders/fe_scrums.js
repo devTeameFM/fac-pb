@@ -24,7 +24,7 @@ module.exports = {
         id: "performance",
         name: 'ANALYZE',
         description: 'Monitor your service and contract results and kpi',
-        imageURL: "myspot-icons/scrumboards/business-graph-2.png",
+      	imageURL : 'myspot-icons/scrumboards/business-graph-2.png',
         uri: "",
         createdAt: new Date(),
         updatedAt: new Date()
@@ -32,8 +32,8 @@ module.exports = {
       {
         id: "management",
         name: 'MANAGEMENT',
-        description: 'Facility Management System',
-        imageURL: "myspot-icons/scrumboards/desktop-imac-chart.png",
+        description: 'Facility management system',
+      	imageURL : 'myspot-icons/scrumboards/desktop-imac-chart.png"',
         uri: "",
         createdAt: new Date(),
         updatedAt: new Date()
@@ -42,14 +42,14 @@ module.exports = {
         id: "strategy",
         name: 'IMPROVE',
         description: 'Define your budget and plan the maintenance activities',
-        imageURL: "myspot-icons/scrumboards/calendar.png",
+        imageURL : 'myspot-icons/scrumboards/business-graph-2.png',
         uri: "",
         createdAt: new Date(),
         updatedAt: new Date()
-      }
+      },
     ],
     {},
   ),
 
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('SM_Surveys', null, {}),
+  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('FE_Scrums', null, {}),
 };

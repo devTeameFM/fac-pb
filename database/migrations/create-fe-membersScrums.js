@@ -1,34 +1,26 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('MS_Members', {
-      id: {
+    return queryInterface.createTable('FE_MembersScrums', {
+      idMember: {
         allowNull: false,
-        autoIncrement: false,
-        primaryKey: true,
         type: Sequelize.STRING
       },
-      name: {
-        type: Sequelize.STRING
-      },
-      avatar: {
-        type: Sequelize.STRING
-      },
-      tenant: {
+      idScrum: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-
-    return queryInterface.dropTable('MS_Members');
+    return queryInterface.dropTable('FE_MembersScrums');
   }
 };

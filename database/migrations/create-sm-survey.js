@@ -20,6 +20,9 @@ module.exports = {
       imageURL: {
         type: Sequelize.STRING
       },
+      surveyType: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
