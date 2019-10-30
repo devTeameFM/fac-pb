@@ -47,5 +47,5 @@ module.exports = {
     {},
   ),
 
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('SM_Surveys', null, {}),
+  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('SM_SurveySections', null, {}),
 };

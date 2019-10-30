@@ -1,9 +1,9 @@
 
 const { Router } = require('express');
-const controllers = require('../controllers');
+const controllers = require('../controller');
+//const scrumController = require('../controller').scrum;
 
 const router = Router();
-
 
 router.get('/', (req, res) => res.send('Welcome'))
 router.get('/scrums/:memberId',controllers.getAllScrumsByMember);
@@ -17,6 +17,8 @@ router.post('/playbook',controllers.createPlaybook);
 
 router.get('/surveys', controllers.getAllSurveyDynamics);
 router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
+
+//router.get('/test',scrumController.getAllUserEarnings);
 //router.get('/surveys/:surveyId', controllers.getSurveyById);
 //router.get('/surveysSections', controllers.getAllSurveySection);
 //router.get('/surveysSections/:sectionId', controllers.getAllSurveySectionById);

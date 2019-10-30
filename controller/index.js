@@ -1,5 +1,6 @@
 const models = require("../database/models");
 
+
 /*
 const getPlaybookById = async (id,res) => {
   try {
@@ -105,11 +106,18 @@ const getAllSurveyDynamics = async (req, res) => {
             {
               model: models.SM_SurveySectionQuestion,
               as: "questions",
+              include: [
+                {
+                  model: models.SM_SurveySectionQuestionOption,
+                  as: "options"
+                }
+              ]
             }
           ]
         }
       ]
     });
+    /*
     for (survey in surveys) {
         for (section in surveys[survey].sections) {
           for (question in surveys[survey].sections[section].questions) {
@@ -123,6 +131,7 @@ const getAllSurveyDynamics = async (req, res) => {
           }
 	       }
        }
+      */
 
 
     return res.status(200).json({ surveys });
@@ -178,8 +187,13 @@ const getAllSurvey = async (req, res) => {
                   as: "options"
                 }
               ]
+            },
+            {
+              model: models.MS_Member,
+              as:"members"
             }
           ]
+
         }
       ]
     });
@@ -333,6 +347,78 @@ const getAllSurveySectionQuestionById = async (req, res) => {
   }
 };
 
+function who() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('🤡');
+    }, 200);
+  });
+}
+
+function what() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('lurks');
+    }, 300);
+  });
+}
+
+function where() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('in the shadows');
+    }, 500);
+  });
+}
+
+async function msg(req,res) {
+  const a = await getAllSurvey();
+  //const b = await what();
+  //const c = await where();
+
+  console.log(`${ a } ${ b } ${ c }`);
+
+}
+
+const getAllTest = async (req,res) => {
+  try {
+    var option = await models.MS_Member.findAll({
+    }).then(members => {
+      var m = Object.assign({},members);
+      m[0]["options"]={};
+      /*
+      for (member in m) {
+          console.log(m[member].id);
+          m[member]["option"]={};
+      }*/
+      console.log("OUTPUT TEST (M)" + JSON.stringify(m));
+      return res.status(200).json({ m });
+    })
+
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+/*
+const getAllTest = async (req,res) => {
+  try {
+    var option = await models.MS_Member.findAll({
+    }).then(members => {
+      console.log("OUTPUT TEST" + JSON.stringify(members));
+      members["test"]="Got it";
+
+      var m = Object.assign({},members);
+      m.test="Got  it";
+      console.log("OUTPUT TEST (M)" + JSON.stringify(m));
+      return res.status(200).json({ m });
+    })
+
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+*/
+
 const getAllSurveyQuestionsOptions = async (req, res) => {
   try {
     const option = await models.SM_SurveySectionQuestionOption.findAll({
@@ -457,6 +543,9 @@ const deletePost = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
+
+
 */
 module.exports = {
   /*createPost,
@@ -478,5 +567,7 @@ module.exports = {
   getAllScrumsByMember,
   getScrumById,
   getAllSurveyByType,
-  createPlaybook
+  createPlaybook,
+  getAllTest,
+  msg
 };
