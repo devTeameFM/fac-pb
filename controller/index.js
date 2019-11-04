@@ -78,10 +78,6 @@ const getDynamicOptions = async (req, res) => {
     return res.status(200).json({ output });
 };
 
-
-
-
-
 function myData() {
    console.log("ciao");
    return 123;
@@ -299,8 +295,9 @@ const getScrumById = async (req, res) => {
     const scrum = await models.FE_Scrum.findOne({
       where: { id: scrumId }
     });
+    console.log("SCRUM");
     if (scrum) {
-      return res.status(200).json({ scrum });
+      return res.status(200).json( scrum );
     }
     return res.status(404).send("This member doesn't have scrums");
   } catch (error) {
