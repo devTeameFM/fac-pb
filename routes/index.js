@@ -15,6 +15,8 @@ router.get('/members',controllers.getAllMembers);
 router.get('/playbooks',controllers.getAllPlaybooks);
 router.post('/playbook',controllers.createPlaybook);
 
+router.put('/playbook',controllers.putTest);
+
 router.get('/surveys', controllers.getAllSurveyDynamics);
 router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
 router.get('/dynamic/:tableName',controllers.getDynamicOptions)
