@@ -118,7 +118,7 @@ const getAllScrums = async (req, res) => {
         }
       ]
     });
-    return res.status(200).json({ scrums });
+    return res.status(200).json( scrums );
   } catch (error) {
     return res.status(500).send(error.message);
   }
