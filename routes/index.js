@@ -13,9 +13,9 @@ router.get('/scrums',controllers.getAllScrums);
 router.get('/members',controllers.getAllMembers);
 
 router.get('/playbooks',controllers.getAllPlaybooks);
-router.post('/playbook',controllers.createPlaybook);
+router.post('/contract',controllers.createPlaybook);
 
-router.put('/playbook',controllers.putTest);
+router.put('/contract',controllers.putTest);
 
 router.get('/surveys', controllers.getAllSurveyDynamics);
 router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
