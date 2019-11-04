@@ -301,13 +301,18 @@ const getScrumById = async (req, res) => {
         },
         {
           model: models.FE_ScrumsList,
-          as: "lists"
-        }/*,
+          as: "lists",/*
+          include: [
+            {
+              model: models.PB_Playbook,
+              as: "cards",
+            }
+          ]*/
+        },
         {
           model: models.MS_Member,
-          as: "members",
-          where: { id: memberId }
-        }*/
+          as: "members"
+        }
       ]
     });
     console.log("SCRUM");
