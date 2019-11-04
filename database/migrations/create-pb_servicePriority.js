@@ -1,8 +1,8 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServicePriority', {
-      idServicePriority: {
+    return queryInterface.createTable('PB_ServicePriorities', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -13,10 +13,18 @@ module.exports = {
       },
       servicePriorityDescription: {
         type: Sequelize.TEXT
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServicePriority');
+    return queryInterface.dropTable('PB_ServicePriorities');
   }
 };

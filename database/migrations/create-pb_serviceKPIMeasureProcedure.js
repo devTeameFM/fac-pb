@@ -1,19 +1,19 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceKPIMeasureProcedure', {
-      idMeasureProcedure: {
+    return queryInterface.createTable('PB_ServiceKPIMeasureProcedures', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      MeasureProcedureDescription: {
+      measureProcedureDescription: {
         type: Sequelize.TEXT
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceKPIMeasureProcedure');
+    return queryInterface.dropTable('PB_ServiceKPIMeasureProcedures');
   }
 };

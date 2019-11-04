@@ -1,8 +1,8 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceResponseType', {
-      idServiceResponseType: {
+    return queryInterface.createTable('PB_ServiceResponseTypes', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -13,10 +13,18 @@ module.exports = {
       },
       serviceResponseTypeDescription: {
         type: Sequelize.TEXT
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceResponseType');
+    return queryInterface.dropTable('PB_ServiceResponseTypes');
   }
 };

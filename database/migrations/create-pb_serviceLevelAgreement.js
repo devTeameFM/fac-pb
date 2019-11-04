@@ -1,8 +1,8 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceLevelAgreement', {
-      idServiceLevelAgreement: {
+    return queryInterface.createTable('PB_ServiceLevelAgreements', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -13,10 +13,18 @@ module.exports = {
       },
       serviceLevelAgreementDescription: {
         type: Sequelize.TEXT
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceLevelAgreement');
+    return queryInterface.dropTable('PB_ServiceLevelAgreements');
   }
 };

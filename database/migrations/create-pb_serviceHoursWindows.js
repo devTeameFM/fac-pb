@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceHoursWindow', {
+    return queryInterface.createTable('PB_ServiceHoursWindows', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,10 +10,18 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceHoursWindow');
+    return queryInterface.dropTable('PB_ServiceHoursWindows');
   }
 };

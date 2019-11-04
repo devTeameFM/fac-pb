@@ -23,6 +23,64 @@ const getPlaybookById = async (id,res) => {
   }
 }
 */
+const getTest = async () => {
+  const output = await models[""].findAll({
+  });
+}
+
+
+const getDynamicOptions = async (req, res) => {
+    const { tableName } = req.params;
+    //console.log(tableName);
+    var questions=await models['SM_SurveySectionQuestion'].findAll();
+
+    var table=[];
+    for (q in questions) {
+      //console.log("TEST:" + q);
+      if (questions[q].type==="SELECT") {
+        console.log("TEST:" + questions[q].tableInput);
+        var datas=await models[questions[q].tableInput].findAll();
+        table.push(datas);
+      }
+    }
+
+
+    const output = await models[req.params.tableName].findAll({
+    });
+    /*
+    var surveys = await models['SM_Survey'].findAll({
+      include: [
+        {
+          model: models.SM_SurveySection,
+          as: "sections",
+          include: [
+            {
+              model: models.SM_SurveySectionQuestion,
+              as: "questions",
+              include: [
+                {
+                  model: models.SM_SurveySectionQuestionOption,
+                  as: "options"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
+    /*
+    var response={
+      "output" : output,
+      "surveys" : s
+    }*/
+
+    return res.status(200).json({ output });
+};
+
+
+
+
 
 function myData() {
    console.log("ciao");
@@ -569,5 +627,6 @@ module.exports = {
   getAllSurveyByType,
   createPlaybook,
   getAllTest,
-  msg
+  msg,
+  getDynamicOptions
 };

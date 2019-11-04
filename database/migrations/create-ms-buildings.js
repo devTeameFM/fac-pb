@@ -1,18 +1,18 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceClasses', {
+    return queryInterface.createTable('MS_Buildings', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      idMember: {
         type: Sequelize.STRING
       },
-      description: {
-        type: Sequelize.TEXT
+      name: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +25,7 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceClasses');
+
+    return queryInterface.dropTable('MS_Buildings');
   }
 };

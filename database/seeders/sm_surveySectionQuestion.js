@@ -13,6 +13,8 @@ module.exports = {
     		icon: 'business',
     		required: true,
     		flow: true,
+        tableInput: "MS_Building",
+        valueInput: "name",
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -55,6 +57,8 @@ module.exports = {
     		type: 'SELECT',
     		required: true,
     		flow: true,
+        tableInput: "PB_ServiceClass",
+        valueInput: "name",
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -69,6 +73,8 @@ module.exports = {
     		icon: 'business',
     		required: true,
     		flow: true,
+        tableInput: "MS_Building",
+        valueInput: "name",
         createdAt: new Date(),
         updatedAt: new Date()
       }

@@ -1,8 +1,8 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceDuration', {
-      idServiceDuration: {
+    return queryInterface.createTable('PB_ServiceDurations', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -10,10 +10,18 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceDuration');
+    return queryInterface.dropTable('PB_ServiceDurations');
   }
 };

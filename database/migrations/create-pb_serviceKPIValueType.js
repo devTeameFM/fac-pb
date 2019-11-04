@@ -1,22 +1,22 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceKPIValueType', {
-      idKPIValueType: {
+    return queryInterface.createTable('PB_ServiceKPIValueTypes', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ValueTypeName: {
+      valueTypeName: {
         type: Sequelize.STRING
       },
-      ValueMeasureUnit: {
+      valueMeasureUnit: {
         type: Sequelize.TEXT
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceKPIValueType');
+    return queryInterface.dropTable('PB_ServiceKPIValueTypes');
   }
 };

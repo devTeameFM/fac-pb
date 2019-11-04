@@ -1,8 +1,8 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceActivityActivationMethod', {
-      idServiceActivityActivationMethod: {
+    return queryInterface.createTable('PB_ServiceActivityActivationMethods', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -14,15 +14,23 @@ module.exports = {
       idRemunerationMethod: {
         type: Sequelize.INTEGER
       },
-      ActivityTypeName: {
+      activityTypeName: {
         type: Sequelize.STRING
       },
-      RemunerationMethodTypeName: {
+      remunerationMethodTypeName: {
         type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceActivityActivationMethod');
+    return queryInterface.dropTable('PB_ServiceActivityActivationMethods');
   }
 };

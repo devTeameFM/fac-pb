@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     icon: DataTypes.STRING,
     required: DataTypes.STRING,
     flow: DataTypes.STRING,
+    tableInput: DataTypes.STRING,
+    valueInput: DataTypes.STRING
   }, {});
   SM_SurveySectionQuestion.associate = function(models) {
     SM_SurveySectionQuestion.belongsTo(models.SM_SurveySection, {

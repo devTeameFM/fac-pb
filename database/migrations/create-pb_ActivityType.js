@@ -1,8 +1,8 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ActivityType', {
-      idActivityType: {
+    return queryInterface.createTable('PB_ActivityTypes', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -13,10 +13,19 @@ module.exports = {
       },
       ActivityTypeDescription: {
         type: Sequelize.TEXT
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
+
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ActivityType');
+    return queryInterface.dropTable('PB_ActivityTypes');
   }
 };

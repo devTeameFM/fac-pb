@@ -40,6 +40,12 @@ module.exports = {
       flow: {
         type: Sequelize.BOOLEAN
       },
+      tableInput: {
+        type: Sequelize.STRING
+      },
+      valueInput: {
+        type: Sequelize.STRING
+      },
     createdAt: {
         allowNull: false,
         type: Sequelize.DATE

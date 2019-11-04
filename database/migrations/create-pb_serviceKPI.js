@@ -1,38 +1,47 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceSlaResponseTypes', {
+    return queryInterface.createTable('PB_ServiceKPIs', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      idService: {
+      idKpiScope: {
         type: Sequelize.INTEGER
       },
-      idServiceResponseType: {
+      kpiName: {
+        type: Sequelize.STRING
+      },
+      idKpiType: {
         type: Sequelize.INTEGER
       },
-      idServicePriority: {
+      isActive: {
+        type: Sequelize.BOOLEAN
+      },
+      idMeasuringProcedures:{
         type: Sequelize.INTEGER
       },
-      idServiceLevelAgreement: {
+      idMeasuringMethod: {
         type: Sequelize.INTEGER
       },
-      target: {
+      calculateProcedure: {
         type: Sequelize.STRING
       },
-      serviceName: {
+      idRespType: {
+        type: Sequelize.INTEGER
+      },
+      kpiScopeName: {
+        type : Sequelize.STRING
+      },
+      measuringProceduresDescription: {
         type: Sequelize.STRING
       },
-      serviceResponseTypeName: {
+      measuringMethodDescription: {
         type: Sequelize.STRING
       },
-      servicePriorityName: {
-        type: Sequelize.STRING
-      },
-      serviceLevelAgreementName: {
+      responseTypeName: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -46,6 +55,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceSlaResponseTypes');
+    return queryInterface.dropTable('PB_ServiceKPIs');
   }
 };

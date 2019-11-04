@@ -1,22 +1,30 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServiceActivationMethod', {
-      idRemunerationMethod: {
+    return queryInterface.createTable('PB_ServiceActivationMethods', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      RemunerationMethodTypeName: {
+      remunerationMethodTypeName: {
         type: Sequelize.STRING
       },
-      RemunerationMethodDescription: {
+      remunerationMethodDescription: {
         type: Sequelize.TEXT
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServiceActivationMethod');
+    return queryInterface.dropTable('PB_ServiceActivationMethods');
   }
 };

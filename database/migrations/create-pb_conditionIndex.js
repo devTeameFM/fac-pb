@@ -1,8 +1,8 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ConditionIndex', {
-      idCondition: {
+    return queryInterface.createTable('PB_ConditionIndices', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -10,10 +10,18 @@ module.exports = {
       },
       LevelTypeName: {
         type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ConditionIndex');
+    return queryInterface.dropTable('PB_ConditionIndices');
   }
 };

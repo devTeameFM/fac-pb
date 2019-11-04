@@ -17,6 +17,7 @@ router.post('/playbook',controllers.createPlaybook);
 
 router.get('/surveys', controllers.getAllSurveyDynamics);
 router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
+router.get('/dynamic/:tableName',controllers.getDynamicOptions)
 
 //router.get('/test',scrumController.getAllUserEarnings);
 //router.get('/surveys/:surveyId', controllers.getSurveyById);
