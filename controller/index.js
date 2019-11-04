@@ -293,7 +293,22 @@ const getScrumById = async (req, res) => {
   try {
     const { scrumId } = req.params;
     const scrum = await models.FE_Scrum.findOne({
-      where: { id: scrumId }
+      where: { id: scrumId },
+      include: [
+        {
+          model: models.FE_ScrumsSetting,
+          as: "settings"
+        },
+        {
+          model: models.FE_ScrumsList,
+          as: "lists"
+        }/*,
+        {
+          model: models.MS_Member,
+          as: "members",
+          where: { id: memberId }
+        }*/
+      ]
     });
     console.log("SCRUM");
     if (scrum) {
