@@ -39,6 +39,11 @@ module.exports = (sequelize, DataTypes) => {
           as: 'cards',
           onDelete: 'CASCADE',
         });
+        FE_ScrumsList.hasMany(models.FE_ScrumsListsAction, {
+              foreignKey: 'idList',
+              as: 'action',
+              onDelete: 'CASCADE',
+            });
       /*
       FE_ScrumsList.belongsToMany(models.PB_Playbook, {
         through: 'FE_CardsLists',

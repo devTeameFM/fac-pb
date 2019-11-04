@@ -104,13 +104,13 @@ const getAllScrums = async (req, res) => {
         },
         {
           model: models.FE_ScrumsList,
-          as: "lists",/*
+          as: "lists",
           include: [
             {
-              model: models.PB_Playbook,
-              as: "cards",
+              model: models.FE_ScrumsListsAction,
+              as: "action",
             }
-          ]*/
+          ]
         },
         {
           model: models.MS_Member,
