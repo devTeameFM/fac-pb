@@ -520,10 +520,77 @@ const createPlaybook = async (req, res) => {
     var  pb=req.body;
     pb["typeTask"]="PLAYBOOK";
     pb["status"]="BUILDING_INFO";
-    const post = await models.PB_Playbook.create(pb);
-    return res.status(201).json({
-      post
+    pb["templateName"]="";
+    pb["fileName"]="";
+    pb["context"]={}
+    pb["context"]["name"]=req.body.name;
+    pb["context"]["status"]="BUILDING_INFO";
+    pb["context"]["dueDate"]="";
+    //pb["surveys"]=new Object();
+    //pb["answers"]=new Object();
+    //let post = await models.PB_Playbook.create(pb);
+    //pb["answers"] = [];
+    pb["surveys"] = await models['SM_Survey'].findAll({
+      include: [
+        {
+          model: models.SM_SurveySection,
+          as: "sections",
+          include: [
+            {
+              model: models.SM_SurveySectionQuestion,
+              as: "questions",
+              include: [
+                {
+                  model: models.SM_SurveySectionQuestionOption,
+                  as: "options"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     });
+
+    console.log("------------ BEGIN SURVEY -------------------");
+
+
+
+    var risposte={};
+    for (survey in pb["surveys"]) {
+      var ID=pb.surveys[survey].id;
+      risposte[ID]={};
+      for (section in pb.surveys[survey].sections) {
+        var sectionCode=pb.surveys[survey].sections[section].code.toString();
+
+        risposte[ID][sectionCode]={};
+        //risposte[pb.surveys[survey].id][pb.surveys[survey].sections[section].code]={}
+        for (question in pb.surveys[survey].sections[section].questions) {
+          var QUESTION_ID=pb.surveys[survey].sections[section].questions[question].id;
+          var QUESTION_CODE=pb.surveys[survey].sections[section].questions[question].code;
+          risposte[ID][sectionCode][QUESTION_CODE]={};
+          risposte[ID][sectionCode][QUESTION_CODE]["questionId"]=QUESTION_ID;
+          risposte[ID][sectionCode][QUESTION_CODE]["value"]="";
+        }
+      }
+
+    }
+    console.log(risposte);
+    pb["context"]["answers"]=risposte;
+    console.log("------------ END SURVEY -------------------");
+
+
+    let post = await models.PB_Playbook.create(pb);
+
+    //let  people = {id: 4 ,firstName: 'John'};
+    //let answers =[];
+    //post = {...post, surveys:surveys};
+    //post = (...post, answers: answers);
+    //let newPost=post;
+    //newPost['surveys']=surveys;
+    //newPost['answers']=[];
+    return res.status(201).json(
+      pb
+    );
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
