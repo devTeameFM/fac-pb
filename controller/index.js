@@ -97,6 +97,7 @@ const putTest = async (req, res) => {
 const getAllScrums = async (req, res) => {
   try {
     const scrums = await models.FE_Scrum.findAll({
+      order: [['order', 'ASC']],
       include: [
         {
           model: models.FE_ScrumsSetting,
@@ -109,7 +110,14 @@ const getAllScrums = async (req, res) => {
             {
               model: models.FE_ScrumsListsAction,
               as: "action",
+            },
+            {
+              model: models.PB_Playbook,
+              as:"cards"
             }
+          ],
+          order: [
+            [{model: models.FE_ScrumsList, as: 'lists'},'order', 'ASC']
           ]
         },
         {
@@ -256,7 +264,8 @@ const getAllSurvey = async (req, res) => {
             {
               model: models.MS_Member,
               as:"members"
-            }
+            },
+
           ]
 
         }
@@ -289,6 +298,47 @@ const getSurveyById = async (req, res) => {
   }
 };
 
+const getScrumById = async (req,res) => {
+  try {
+    const { scrumId } = req.params;
+    const scrums = await models.FE_Scrum.findOne({
+      where: { id: scrumId },
+      order: [['order', 'ASC']],
+      include: [
+        {
+          model: models.FE_ScrumsSetting,
+          as: "settings"
+        },
+        {
+          model: models.FE_ScrumsList,
+          as: "lists",
+          include: [
+            {
+              model: models.FE_ScrumsListsAction,
+              as: "action",
+            },
+            {
+              model: models.PB_Playbook,
+              as:"cards"
+            }
+          ],
+          order: [
+            [{model: models.FE_ScrumsList, as: 'lists'},'order', 'ASC']
+          ]
+        },
+        {
+          model: models.MS_Member,
+          as: "members"
+        }
+      ]
+    });
+    return res.status(200).json( scrums );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+/*
 const getScrumById = async (req, res) => {
   try {
     const { scrumId } = req.params;
@@ -324,7 +374,7 @@ const getScrumById = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
+*/
 
 const getAllScrumsByMember = async (req, res) => {
   try {
@@ -580,6 +630,14 @@ const createPlaybook = async (req, res) => {
 
 
     let post = await models.PB_Playbook.create(pb);
+
+    var cardList={
+      "idPlaybook":post.id,
+      "idList":"0001"
+    }
+
+    let ins = await models.FE_CardsList.create(cardList);
+
     return res.status(201).json(
       pb
     );
