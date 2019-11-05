@@ -580,14 +580,6 @@ const createPlaybook = async (req, res) => {
 
 
     let post = await models.PB_Playbook.create(pb);
-
-    //let  people = {id: 4 ,firstName: 'John'};
-    //let answers =[];
-    //post = {...post, surveys:surveys};
-    //post = (...post, answers: answers);
-    //let newPost=post;
-    //newPost['surveys']=surveys;
-    //newPost['answers']=[];
     return res.status(201).json(
       pb
     );
