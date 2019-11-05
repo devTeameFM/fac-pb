@@ -25,6 +25,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'idPlaybook'
     });
 
+    PB_Playbook.belongsToMany(models.FE_ScrumsList, {
+      through: 'FE_CardsList',
+      as: 'cards',
+      foreignKey: 'idPlaybook'
+    });
+
   };
   return PB_Playbook;
 };

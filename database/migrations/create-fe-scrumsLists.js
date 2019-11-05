@@ -23,6 +23,10 @@ module.exports = {
       imageURL: {
         type: Sequelize.STRING
       },
+      order:{
+        type: Sequelize.INTEGER,
+        autoIncrement: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

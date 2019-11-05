@@ -8,6 +8,7 @@ module.exports = {
         description: 'Create your market analysis and select the vendors',
         imageURL: "myspot-icons/scrumboards/business-team.png",
         uri: "",
+        order: 0,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -17,6 +18,7 @@ module.exports = {
         description: 'Establish your baseline technical requirements',
         imageURL: "myspot-icons/scrumboards/document-approve.png",
         uri: "",
+        order: 1,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -26,6 +28,7 @@ module.exports = {
         description: 'Monitor your service and contract results and kpi',
       	imageURL : 'myspot-icons/scrumboards/business-graph-2.png',
         uri: "",
+        order: 2,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -35,6 +38,7 @@ module.exports = {
         description: 'Facility management system',
       	imageURL : 'myspot-icons/scrumboards/desktop-imac-chart.png"',
         uri: "",
+        order: 3,
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -44,8 +48,9 @@ module.exports = {
         description: 'Define your budget and plan the maintenance activities',
         imageURL : 'myspot-icons/scrumboards/business-graph-2.png',
         uri: "",
+        order: 4,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date()        
       },
     ],
     {},

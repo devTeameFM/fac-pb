@@ -20,6 +20,9 @@ module.exports = {
       uri: {
         type: Sequelize.STRING
       },
+      order:{
+        type :Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

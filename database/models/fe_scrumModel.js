@@ -1,10 +1,9 @@
-
 module.exports = (sequelize, DataTypes) => {
   const FE_Scrum = sequelize.define('FE_Scrum', {
     id: {
       allowNull: false,
       autoIncrement: true,
-      type : DataTypes.INTEGER,
+      type : DataTypes.STRING,
       primaryKey: true
     },
     name: {
@@ -18,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     uri: {
       type: DataTypes.STRING
-    },
+    }  
   }, {});
   FE_Scrum.associate = function(models) {
     FE_Scrum.hasMany(models.FE_ScrumsSetting, {
