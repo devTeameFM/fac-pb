@@ -182,71 +182,106 @@ const getContractById = async (req, res) => {
   }
 };
 
+
+/*
+function async contractAddSurveys(pb) {
+  var obj = Object.assign({}, pb.dataValues);
+  obj["surveys"] = await models['SM_Survey'].findAll({
+    include: [
+      {
+        model: models.SM_SurveySection,
+        as: "sections",
+        include: [
+          {
+            model: models.SM_SurveySectionQuestion,
+            as: "questions",
+            include: [
+              {
+                model: models.SM_SurveySectionQuestionOption,
+                as: "options"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  });
+  return obj;
+}*/
+
+function initPlayBook(pb) {
+  pb["typeTask"]="PLAYBOOK";
+  pb["status"]="BUILDING_INFO";
+  pb["templateName"]="";
+  pb["fileName"]="";
+  pb["context"]={}
+  pb["context"]["name"]="req.body.name";
+  pb["context"]["status"]="BUILDING_INFO";
+  pb["context"]["dueDate"]="";
+
+  return pb;
+}
+
 const getAllPlaybooks = async (req, res) => {
   try {
-    var  pb=req.body;
-    pb["typeTask"]="PLAYBOOK";
-    pb["status"]="BUILDING_INFO";
-    pb["templateName"]="";
-    pb["fileName"]="";
-    pb["context"]={}
-    pb["context"]["name"]=req.body.name;
-    pb["context"]["status"]="BUILDING_INFO";
-    pb["context"]["dueDate"]="";
-    //pb["surveys"]=new Object();
-    //pb["answers"]=new Object();
-    //let post = await models.PB_Playbook.create(pb);
-    //pb["answers"] = [];
-    pb["surveys"] = await models['SM_Survey'].findAll({
-      include: [
-        {
-          model: models.SM_SurveySection,
-          as: "sections",
-          include: [
-            {
-              model: models.SM_SurveySectionQuestion,
-              as: "questions",
-              include: [
-                {
-                  model: models.SM_SurveySectionQuestionOption,
-                  as: "options"
-                }
-              ]
-            }
-          ]
-        }
-      ]
+    console.log("getAllPlaybooks");
+
+    const playbooks = await models.PB_Playbook.findAll({
     });
 
-    console.log("------------ BEGIN SURVEY -------------------");
+    var listPlayBooks=[];
+    for (contract in playbooks) {
+      var obj = Object.assign({}, playbooks[contract].dataValues);
+      obj=initPlayBook(obj);
+      obj["surveys"] = await models['SM_Survey'].findAll({
+        include: [
+          {
+            model: models.SM_SurveySection,
+            as: "sections",
+            include: [
+              {
+                model: models.SM_SurveySectionQuestion,
+                as: "questions",
+                include: [
+                  {
+                    model: models.SM_SurveySectionQuestionOption,
+                    as: "options"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      });
+      var risposte={};
+      for (survey in obj["surveys"]) {
+        var ID=obj.surveys[survey].id;
+        risposte[ID]={};
+        for (section in obj.surveys[survey].sections) {
+          var sectionCode=obj.surveys[survey].sections[section].code.toString();
 
-
-
-    var risposte={};
-    for (survey in pb["surveys"]) {
-      var ID=pb.surveys[survey].id;
-      risposte[ID]={};
-      for (section in pb.surveys[survey].sections) {
-        var sectionCode=pb.surveys[survey].sections[section].code.toString();
-
-        risposte[ID][sectionCode]={};
-        //risposte[pb.surveys[survey].id][pb.surveys[survey].sections[section].code]={}
-        for (question in pb.surveys[survey].sections[section].questions) {
-          var QUESTION_ID=pb.surveys[survey].sections[section].questions[question].id;
-          var QUESTION_CODE=pb.surveys[survey].sections[section].questions[question].code;
-          risposte[ID][sectionCode][QUESTION_CODE]={};
-          risposte[ID][sectionCode][QUESTION_CODE]["questionId"]=QUESTION_ID;
-          risposte[ID][sectionCode][QUESTION_CODE]["value"]="";
+          risposte[ID][sectionCode]={};
+          //risposte[pb.surveys[survey].id][pb.surveys[survey].sections[section].code]={}
+          for (question in obj.surveys[survey].sections[section].questions) {
+            var QUESTION_ID=obj.surveys[survey].sections[section].questions[question].id;
+            var QUESTION_CODE=obj.surveys[survey].sections[section].questions[question].code;
+            risposte[ID][sectionCode][QUESTION_CODE]={};
+            risposte[ID][sectionCode][QUESTION_CODE]["questionId"]=QUESTION_ID;
+            risposte[ID][sectionCode][QUESTION_CODE]["value"]="";
+          }
         }
-      }
 
+      }
+      obj["context"]["answers"]=risposte;
+      listPlayBooks.push(obj);
     }
-    console.log(risposte);
-    pb["context"]["answers"]=risposte;
-    console.log("------------ END SURVEY -------------------");
-    
+
+    console.log(playbooks);
+    let pb={};
+    pb=initPlayBook(pb);
+
     return res.status(201).json(
-      pb
+      listPlayBooks
     );
   } catch (error) {
     return res.status(500).json({ error: error.message });
