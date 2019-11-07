@@ -13,6 +13,7 @@ router.get('/scrums',controllers.getAllScrums);
 router.get('/members',controllers.getAllMembers);
 
 router.get('/contract',controllers.getAllPlaybooks);
+router.get('/contract/:contractId',controllers.getContractById);
 router.post('/contract',controllers.createPlaybook);
 
 router.put('/contract',controllers.putTest);

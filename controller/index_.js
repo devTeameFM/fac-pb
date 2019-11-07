@@ -78,6 +78,21 @@ const getDynamicOptions = async (req, res) => {
     return res.status(200).json({ output });
 };
 
+function myData() {
+   console.log("ciao");
+   return 123;
+}
+
+const putTest = async (req, res) => {
+  try {
+    const  bodyMsg  = req.body;
+    console.log(bodyMsg);
+    return res.status(200).json({ bodyMsg });
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 
 const getAllScrums = async (req, res) => {
   try {
@@ -117,151 +132,22 @@ const getAllScrums = async (req, res) => {
   }
 };
 
-const getContractById = async (req, res) => {
+const getAllPlaybooks = async (req, res) => {
   try {
-    const contractId= req.params.contractId;
-    let pb={};
-
-    //console.log("contractId --> " + JSON.stringify(req.params));
-    const playbook = await models.PB_Playbook.findOne({
-      where: { id: contractId},
-    });
-
-    var obj = Object.assign({}, playbook.dataValues);
-    obj["surveys"] = await models['SM_Survey'].findAll({
+    const playbooks = await models.PB_Playbook.findAll({
       include: [
         {
-          model: models.SM_SurveySection,
-          as: "sections",
-          include: [
-            {
-              model: models.SM_SurveySectionQuestion,
-              as: "questions",
-              include: [
-                {
-                  model: models.SM_SurveySectionQuestionOption,
-                  as: "options"
-                }
-              ]
-            }
-          ]
+          model:models.SM_Survey,
+          as: "surveys"
         }
       ]
     });
 
-    var risposte={};
-    for (survey in obj["surveys"]) {
-      var ID=obj.surveys[survey].id;
-      risposte[ID]={};
-      for (section in obj.surveys[survey].sections) {
-        var sectionCode=obj.surveys[survey].sections[section].code.toString();
-
-        risposte[ID][sectionCode]={};
-        //risposte[pb.surveys[survey].id][pb.surveys[survey].sections[section].code]={}
-        for (question in obj.surveys[survey].sections[section].questions) {
-          var QUESTION_ID=obj.surveys[survey].sections[section].questions[question].id;
-          var QUESTION_CODE=obj.surveys[survey].sections[section].questions[question].code;
-          risposte[ID][sectionCode][QUESTION_CODE]={};
-          risposte[ID][sectionCode][QUESTION_CODE]["questionId"]=QUESTION_ID;
-          risposte[ID][sectionCode][QUESTION_CODE]["value"]="";
-        }
-      }
-
-    }
-    obj["templateName"]="";
-    obj["fileName"]="";
-    obj["context"]={}
-    obj["context"]["name"]=playbook.name;
-    obj["context"]["status"]="BUILDING_INFO";
-    obj["context"]["dueDate"]="";
-    obj["context"]["answers"]=risposte;
-    return res.status(200).json(obj)
+    return res.status(200).json({ playbooks })
 
   } catch (error) {
     return res.status(500).send(error.message);
   }
-};
-
-const getAllPlaybooks = async (req, res) => {
-  try {
-    var  pb=req.body;
-    pb["typeTask"]="PLAYBOOK";
-    pb["status"]="BUILDING_INFO";
-    pb["templateName"]="";
-    pb["fileName"]="";
-    pb["context"]={}
-    pb["context"]["name"]=req.body.name;
-    pb["context"]["status"]="BUILDING_INFO";
-    pb["context"]["dueDate"]="";
-    //pb["surveys"]=new Object();
-    //pb["answers"]=new Object();
-    //let post = await models.PB_Playbook.create(pb);
-    //pb["answers"] = [];
-    pb["surveys"] = await models['SM_Survey'].findAll({
-      include: [
-        {
-          model: models.SM_SurveySection,
-          as: "sections",
-          include: [
-            {
-              model: models.SM_SurveySectionQuestion,
-              as: "questions",
-              include: [
-                {
-                  model: models.SM_SurveySectionQuestionOption,
-                  as: "options"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    });
-
-    console.log("------------ BEGIN SURVEY -------------------");
-
-
-
-    var risposte={};
-    for (survey in pb["surveys"]) {
-      var ID=pb.surveys[survey].id;
-      risposte[ID]={};
-      for (section in pb.surveys[survey].sections) {
-        var sectionCode=pb.surveys[survey].sections[section].code.toString();
-
-        risposte[ID][sectionCode]={};
-        //risposte[pb.surveys[survey].id][pb.surveys[survey].sections[section].code]={}
-        for (question in pb.surveys[survey].sections[section].questions) {
-          var QUESTION_ID=pb.surveys[survey].sections[section].questions[question].id;
-          var QUESTION_CODE=pb.surveys[survey].sections[section].questions[question].code;
-          risposte[ID][sectionCode][QUESTION_CODE]={};
-          risposte[ID][sectionCode][QUESTION_CODE]["questionId"]=QUESTION_ID;
-          risposte[ID][sectionCode][QUESTION_CODE]["value"]="";
-        }
-      }
-
-    }
-    console.log(risposte);
-    pb["context"]["answers"]=risposte;
-    console.log("------------ END SURVEY -------------------");
-
-
-    let post = await models.PB_Playbook.create(pb);
-
-    var cardList={
-      "idPlaybook":post.id,
-      "idList":"0001"
-    }
-
-    let ins = await models.FE_CardsList.create(cardList);
-
-    return res.status(201).json(
-      pb
-    );
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-
 };
 
 
@@ -597,7 +483,38 @@ const getAllSurveySectionQuestionById = async (req, res) => {
   }
 };
 
+function who() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('🤡');
+    }, 200);
+  });
+}
 
+function what() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('lurks');
+    }, 300);
+  });
+}
+
+function where() {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('in the shadows');
+    }, 500);
+  });
+}
+
+async function msg(req,res) {
+  const a = await getAllSurvey();
+  //const b = await what();
+  //const c = await where();
+
+  console.log(`${ a } ${ b } ${ c }`);
+
+}
 
 const getAllTest = async (req,res) => {
   try {
@@ -730,16 +647,6 @@ const createPlaybook = async (req, res) => {
 };
 
 
-const putTest = async (req, res) => {
-  try {
-    const  bodyMsg  = req.body;
-    console.log(bodyMsg);
-    return res.status(200).json( bodyMsg );
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
-
 
 
 
@@ -865,7 +772,7 @@ module.exports = {
   getAllSurveyByType,
   createPlaybook,
   getAllTest,
+  msg,
   getDynamicOptions,
-  getContractById,
   putTest
 };
