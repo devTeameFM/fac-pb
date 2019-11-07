@@ -244,17 +244,7 @@ const getAllPlaybooks = async (req, res) => {
     console.log(risposte);
     pb["context"]["answers"]=risposte;
     console.log("------------ END SURVEY -------------------");
-
-
-    let post = await models.PB_Playbook.create(pb);
-
-    var cardList={
-      "idPlaybook":post.id,
-      "idList":"0001"
-    }
-
-    let ins = await models.FE_CardsList.create(cardList);
-
+    
     return res.status(201).json(
       pb
     );
