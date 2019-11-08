@@ -64,7 +64,7 @@ const getAllScrums = async (req, res) => {
           include: [
             {
               model: models.FE_ScrumsListsAction,
-              as: "action",
+              as: "actions",
             },
             {
               model: models.PB_Playbook,
@@ -431,7 +431,7 @@ const getScrumById = async (req,res) => {
           include: [
             {
               model: models.FE_ScrumsListsAction,
-              as: "action",
+              as: "actions",
             },
             {
               model: models.PB_Playbook,
@@ -575,9 +575,42 @@ const createPlaybook = async (req, res) => {
 
 const updateContract = async (req, res) => {
   try {
-    const  bodyMsg  = req.body;
-    console.log(bodyMsg);
-    return res.status(200).json( bodyMsg );
+    const  playbook  = req.body;
+    console.log(playbook.id);
+    const { playbookId } = playbook.id;
+    //UPDATE status
+    var pb={
+      "id" : playbook.id,
+      "status" : playbook.status
+    }
+    const [updated] = await models.PB_Playbook.update(pb, {
+      where: { id: pb.id }
+    });
+    //UPDATE answers
+    var answers=playbook.context.answers;
+    console.log(JSON.stringify(answers));
+    for (answer in answers) {
+      const [updated] = await models.SM_SurveyAnswer.update(answers[answer], {
+        where: { id: answers[answer].id }
+      });
+    }
+    //UPDATE CARD Status
+    let listCard = await models.FE_ScrumsList.findOne({
+      where: { status: playbook.status }
+    });
+    console.log("listCard" + JSON.stringify(listCard));
+    let idList=listCard.id;
+    var card={
+      "idList": idList
+    }
+
+    let ins = await models.FE_CardsList.update(card, {
+      where: { idPlaybook: pb.id}
+    });
+
+
+
+    return res.status(200).json( playbook );
   } catch (error) {
     return res.status(500).send(error.message);
   }
@@ -592,6 +625,9 @@ const cleandDB = async (req,res) => {
       where: {},
       truncate: true });
     await models.SM_SurveySectionQuestionOption.destroy({
+        where: {},
+        truncate: true })
+    await models.FE_CardsList.destroy({
         where: {},
         truncate: true })
     return res.status(200).json({ });
