@@ -12,14 +12,20 @@ router.get('/scrums',controllers.getAllScrums);
 
 router.get('/members',controllers.getAllMembers);
 
-router.get('/contract',controllers.getAllPlaybooks);
+router.get('/contract',controllers.getAllContracts);
 router.get('/contract/:contractId',controllers.getContractById);
 router.post('/contract',controllers.createPlaybook);
 
-router.put('/contract',controllers.putTest);
+router.put('/contract',controllers.updateContract);
+router.post('/updateQuestions', controllers.generateQuestions);
 
+
+
+//SOLO PER DEVELOP
 router.get('/surveys', controllers.getAllSurveyDynamics);
 router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
 router.get('/dynamic/:tableName',controllers.getDynamicOptions)
+router.delete('/clean',controllers.cleandDB)
+
 
 module.exports = router;
