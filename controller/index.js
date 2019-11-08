@@ -98,7 +98,18 @@ const getContractById = async (req, res) => {
     });
 
     var obj = Object.assign({}, playbook.dataValues);
+    obj["templateName"]="";
+    obj["fileName"]="";
+    obj["context"]={}
+    obj["context"]["name"]=playbook.name;
+    obj["context"]["status"]="BUILDING_INFO";
+    obj["context"]["dueDate"]="";
     obj["surveys"] = await models['SM_Survey'].findAll({
+      order: [
+        [ { model: models.SM_SurveySection , as: 'sections'}, 'id', 'ASC'],
+        [ { model: models.SM_SurveySection , as: 'sections'},
+          { model: models.SM_SurveySectionQuestion, as: 'questions' }, 'id', 'ASC']
+      ],
       include: [
         {
           model: models.SM_SurveySection,
@@ -119,6 +130,12 @@ const getContractById = async (req, res) => {
       ]
     });
 
+    obj["context"]["answers"] = await models['SM_SurveyAnswer'].findAll({
+      where: {
+        playBookId: playbook.id
+      }
+    });
+    /*
     var risposte={};
     for (survey in obj["surveys"]) {
       var ID=obj.surveys[survey].id;
@@ -137,14 +154,9 @@ const getContractById = async (req, res) => {
         }
       }
 
-    }
-    obj["templateName"]="";
-    obj["fileName"]="";
-    obj["context"]={}
-    obj["context"]["name"]=playbook.name;
-    obj["context"]["status"]="BUILDING_INFO";
-    obj["context"]["dueDate"]="";
-    obj["context"]["answers"]=risposte;
+    }*/
+
+
     return res.status(200).json(obj)
 
   } catch (error) {
@@ -214,7 +226,6 @@ const getAllContracts= async (req, res) => {
           }
         ]
       });
-      obj["surveys"]= obj["surveys"].sort(sortByProperty("id"));
       /*
       var risposte={};
       for (survey in obj["surveys"]) {
@@ -621,7 +632,7 @@ const generateQuestions = async (req,res) => {
                 var option={
                   "idQuestion" : surveys[survey].sections[section].questions[question].id,
                   "name" : options[o][fieldInput],
-                  "defaultValue" : "",
+                  "defaultValue" : options[o][fieldInput],
                   "disabled" : false,
                   "createdAt" : new Date(),
                   "updatedAt" : new Date()
