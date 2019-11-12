@@ -192,12 +192,12 @@ const getContractById = async (req, res) => {
       obj["surveys"].push(temp_survey);
     }
 
-    /*
+
     obj["context"]["answers"] = await models['SM_SurveyAnswer'].findAll({
       where: {
         playBookId: playbook.id
       }
-    });*/
+    });
     return res.status(200).json(obj)
 
   } catch (error) {
@@ -584,7 +584,7 @@ const getAllScrumsByMember = async (req, res) => {
 const createPlaybook = async (req, res) => {
   try {
     var  pb=req.body;
-    pb["taskId"]=0;
+
     pb["coverImg"]="";
     pb["typeTask"]="PLAYBOOK";
     pb["status"]="BUILDING_INFO";
@@ -623,6 +623,14 @@ const createPlaybook = async (req, res) => {
 
 
     let post = await models.PB_Playbook.create(pb);
+
+    var playb={
+      "id" : post.id,
+      "taskId" : post.id
+    }
+    const [updated] = await models.PB_Playbook.update(playb, {
+      where: { id: post.id }
+    });
 
     var cardList={
       "idTask":post.id,
@@ -768,7 +776,7 @@ const updateContract = async (req, res) => {
     }
 
     let ins = await models.FE_CardsList.update(card, {
-      where: { idPlaybook: pb.id}
+      where: { idTask: pb.id}
     });
 
 
