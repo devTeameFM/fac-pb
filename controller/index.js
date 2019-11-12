@@ -864,6 +864,7 @@ const generateQuestions = async (req,res) => {
 
 const importQuestionsFromJSON = async (req,res) => {
     let surveyModel=require("../tracciati/survey.json");
+    console.log(surveyModel);
     for (survey in surveyModel) {
       var surveyEntity={
         //"id" : surveyModel[survey].id,
