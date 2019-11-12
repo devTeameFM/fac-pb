@@ -2,7 +2,9 @@
 module.exports = (sequelize, DataTypes) => {
   const PB_Playbook = sequelize.define('PB_Playbook', {
     idMember: DataTypes.STRING,
+    taskId: DataTypes.STRING,
     typeTask:DataTypes.STRING,
+    coverImg:DataTypes.STRING,
     name: DataTypes.STRING,
     description:DataTypes.STRING,
     status:DataTypes.STRING
@@ -14,8 +16,15 @@ module.exports = (sequelize, DataTypes) => {
         as: 'option',
         onDelete: 'CASCADE',
       });*/
-    PB_Playbook.belongsTo(models.MS_Member, {
+    PB_Playbook.belongsTo(models.PB_PlaybookTaskInfo, {
         foreignKey: 'id',
+        as: 'taskInfo',
+        onDelete: 'CASCADE',
+    });
+
+    PB_Playbook.belongsTo(models.SM_SurveySectionQuestion, {
+        foreignKey: 'id',
+        as: 'options',
         onDelete: 'CASCADE',
     });
 

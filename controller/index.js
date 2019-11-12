@@ -69,7 +69,8 @@ const getAllScrums = async (req, res) => {
             {
               model: models.PB_Playbook,
               as:"cards"
-            }
+            },
+
           ],
           order: [
             [{model: models.FE_ScrumsList, as: 'lists'},'order', 'ASC']
@@ -260,7 +261,6 @@ const getContractByIdOriginal = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
 
 function initPlayBook(pb) {
   pb["typeTask"]="PLAYBOOK";
@@ -584,6 +584,8 @@ const getAllScrumsByMember = async (req, res) => {
 const createPlaybook = async (req, res) => {
   try {
     var  pb=req.body;
+    pb["taskId"]=0;
+    pb["coverImg"]="";
     pb["typeTask"]="PLAYBOOK";
     pb["status"]="BUILDING_INFO";
     pb["templateName"]="";

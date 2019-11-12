@@ -9,6 +9,7 @@ module.exports = {
         imageURL: "myspot-icons/scrumboards/business-team.png",
         uri: "",
         order: 0,
+        type : "",
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -19,6 +20,7 @@ module.exports = {
         imageURL: "myspot-icons/scrumboards/document-approve.png",
         uri: "",
         order: 1,
+        type : "PLAYBOOK",
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -29,6 +31,7 @@ module.exports = {
       	imageURL : 'myspot-icons/scrumboards/business-graph-2.png',
         uri: "",
         order: 2,
+        type : "",
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -39,6 +42,7 @@ module.exports = {
       	imageURL : 'myspot-icons/scrumboards/desktop-imac-chart.png"',
         uri: "",
         order: 3,
+        type : "",
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -49,8 +53,9 @@ module.exports = {
         imageURL : 'myspot-icons/scrumboards/business-graph-2.png',
         uri: "",
         order: 4,
+        type : "",
         createdAt: new Date(),
-        updatedAt: new Date()        
+        updatedAt: new Date()
       },
     ],
     {},

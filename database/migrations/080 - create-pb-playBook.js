@@ -19,6 +19,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      taskId : {
+        type: Sequelize.INTEGER
+      },
+      coverImg: {
+        allowNull: true,
+        type:Sequelize.STRING
+      },
       typeTask: {
         allowNull: true,
         type: Sequelize.STRING

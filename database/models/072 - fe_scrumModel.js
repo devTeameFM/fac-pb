@@ -15,9 +15,15 @@ module.exports = (sequelize, DataTypes) => {
     imageURL: {
       type: DataTypes.STRING
     },
+    order:{
+      type :DataTypes.INTEGER
+    },
+    type: {
+      type: DataTypes.STRING
+    },
     uri: {
       type: DataTypes.STRING
-    }  
+    }
   }, {});
   FE_Scrum.associate = function(models) {
     FE_Scrum.hasMany(models.FE_ScrumsSetting, {
