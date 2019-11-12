@@ -1,0 +1,684 @@
+{
+    "id": 2,
+    "idMember": "76027g1930450d8bf7b10958",
+    "typeTask": "PLAYBOOK",
+    "name": "testPB",
+    "description": "3",
+    "status": "BUILDING_INFO",
+    "templateName": "",
+    "fileName": "",
+    "context": {
+        "name": "testPB",
+        "status": "BUILDING_INFO",
+        "dueDate": ""
+    },
+    "surveys": [
+        {
+            "id": 1,
+            "name": "Building info",
+            "code": "buildingInfo",
+            "nextStatus": "SLA",
+            "imageURL": "myspot-icons/line/building.png",
+            "sections": [
+                {
+                    "name": "Building Information",
+                    "code": "buildingInformation",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/building-info.png",
+                    "questions": [
+                        {
+                            "id": 1,
+                            "code": "code",
+                            "name": "Building",
+                            "tooltip": "Select building location in the scope of work",
+                            "type": "SELECT",
+                            "icon": "business",
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "51 Melcher St",
+                                    "defaultValue": "51 Melcher St"
+                                },
+                                {
+                                    "name": "625 Massachusetts Ave",
+                                    "defaultValue": "625 Massachusetts Ave"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "code": "address",
+                            "name": "Building Address",
+                            "tooltip": "Building address for geo-referenzing",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 3,
+                            "code": "area",
+                            "name": "Total Served Area (sqft)",
+                            "tooltip": "Define the gross total area that must be served",
+                            "type": "NUMBER",
+                            "icon": "tab_unselected",
+                            "required": true,
+                            "flow": true
+                        },
+                        {
+                            "id": 4,
+                            "code": "floors",
+                            "name": "Number of Floors",
+                            "tooltip": "Define the number of floors involved in the service",
+                            "type": "NUMBER",
+                            "icon": "view_agenda",
+                            "required": true,
+                            "flow": true
+                        },
+                        {
+                            "id": 5,
+                            "code": "serviceHours",
+                            "name": "Service Hours",
+                            "tooltip": "Select the contract service hours",
+                            "type": "SELECT",
+                            "icon": "access_time",
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "9 am to 7 pm - Monday to Friday",
+                                    "defaultValue": "9 am to 7 pm - Monday to Friday"
+                                },
+                                {
+                                    "name": "8 am to 8 pm - Monday to Sunday",
+                                    "defaultValue": "8 am to 8 pm - Monday to Sunday"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Contract Period",
+                    "code": "contractPeriod",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/contract-time.png",
+                    "questions": [
+                        {
+                            "id": 6,
+                            "code": "startDate",
+                            "name": "Start date",
+                            "tooltip": "Select the contract’s date start",
+                            "type": "DATE",
+                            "icon": "today",
+                            "required": true,
+                            "flow": true
+                        },
+                        {
+                            "id": 7,
+                            "code": "duration",
+                            "name": "Duration",
+                            "tooltip": "Insert the contract duration",
+                            "type": "SELECT",
+                            "icon": "today",
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "12 months",
+                                    "defaultValue": "12 months"
+                                },
+                                {
+                                    "name": "24 months",
+                                    "defaultValue": "24 months"
+                                },
+                                {
+                                    "name": "36 months",
+                                    "defaultValue": "36 months"
+                                },
+                                {
+                                    "name": "48 months",
+                                    "defaultValue": "48 months"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "code": "extension",
+                            "name": "Contract extension rule",
+                            "tooltip": "Define the contract extension rule",
+                            "type": "SELECT",
+                            "icon": "refresh",
+                            "required": false,
+                            "flow": false,
+                            "options": [
+                                {
+                                    "name": "Upon request 30 days before the termination",
+                                    "defaultValue": "Upon request 30 days before the termination"
+                                },
+                                {
+                                    "name": "Upon request 60 days before the termination",
+                                    "defaultValue": "Upon request 60 days before the termination"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Service in Scope",
+                    "code": "serviceInScope",
+                    "tooltip": "Select the requested Service",
+                    "imageURL": "myspot-icons/line/service.png",
+                    "questions": [
+                        {
+                            "id": 9,
+                            "code": "facilityService",
+                            "name": "Service type",
+                            "tooltip": "Select the Macro-Service in the scope of work",
+                            "type": "SELECT",
+                            "icon": null,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Hard Services",
+                                    "defaultValue": "Hard Services"
+                                },
+                                {
+                                    "name": "Soft Services",
+                                    "defaultValue": "Soft Services"
+                                },
+                                {
+                                    "name": "Logistics Services",
+                                    "defaultValue": "Logistics Services"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 10,
+                            "code": null,
+                            "name": null,
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "required": null,
+                            "flow": null
+                        },
+                        {
+                            "id": 11,
+                            "code": null,
+                            "name": null,
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "required": null,
+                            "flow": null
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "SLA",
+            "code": "sla",
+            "nextStatus": "REVIEW",
+            "imageURL": "myspot-icons/line/building.png",
+            "sections": [
+                {
+                    "name": "Activities in Scope",
+                    "code": "activitiesInScope",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/activities-in-scope.png",
+                    "questions": [
+                        {
+                            "id": 12,
+                            "code": "contractSla",
+                            "name": "Service Level",
+                            "tooltip": "Select the Level of Service required",
+                            "type": "SELECT",
+                            "icon": "sentiment_satisfied_alt",
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "HIGH",
+                                    "defaultValue": "HIGH"
+                                },
+                                {
+                                    "name": "MEDIUM",
+                                    "defaultValue": "MEDIUM"
+                                },
+                                {
+                                    "name": "LOW",
+                                    "defaultValue": "LOW"
+                                },
+                                {
+                                    "name": "BASIC",
+                                    "defaultValue": "BASIC"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 13,
+                            "code": null,
+                            "name": null,
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "required": true,
+                            "flow": true
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Review",
+            "code": "review",
+            "nextStatus": "PB_READY",
+            "imageURL": "myspot-icons/line/building.png",
+            "sections": [
+                {
+                    "name": "Review",
+                    "code": "review",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/activities-in-scope.png",
+                    "questions": [
+                        {
+                            "id": 14,
+                            "code": "r1",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 15,
+                            "code": "r2",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 16,
+                            "code": "r3",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 17,
+                            "code": "r4",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 18,
+                            "code": "r5",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 19,
+                            "code": "r6",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 20,
+                            "code": "r7",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 21,
+                            "code": "r8",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 22,
+                            "code": "r9",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 23,
+                            "code": "r10",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 24,
+                            "code": "r11",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 25,
+                            "code": "r12",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 26,
+                            "code": "r13",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 27,
+                            "code": "r14",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 28,
+                            "code": "r15",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 29,
+                            "code": "r16",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 30,
+                            "code": "r17",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 31,
+                            "code": "r18",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 32,
+                            "code": "r19",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 33,
+                            "code": "r20",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 34,
+                            "code": "r21",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 35,
+                            "code": "r22",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 36,
+                            "code": "r022",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 37,
+                            "code": "r023",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 38,
+                            "code": "r024",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 39,
+                            "code": "r23",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 40,
+                            "code": "r24",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 41,
+                            "code": "r25",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 42,
+                            "code": "r26",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 43,
+                            "code": "r27",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 44,
+                            "code": "r28",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 45,
+                            "code": "r29",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 46,
+                            "code": "r30",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 47,
+                            "code": "r31",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 48,
+                            "code": "r32",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 49,
+                            "code": "r33",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 50,
+                            "code": "r34",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 51,
+                            "code": "r35",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        },
+                        {
+                            "id": 52,
+                            "code": "r36",
+                            "name": "",
+                            "tooltip": "",
+                            "type": "STRING",
+                            "icon": "place",
+                            "required": false,
+                            "flow": false
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
