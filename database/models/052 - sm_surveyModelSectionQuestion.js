@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     required: DataTypes.STRING,
     flow: DataTypes.STRING,
     tableInput: DataTypes.STRING,
-    valueInput: DataTypes.STRING
+    valueInput: DataTypes.STRING,
+    isParameter:DataTypes.BOOLEAN
   }, {});
   SM_SurveySectionQuestion.associate = function(models) {
     SM_SurveySectionQuestion.belongsTo(models.SM_SurveySection, {

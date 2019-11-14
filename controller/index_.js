@@ -28,6 +28,125 @@ const getTest = async () => {
   });
 }
 
+const importQuestionsFromJSON_original = async (req,res) => {
+    let surveyModel=require("../tracciati/survey.json");
+    for (survey in surveyModel) {
+      var surveyEntity={
+        //"id" : surveyModel[survey].id,
+        "name" : surveyModel[survey].name,
+        "code" : surveyModel[survey].code,
+        "nextStatus" : surveyModel[survey].nextStatus,
+        "imageURL" : surveyModel[survey].imageURL,
+        "surveyType" : "PLAYBOOK",
+        "createdAt" : new Date(),
+        "updatedAt" : new Date()
+      }
+      let sur=await models.SM_Survey.create(surveyEntity);
+      console.log("survey id " + sur.id);
+      for (section in surveyModel[survey].sections) {
+        var surveySectionEntity={
+          //"id" : surveyModel[survey].sections[section].id,
+          "idSurvey" : sur.id,
+          "name" :  surveyModel[survey].sections[section].name,
+          "code" : surveyModel[survey].sections[section].code,
+          "tooltip" : surveyModel[survey].sections[section].tooltip,
+          "nameI18n" : surveyModel[survey].sections[section].nameI18n,
+          "imageURL" : surveyModel[survey].sections[section].imageURL,
+          "createdAt" : new Date(),
+          "updatedAt" : new Date()
+        }
+
+        let surSec=await models.SM_SurveySection.create(surveySectionEntity);
+        for (question in surveyModel[survey].sections[section].questions) {
+          if (surveyModel[survey].sections[section].questions[question].type=="TABLE") {
+            if (surveyModel[survey].sections[section].questions[question].tableRows) {
+              console.log("**********************************" + surveyModel[survey].sections[section].questions[question].tableHeader);
+            }
+            if (surveyModel[survey].sections[section].questions[question].condition) {
+              console.log("**********************************" + JSON.stringify(surveyModel[survey].sections[section].questions[question].condition.tables));
+            }
+          } else {
+            var surveySectionQuestionEntity={
+              //"id" : surveyModel[survey].sections[section].questions[question].id,
+              "idSection" : surSec.id,
+              "code" : surveyModel[survey].sections[section].questions[question].code,
+              "name" : surveyModel[survey].sections[section].questions[question].name,
+              "tooltip" : surveyModel[survey].sections[section].questions[question].tooltip,
+              "nameI98n" : surveyModel[survey].sections[section].questions[question].nameI98n,
+              "type" : surveyModel[survey].sections[section].questions[question].type,
+              "icon" : surveyModel[survey].sections[section].questions[question].icon,
+              "required" : surveyModel[survey].sections[section].questions[question].required,
+              "flow" : surveyModel[survey].sections[section].questions[question].flow,
+              "tableInput" : "",
+              "valueInput" : ""
+            }
+        }
+        let surSecQue=await models.SM_SurveySectionQuestion.create(surveySectionQuestionEntity);
+        }
+      }
+
+    }
+
+    return res.status(200).json(surveyModel);
+}
+
+const getContractByIdOriginal = async (req, res) => {
+  try {
+    const contractId= req.params.contractId;
+    let pb={};
+
+    //console.log("contractId --> " + JSON.stringify(req.params));
+    const playbook = await models.PB_Playbook.findOne({
+      where: { id: contractId},
+    });
+
+    var obj = Object.assign({}, playbook.dataValues);
+    obj["templateName"]="";
+    obj["fileName"]="";
+    obj["context"]={}
+    obj["context"]["name"]=playbook.name;
+    obj["context"]["status"]="BUILDING_INFO";
+    obj["context"]["dueDate"]="";
+    obj["surveys"] = await models['SM_Survey'].findAll({
+      order: [
+        [ { model: models.SM_SurveySection , as: 'sections'}, 'id', 'ASC'],
+        [ { model: models.SM_SurveySection , as: 'sections'}, { model: models.SM_SurveySectionQuestion, as: 'questions' }, 'id', 'ASC'],
+        [ { model: models.SM_SurveySection , as: 'sections'}, { model: models.SM_SurveySectionQuestion, as: 'questions' },{ model: models.SM_SurveySectionQuestionOption, as: 'options' }, 'id', 'ASC']
+      ],
+      include: [
+        {
+          model: models.SM_SurveySection,
+          as: "sections",
+          include: [
+            {
+              model: models.SM_SurveySectionQuestion,
+              as: "questions" ,
+              include: [
+                {
+                  where: {'idPlaybook': contractId},
+                  model: models.SM_SurveySectionQuestionOption,
+                  as: "options"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
+
+    obj["context"]["answers"] = await models['SM_SurveyAnswer'].findAll({
+      where: {
+        playBookId: playbook.id
+      }
+    });
+    return res.status(200).json(obj)
+
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 
 const getDynamicOptions = async (req, res) => {
     const { tableName } = req.params;

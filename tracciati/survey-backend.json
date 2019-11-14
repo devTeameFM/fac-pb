@@ -1,0 +1,1109 @@
+[
+	{
+		"id": 1231232,
+		"name": "Building info",
+		"code": "buildingInfo",
+		"nextStatus": "SLA",
+		"imageURL": "myspot-icons/line/building.png",
+		"sections": [
+			{
+				"name": "Building Information",
+				"code": "buildingInformation",
+				"tooltip": "",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"imageURL": "myspot-icons/line/building-info.png",
+				"questions": [
+					{
+						"id": 100001,
+						"code": "code",
+						"name": "Building",
+						"tooltip": "Select building location in the scope of work",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"type": "SELECT",
+						"icon": "business",
+						"required": true,
+						"flow": true,
+						"isParameter" : true,
+						"tableInput" : "MS_Building",
+						"valueInput" : "name",
+						"options": [
+							{
+								"name": "51 Melcher St",
+								"defaultValue": "51 Melcher St"
+							},
+							{
+								"name": "625 Massachusetts Ave",
+								"defaultValue": "625 Massachusetts Ave"
+							}
+						]
+					},
+					{
+						"id": 100003,
+						"code": "area",
+						"name": "Total Served Area (sqft)",
+						"tooltip": "Define the gross total area that must be served",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "tab_unselected",
+						"type": "NUMBER",
+						"flow": true,
+						"required": true
+					},
+					{
+						"id": 100004,
+						"code": "floors",
+						"name": "Number of Floors",
+						"tooltip": "Define the number of floors involved in the service",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "view_agenda",
+						"type": "NUMBER",
+						"flow": true,
+						"required": true
+					},
+					{
+						"id": 100005,
+						"code": "serviceHours",
+						"name": "Service Hours",
+						"tooltip": "Select the contract service hours",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "access_time",
+						"type": "SELECT",
+						"required": true,
+						"flow": true,
+						"isParameter" : true,
+						"tableInput" : "PB_ServiceHoursWindow",
+						"valueInput" : "name",
+						"options": [
+							{
+								"name": "9 am to 7 pm - Monday to Friday",
+								"defaultValue": "9 am to 7 pm - Monday to Friday"
+							},
+							{
+								"name": "8 am to 8 pm - Monday to Sunday",
+								"defaultValue": "9 am to 7 pm - Monday to Sunday",
+								"disabled": true
+							}
+						]
+					}
+				]
+			},
+			{
+				"name": "Contract Period",
+				"code": "contractPeriod",
+				"tooltip": "",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"imageURL": "myspot-icons/line/contract-time.png",
+				"questions": [
+					{
+						"id": 100009,
+						"code": "startDate",
+						"name": "Start date",
+						"tooltip": "Select the contract’s date start",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "today",
+						"type": "DATE",
+						"flow": true,
+						"required": true,
+						"defaultValue": " "
+					},
+					{
+						"id": 100007,
+						"code": "duration",
+						"name": "Duration",
+						"tooltip": "Insert the contract duration",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "today",
+						"type": "SELECT",
+						"flow": true,
+						"required": true,
+						"isParameter" : true,
+						"tableInput" : "PB_ServiceDuration",
+						"valueInput" : "name",
+						"options": [
+							{
+								"name": "12 months",
+								"defaultValue": "12 month"
+							},
+							{
+								"name": "24 months",
+								"defaultValue": "24 month",
+								"disabled": true
+							},
+							{
+								"name": "36 months",
+								"defaultValue": "36 month",
+								"disabled": true
+							},
+							{
+								"name": "48 months",
+								"defaultValue": " month",
+								"disabled": true
+							}
+						]
+					},
+					{
+						"id": 100008,
+						"code": "extension",
+						"name": "Contract extension rule",
+						"tooltip": "Define the contract extension rule",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "refresh",
+						"type": "SELECT",
+						"flow": false,
+						"required": false,
+						"defaultValue": "",
+						"isParameter" : true,
+						"tableInput" : "PB_ServiceExtensionRule",
+						"valueInput" : "name",
+						"options": [
+							{
+								"name": "Upon request 30 days before the termination",
+								"defaultValue": "Upon request 30 days before the termination",
+								"icon": "fast"
+							}
+						]
+					}
+				]
+			},
+			{
+				"name": "Service in Scope",
+				"code": "serviceInScope",
+				"imageURL": "myspot-icons/line/service.png",
+				"tooltip": "Select the requested Service",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"questions": [
+					{
+						"id": 110009,
+						"code": "facilityService",
+						"name": "Service type",
+						"tooltip": "Select the Macro-Service in the scope of work",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"type": "SELECT",
+						"required": true,
+						"flow": true,
+						"isParameter" : true,
+						"tableInput" : "PB_ServiceClass",
+						"valueInput" : "name",
+						"options": {
+							"51 Melcher St": [
+								{
+									"name": "Hard service",
+									"defaultValue": "Hard service"
+								},
+								{
+									"name": "Soft service",
+									"defaultValue": "Soft service",
+									"disabled": true
+								}
+							],
+							"625 Massachusetts Ave": [
+								{
+									"name": "Hard service",
+									"defaultValue": "Hard service",
+									"disabled": true
+								},
+								{
+									"name": "Soft service",
+									"defaultValue": "Soft service"
+								}
+							]
+						}
+					},
+					{
+						"code" : "table1",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"defaultValue": " ",
+						"tableHeader": [
+							"Select the service that must be provided",
+							"Select the average facility condition of your physical assets"
+						],
+						"tableRows": [
+							[
+								{
+									"id": 110010,
+									"code": "system1Name",
+									"name": "Name",
+									"tooltip": "Select the systems that must be provided",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"type": "SELECT",
+									"flow": true,
+									"required": true,
+									"options": {
+								    "Hard service": [
+								      {
+								        "name": "HVAC",
+								        "defaultValue": "HVAC"
+								      },
+								      {
+								        "name": "Fire & Safety systems",
+								        "defaultValue": "Fire & Safety systems",
+								        "disabled": true
+								      },
+								      {
+								        "name": "Plumbing",
+								        "defaultValue": "Plumbing",
+								        "disabled": true
+								      },
+								      {
+								        "name": "Elevator",
+								        "defaultValue": "Elevator",
+								        "disabled": true
+								      }
+								    ],
+								    "Soft service": [
+								      {
+								        "name": "Plants",
+								        "defaultValue": "Plants"
+								      },
+								      {
+								        "name": "Cleaning & Janitorial",
+								        "defaultValue": "Cleaning & Janitorial",
+								        "disabled": true
+								      },
+								      {
+								        "name": "Mail",
+								        "defaultValue": "Mail",
+								        "disabled": true
+								      },
+								      {
+								        "name": "Waste",
+								        "defaultValue": "Waste",
+								        "disabled": true
+								      },
+								      {
+								        "name": "Catering",
+								        "defaultValue": "Catering",
+								        "disabled": true
+								      }
+								    ]
+								  }
+								},
+								{
+									"id": 110011,
+									"code": "facilityServiceCondition",
+									"name": "Facility Condition value",
+									"tooltip": "Select the average facility condition of your physical assets",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"icon": "signal_cellular_alt",
+									"type": "SELECT",
+									"flow": false,
+									"required": false,
+									"defaultValue": "Fair",
+									"options": {
+										"HVAC": [
+											{
+												"name": "New",
+												"defaultValue": "New",
+												"icon": "sentiment_very_satisfied",
+												"disabled": true
+											},
+											{
+												"name": "Good",
+												"defaultValue": "Good",
+												"icon": "mood",
+												"disabled": true
+											},
+											{
+												"name": "Fair",
+												"defaultValue": "Fair",
+												"icon": "sentiment_satisfied_alt"
+											},
+											{
+												"name": "Poor",
+												"defaultValue": "Poor",
+												"icon": "sentiment_dissatisfied",
+												"disabled": true
+											}
+										],
+										"Plants": [
+											{
+												"name": "NA",
+												"defaultValue": "NA",
+												"icon": ""
+											}
+										]
+									}
+								}
+							]
+						]
+					},
+					{
+						"code" : "table2",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"defaultValue": " ",
+						"tableHeader": [
+			        "System",
+			        "Component",
+			        "# of components of served area sf",
+			        "Add any other useful information"
+			      ],
+			      "tableRows": [
+			        [
+			          "PLANT",
+			          "Dracaena",
+			          {
+			            "id": 101010,
+			            "code": "dracaena",
+			            "name": "# of elements",
+			            "tooltip": "",
+			            "nameI98n": "",
+			            "tooltipI18n": "",
+			            "type": "STRING",
+			            "defaultValue": " "
+			          },
+			          {
+			            "id": 101011,
+			            "code": "dracaenaNotes",
+			            "name": "Information or comments",
+			            "tooltip": "",
+			            "nameI98n": "",
+			            "tooltipI18n": "",
+			            "type": "STRING",
+			            "defaultValue": " "
+			          }
+			        ],
+			        [
+			          "PLANT",
+			          "Philodendron",
+			          {
+			            "id": 101012,
+			            "code": "philodendron",
+			            "name": "# of elements",
+			            "tooltip": "",
+			            "nameI98n": "",
+			            "tooltipI18n": "",
+			            "type": "STRING",
+			            "defaultValue": " "
+			          },
+			          {
+			            "id": 101013,
+			            "code": "philodendronNotes",
+			            "name": "Information or comments",
+			            "tooltip": "",
+			            "nameI98n": "",
+			            "tooltipI18n": "",
+			            "type": "STRING",
+			            "defaultValue": " "
+			          }
+			        ],
+			        [
+			          "PLANT",
+			          "Pothos",
+			          {
+			            "id": 101014,
+			            "code": "pothos",
+			            "name": "# of elements",
+			            "tooltip": "",
+			            "nameI98n": "",
+			            "tooltipI18n": "",
+			            "type": "STRING",
+			            "defaultValue": " "
+			          },
+			          {
+			            "id": 101015,
+			            "code": "pothosNotes",
+			            "name": "Information or comments",
+			            "tooltip": "",
+			            "nameI98n": "",
+			            "tooltipI18n": "",
+			            "type": "STRING",
+			            "defaultValue": " "
+			          }
+			        ],
+			        [
+			          "PLANT",
+			          "Sansevieria",
+			          {
+			            "id": 101016,
+			            "code": "sansevieria",
+			            "name": "# of elements",
+			            "tooltip": "",
+			            "nameI98n": "",
+			            "tooltipI18n": "",
+			            "type": "STRING",
+			            "defaultValue": " "
+			          },
+			          {
+			            "id": 101017,
+			            "code": "sansevieriaNotes",
+			            "name": "Information or comments",
+			            "tooltip": "",
+			            "nameI98n": "",
+			            "tooltipI18n": "",
+			            "type": "STRING",
+			            "defaultValue": " "
+			          }
+			        ]
+			      ]
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": 1231233,
+		"name": "SLA",
+		"code": "sla",
+		"nextStatus": "REVIEW",
+		"imageURL": "myspot-icons/line/building.png",
+		"sections": [
+			{
+				"name": "Activities in Scope",
+				"code": "activitiesInScope",
+				"tooltip": "",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"imageURL": "myspot-icons/line/activities-in-scope.png",
+				"questions": [
+					{
+						"id": 100101,
+						"code": "contractSla",
+						"name": "Service Level",
+						"tooltip": "Select the Level of Service required",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"type": "SELECT",
+						"icon": "sentiment_satisfied_alt",
+						"flow": true,
+						"required": true,
+						"isParameter" : true,
+						"tableInput" : "PB_ServiceLevelAgreement",
+						"valueInput" : "serviceLevelAgreementName",
+						"options" : []
+					},
+					{
+						"code" : "table3",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [
+							"Type of activities",
+							"Preventive Maintenance",
+							"Type of remuneration"
+						],
+						"tableRows": [
+							[
+								"Preventive Maintenance",
+								{
+									"id": 100110,
+									"code": "sAActive",
+									"name": "Preventive Maintenance",
+									"tooltip": "Define if the «Preventive Maintenance» (time-based scheduled activities) is required and the remuneration method",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"type": "SELECT",
+									"flow": true,
+									"required": true,
+									"conditional": true,
+									"condition": {
+										"questionId": 100101,
+										"questionCode": "contractSla",
+										"questionSection": "activitiesInScope",
+										"questionSurvey": 1231233,
+										"options": {
+											"High": [
+												{
+													"name": "Out of scope",
+													"defaultValue": "Out of scope",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee",
+													"defaultValue": "In scope - fixed fee"
+												}
+											],
+											"Basic": [
+												{
+													"name": "Out of scope",
+													"defaultValue": "Out of scope",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee",
+													"defaultValue": "In scope - fixed fee"
+												}
+											],
+											"Low": [
+												{
+													"name": "Out of scope",
+													"defaultValue": "Out of scope",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee",
+													"defaultValue": "In scope - fixed fee"
+												}
+											]
+										}
+									}
+								},
+								{
+									"id": 100111,
+									"code": "sARemuneration",
+									"name": "Scheduled Activities - Remuneration",
+									"tooltip": "",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"type": "STRING",
+									"flow": false,
+									"required": false,
+									"conditional": true,
+									"condition": {
+										"questionCode": "sAActive",
+										"questionId": 100110,
+										"questionSection": "activitiesInScope",
+										"questionSurvey": 1231233,
+										"values": {
+											"Out of scope": "Out of scope",
+											"In scope - fixed fee": "Fixed Fee"
+										}
+									}
+								}
+							],
+							[
+								"Corrective Activities",
+								{
+									"id": 100112,
+									"code": "cAActive",
+									"name": "Corrective Activities",
+									"tooltip": "Define if the «Corrective Activities» (on demand request for failures or malfunctions) are included and the remuneration method",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"type": "SELECT",
+									"flow": true,
+									"required": true,
+									"conditional": true,
+									"condition": {
+										"questionId": 100101,
+										"questionCode": "contractSla",
+										"questionSection": "activitiesInScope",
+										"questionSurvey": 1231233,
+										"options": {
+											"High": [
+												{
+													"name": "Out of scope",
+													"defaultValue": "Out of scope",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee",
+													"defaultValue": "In scope - fixed fee",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee with threshold",
+													"defaultValue": "In scope - fixed fee with threshold"
+												},
+												{
+													"name": "In scope - extra fee",
+													"defaultValue": "In scope - extra fee",
+													"disabled": true
+												}
+											],
+											"Basic": [
+												{
+													"name": "Out of scope",
+													"defaultValue": "Out of scope",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee",
+													"defaultValue": "In scope - fixed fee",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee with threshold",
+													"defaultValue": "In scope - fixed fee with threshold",
+													"disabled": true
+												},
+												{
+													"name": "In scope - extra fee",
+													"defaultValue": "In scope - extra fee"
+												}
+											],
+											"Low": [
+												{
+													"name": "Out of scope",
+													"defaultValue": "Out of scope"
+												},
+												{
+													"name": "In scope - fixed fee",
+													"defaultValue": "In scope - fixed fee",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee with threshold",
+													"defaultValue": "In scope - fixed fee with threshold",
+													"disabled": true
+												},
+												{
+													"name": "In scope - extra fee",
+													"defaultValue": "In scope - extra fee",
+													"disabled": true
+												}
+											]
+										}
+									}
+								},
+								{
+									"id": 100113,
+									"code": "cARemuneration",
+									"name": "Corrective Activities - Remuneration",
+									"tooltip": "Select the remuneration system for the selected activity type",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"type": "STRING",
+									"flow": false,
+									"required": false,
+									"conditional": true,
+									"condition": {
+										"questionCode": "cAActive",
+										"questionId": 100112,
+										"questionSection": "activitiesInScope",
+										"questionSurvey": 1231233,
+										"values": {
+											"Out of scope": "Out of scope",
+											"In scope - fixed fee": "Fixed Fee",
+											"In scope - fixed fee with threshold": "Fixed Fee with threshold",
+											"In scope - extra fee": "Extra Fee"
+										}
+									}
+								}
+							],
+							[
+								"Service Request",
+								{
+									"id": 100114,
+									"code": "eAActive",
+									"name": "Service Request",
+									"tooltip": "Define if the «Service Request» (on demand request of services) are included and the remuneration method",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"type": "SELECT",
+									"flow": true,
+									"required": true,
+									"options": [
+										{
+											"name": "Out of scope",
+											"defaultValue": "Out of scope",
+											"disabled": true
+										},
+										{
+											"name": "In scope - fixed fee",
+											"defaultValue": "In scope - fixed fee",
+											"disabled": true
+										},
+										{
+											"name": "In scope - extra fee",
+											"defaultValue": "In scope - extra fee"
+										}
+									]
+								},
+								{
+									"id": 100115,
+									"code": "eARemuneration",
+									"name": "Extraordinary Activities - Remuneration",
+									"tooltip": "Remuneration system based on a variable cost that depend on the activity and on a budget estimated subjected to client's approval",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"type": "STRING",
+									"flow": false,
+									"required": false,
+									"conditional": true,
+									"condition": {
+										"questionCode": "eAActive",
+										"questionId": 100114,
+										"questionSection": "activitiesInScope",
+										"questionSurvey": 1231233,
+										"values": {
+											"Out of scope": "Out of scope",
+											"In scope - fixed fee": "Fixed Fee",
+											"In scope - extra fee": "Extra Fee"
+										}
+									}
+								}
+							],
+							[
+								"On site team",
+								{
+									"id": 101114,
+									"code": "osAActive",
+									"name": "On site team",
+									"tooltip": "Define if the «On site presence» (dedicated team in the building) are included and the remuneration method",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"type": "SELECT",
+									"flow": true,
+									"required": true,
+									"conditional": true,
+									"condition": {
+										"questionId": 100101,
+										"questionCode": "contractSla",
+										"questionSection": "activitiesInScope",
+										"questionSurvey": 1231233,
+										"options": {
+											"High": [
+												{
+													"name": "Out of scope",
+													"defaultValue": "Out of scope",
+													"disabled": true
+												},
+												{
+													"name": "On demand - extra fee",
+													"defaultValue": "On demand - extra fee",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee",
+													"defaultValue": "In scope - fixed fee"
+												}
+											],
+											"Basic": [
+												{
+													"name": "Out of scope",
+													"defaultValue": "Out of scope"
+												},
+												{
+													"name": "On demand - extra fee",
+													"defaultValue": "On demand - extra fee",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee",
+													"defaultValue": "In scope - fixed fee",
+													"disabled": true
+												}
+											],
+											"Low": [
+												{
+													"name": "Out of scope",
+													"defaultValue": "Out of scope"
+												},
+												{
+													"name": "On demand - extra fee",
+													"defaultValue": "On demand - extra fee",
+													"disabled": true
+												},
+												{
+													"name": "In scope - fixed fee",
+													"defaultValue": "In scope - fixed fee",
+													"disabled": true
+												}
+											]
+										}
+									}
+								},
+								{
+									"id": 101115,
+									"code": "osARemuneration",
+									"name": "Extraordinary Activities - Remuneration",
+									"tooltip": "",
+									"nameI98n": "",
+									"tooltipI18n": "",
+									"type": "STRING",
+									"flow": false,
+									"required": false,
+									"conditional": true,
+									"condition": {
+										"questionCode": "osAActive",
+										"questionId": 101114,
+										"questionSection": "activitiesInScope",
+										"questionSurvey": 1231233,
+										"values": {
+											"Out of scope": "Out of scope",
+											"On demand - extra fee": "Extra Fee",
+											"In scope - fixed fee": "Fixed Fee"
+										}
+									}
+								}
+							]
+						]
+					}
+				]
+			}
+		]
+	},
+	{
+		"id": 1231234,
+		"name": "Review",
+		"code": "review",
+		"nextStatus": "PB_READY",
+		"imageURL": "myspot-icons/line/building.png",
+		"sections": [
+			{
+				"name": "Review",
+				"code": "review",
+				"tooltip": "",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"imageURL": "myspot-icons/line/activities-in-scope.png",
+				"questions": []
+			},
+			{
+				"name": "Generic Technical Requirements",
+				"code": "technicalRequirement",
+				"tooltip": "",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"imageURL": "myspot-icons/line/activities-in-scope.png",
+				"questions": [
+					{
+						"code" : "table4",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					}
+				]
+			},
+			{
+				"name": "Priorities and response times definition",
+				"code": "priorities",
+				"tooltip": "",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"imageURL": "myspot-icons/line/activities-in-scope.png",
+				"questions": [
+					{
+						"code" : "table4",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					},
+					{
+						"code" : "table4",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					},
+					{
+						"code" : "table4",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					},
+					{
+						"code" : "table4",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					},
+					{
+						"code" : "table4",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					},
+					{
+						"code" : "table4",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					},
+					{
+						"code" : "table4",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					}
+				]
+			},
+			{
+				"name": "Key Performance Indicators",
+				"code": "KPI",
+				"tooltip": "",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"imageURL": "myspot-icons/line/activities-in-scope.png",
+				"questions": [{
+					"code" : "table7",
+					"tooltip": "",
+					"nameI98n": "",
+					"tooltipI18n": "",
+					"icon": "airport_shuttle",
+					"type": "TABLE",
+					"flow": true,
+					"required": true,
+					"tableHeader": [],
+					"tableRows": []
+				},
+				{
+					"code" : "table8",
+					"tooltip": "",
+					"nameI98n": "",
+					"tooltipI18n": "",
+					"icon": "airport_shuttle",
+					"type": "TABLE",
+					"flow": true,
+					"required": true,
+					"tableHeader": [],
+					"tableRows": []
+				},
+				{
+					"code" : "table9",
+					"tooltip": "",
+					"nameI98n": "",
+					"tooltipI18n": "",
+					"icon": "airport_shuttle",
+					"type": "TABLE",
+					"flow": true,
+					"required": true,
+					"tableHeader": [],
+					"tableRows": []
+				},
+				{
+					"code" : "table10",
+					"tooltip": "",
+					"nameI98n": "",
+					"tooltipI18n": "",
+					"icon": "airport_shuttle",
+					"type": "TABLE",
+					"flow": true,
+					"required": true,
+					"tableHeader": [],
+					"tableRows": []
+				},
+				{
+					"code" : "table11",
+					"tooltip": "",
+					"nameI98n": "",
+					"tooltipI18n": "",
+					"icon": "airport_shuttle",
+					"type": "TABLE",
+					"flow": true,
+					"required": true,
+					"tableHeader": [],
+					"tableRows": []
+				}
+			]
+			},
+			{
+				"name": "Penalties",
+				"code": "penalties",
+				"tooltip": "",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"imageURL": "myspot-icons/line/activities-in-scope.png",
+				"questions": [
+					{
+						"code" : "table5",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					},
+					{
+						"code" : "table6",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					}
+				]
+			},
+			{
+				"name": "Preventive Maintenance Procedures",
+				"code": "maintenanceProcedures",
+				"tooltip": "",
+				"nameI98n": "",
+				"tooltipI18n": "",
+				"imageURL": "myspot-icons/line/activities-in-scope.png",
+				"questions": [
+					{
+						"code" : "table4",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"icon": "airport_shuttle",
+						"type": "TABLE",
+						"flow": true,
+						"required": true,
+						"tableHeader": [],
+						"tableRows": []
+					}
+				]
+			}
+		]
+	}
+]

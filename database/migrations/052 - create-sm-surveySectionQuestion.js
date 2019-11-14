@@ -46,6 +46,9 @@ module.exports = {
       valueInput: {
         type: Sequelize.STRING
       },
+      isParameter: {
+        type: Sequelize.BOOLEAN
+      },
     createdAt: {
         allowNull: true,
         type: Sequelize.DATE

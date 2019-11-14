@@ -15,6 +15,7 @@ router.get('/members',controllers.getAllMembers);
 router.get('/contract',controllers.getAllContracts);
 router.get('/contract/:contractId',controllers.getContractById);
 router.post('/contract',controllers.createPlaybook);
+router.delete('/contract',controllers.deletePlaybooks);
 
 router.put('/contract',controllers.updateContract);
 router.post('/updateQuestions', controllers.generateQuestions);
@@ -27,6 +28,7 @@ router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
 router.get('/dynamic/:tableName',controllers.getDynamicOptions)
 router.delete('/clean',controllers.cleandDB)
 router.post('/surveys/import', controllers.importQuestionsFromJSON);
+router.get('/test/:tableName',controllers.test)
 
 
 module.exports = router;
