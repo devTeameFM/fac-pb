@@ -3,17 +3,17 @@ module.exports = {
     'PB_ServiceClasses',
     [
       {
-        name  : 'Hard Services',
+        name  : 'Hard service',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name  : 'Soft Services',
+        name  : 'Soft service',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name  : 'Logistics Services',
+        name  : 'Logistics service',
         createdAt: new Date(),
         updatedAt: new Date()
       }

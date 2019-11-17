@@ -221,6 +221,7 @@
 					},
 					{
 						"code" : "table1",
+						"name" : "table1",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -345,6 +346,7 @@
 					},
 					{
 						"code" : "table2",
+						"name" : "table2",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -493,6 +495,7 @@
 					},
 					{
 						"code" : "table3",
+						"name" : "table3",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -873,6 +876,7 @@
 				"questions": [
 					{
 						"code" : "table4",
+						"name" : "table4",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -894,7 +898,8 @@
 				"imageURL": "myspot-icons/line/activities-in-scope.png",
 				"questions": [
 					{
-						"code" : "table4",
+						"code" : "table5",
+						"name" : "table5",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -906,7 +911,8 @@
 						"tableRows": []
 					},
 					{
-						"code" : "table4",
+						"code" : "table6",
+						"name" : "table6",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -918,7 +924,8 @@
 						"tableRows": []
 					},
 					{
-						"code" : "table4",
+						"code" : "table7",
+						"name" : "table7",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -930,7 +937,8 @@
 						"tableRows": []
 					},
 					{
-						"code" : "table4",
+						"code" : "table8",
+						"name" : "table8",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -942,7 +950,8 @@
 						"tableRows": []
 					},
 					{
-						"code" : "table4",
+						"code" : "table9",
+						"name" : "table9",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -954,7 +963,8 @@
 						"tableRows": []
 					},
 					{
-						"code" : "table4",
+						"code" : "table10",
+						"name" : "table10",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -966,7 +976,8 @@
 						"tableRows": []
 					},
 					{
-						"code" : "table4",
+						"code" : "table11",
+						"name" : "table11",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -987,7 +998,8 @@
 				"tooltipI18n": "",
 				"imageURL": "myspot-icons/line/activities-in-scope.png",
 				"questions": [{
-					"code" : "table7",
+					"code" : "table12",
+					"name" : "table12",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -999,7 +1011,8 @@
 					"tableRows": []
 				},
 				{
-					"code" : "table8",
+					"code" : "table13",
+					"name" : "table13",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -1011,7 +1024,8 @@
 					"tableRows": []
 				},
 				{
-					"code" : "table9",
+					"code" : "table14",
+					"name" : "table14",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -1023,7 +1037,8 @@
 					"tableRows": []
 				},
 				{
-					"code" : "table10",
+					"code" : "table15",
+					"name" : "table15",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -1035,7 +1050,8 @@
 					"tableRows": []
 				},
 				{
-					"code" : "table11",
+					"code" : "table16",
+					"name" : "table16",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -1057,7 +1073,8 @@
 				"imageURL": "myspot-icons/line/activities-in-scope.png",
 				"questions": [
 					{
-						"code" : "table5",
+						"code" : "table17",
+						"name" : "table17",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -1069,7 +1086,8 @@
 						"tableRows": []
 					},
 					{
-						"code" : "table6",
+						"code" : "table18",
+						"name" : "table18",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -1091,7 +1109,8 @@
 				"imageURL": "myspot-icons/line/activities-in-scope.png",
 				"questions": [
 					{
-						"code" : "table4",
+						"code" : "table19",
+						"name" : "table19",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",

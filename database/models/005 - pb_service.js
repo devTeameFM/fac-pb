@@ -1,13 +1,17 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const PB_ConditionIndex = sequelize.define('PB_ConditionIndex', {
-    id: {
-      type : DataTypes.INTEGER,
-      primaryKey: true
+  const PB_Service = sequelize.define('PB_Service', {
+    idServiceClass: {
+      type: DataTypes.INTEGER
     },
-    levelTypeName: DataTypes.STRING
+    serviceName: {
+      type: DataTypes.STRING
+    },
+    serviceDescription: {
+      type: DataTypes.TEXT
+    }
   }, {});
-  PB_ConditionIndex.associate = function(models) {
+  PB_Service.associate = function(models) {
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',
@@ -21,5 +25,5 @@ module.exports = (sequelize, DataTypes) => {
       });
       */
   };
-  return PB_ConditionIndex;
+  return PB_Service;
 };

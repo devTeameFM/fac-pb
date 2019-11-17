@@ -28,7 +28,7 @@ router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
 router.get('/dynamic/:tableName',controllers.getDynamicOptions)
 router.delete('/clean',controllers.cleandDB)
 router.post('/surveys/import', controllers.importQuestionsFromJSON);
-router.get('/test/:tableName',controllers.test)
+//router.get('/test/:tableName',controllers.test)
 
 
 module.exports = router;
