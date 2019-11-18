@@ -11,17 +11,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   PB_ServicePenaltyType.associate = function(models) {
     /*
-    MS_Member.belongsToMany(models.FE_Scrum, {
-      through: 'FE_MembersScrums',
-      as: 'scrums',
-      foreignKey: 'idMember'
-    });
-    MS_Member.hasMany(models.PB_Playbook, {
-        foreignKey: 'idMember',
-        as: 'playbooks',
+    PB_ServicePenaltyType.hasMany(models.PB_ServiceSlaPenalty, {
+        foreignKey: 'idPenalty',
         onDelete: 'CASCADE',
-      });
-      */
+      });*/
   };
   return PB_ServicePenaltyType;
 };

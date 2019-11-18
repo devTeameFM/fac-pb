@@ -1,19 +1,13 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const PB_ServiceLevelAgreement = sequelize.define('PB_ServiceLevelAgreement', {
+  const PB_ServiceExtensionRule = sequelize.define('PB_ServiceExtensionRule', {
     id: {
       type : DataTypes.INTEGER,
       primaryKey: true
     },
-    serviceLevelAgreementName: {
-      type: DataTypes.STRING
-    },
-    serviceLevelAgreementDescription: {
-      type: DataTypes.TEXT
-    },
-
+    name: DataTypes.STRING
   }, {});
-  PB_ServiceLevelAgreement.associate = function(models) {
+  PB_ServiceExtensionRule.associate = function(models) {
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',
@@ -27,5 +21,5 @@ module.exports = (sequelize, DataTypes) => {
       });
       */
   };
-  return PB_ServiceLevelAgreement;
+  return PB_ServiceExtensionRule;
 };

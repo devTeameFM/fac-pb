@@ -13,18 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   PB_ServicePenaltyScope.associate = function(models) {
-    /*
-    MS_Member.belongsToMany(models.FE_Scrum, {
-      through: 'FE_MembersScrums',
-      as: 'scrums',
-      foreignKey: 'idMember'
-    });
-    MS_Member.hasMany(models.PB_Playbook, {
-        foreignKey: 'idMember',
-        as: 'playbooks',
+    PB_ServicePenaltyScope.hasMany(models.PB_ServicePenalty, {
+        foreignKey: 'idPenaltyScope',
         onDelete: 'CASCADE',
       });
-      */
   };
   return PB_ServicePenaltyScope;
 };

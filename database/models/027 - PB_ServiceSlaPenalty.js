@@ -25,18 +25,34 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   PB_ServiceSlaPenalty.associate = function(models) {
-    /*
-    MS_Member.belongsToMany(models.FE_Scrum, {
-      through: 'FE_MembersScrums',
-      as: 'scrums',
-      foreignKey: 'idMember'
-    });
-    MS_Member.hasMany(models.PB_Playbook, {
-        foreignKey: 'idMember',
-        as: 'playbooks',
-        onDelete: 'CASCADE',
-      });
-      */
+    PB_ServiceSlaPenalty.belongsTo(models.PB_Service, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaPenalty.belongsTo(models.PB_UnitMeasure, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaPenalty.belongsTo(models.PB_ServiceKPIValueType, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaPenalty.belongsTo(models.PB_ServiceKPI, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaPenalty.belongsTo(models.PB_ServicePenaltyType, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaPenalty.belongsTo(models.PB_ServicePenalty, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaPenalty.belongsTo(models.PB_ServiceLevelAgreement, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
   };
   return PB_ServiceSlaPenalty;
 };

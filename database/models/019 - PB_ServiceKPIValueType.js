@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const PB_ServiceKPIScope = sequelize.define('PB_ServiceKPIScope', {
+  const PB_ServiceKPIValueType = sequelize.define('PB_ServiceKPIValueType', {
     id: {
       type : DataTypes.INTEGER,
       primaryKey: true
@@ -12,19 +12,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT
     }
   }, {});
-  PB_ServiceKPIScope.associate = function(models) {
-    /*
-    MS_Member.belongsToMany(models.FE_Scrum, {
-      through: 'FE_MembersScrums',
-      as: 'scrums',
-      foreignKey: 'idMember'
-    });
-    MS_Member.hasMany(models.PB_Playbook, {
-        foreignKey: 'idMember',
-        as: 'playbooks',
+  PB_ServiceKPIValueType.associate = function(models) {
+    PB_ServiceKPIValueType.hasMany(models.PB_ServiceSlaKPI, {
+        foreignKey: 'idValueType',
         onDelete: 'CASCADE',
       });
-      */
+    PB_ServiceKPIValueType.hasMany(models.PB_ServiceSlaPenalty, {
+        foreignKey: 'idValueType',
+        onDelete: 'CASCADE',
+      });
   };
-  return PB_ServiceKPIScope;
+  return PB_ServiceKPIValueType;
 };

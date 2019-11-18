@@ -20,21 +20,21 @@ module.exports = (sequelize, DataTypes) => {
     target: {
       type: DataTypes.STRING
     },
-    serviceName: {
-      type: DataTypes.STRING
-    },
-    serviceResponseTypeName: {
-      type: DataTypes.STRING
-    },
-    servicePriorityName: {
-      type: DataTypes.STRING
-    },
-    serviceLevelAgreementName: {
-      type: DataTypes.STRING
-    }
 
   }, {});
   PB_ServiceSlaResponseType.associate = function(models) {
+    PB_ServiceSlaResponseType.belongsTo(models.PB_Service, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaResponseType.belongsTo(models.PB_ServiceResponseType, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaResponseType.belongsTo(models.PB_ServiceLevelAgreement, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',

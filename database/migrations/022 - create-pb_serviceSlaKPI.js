@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       idKPI: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.INTEGER
       },
       idFrequency:{
         type: Sequelize.INTEGER

@@ -5,26 +5,26 @@ module.exports = (sequelize, DataTypes) => {
       type : DataTypes.INTEGER,
       primaryKey: true
     },
-    idServiceAsset: {
+    idPMServiceAsset: {
       type: DataTypes.INTEGER
     },
-    activityDescription: {
+    idSLA: {
+      type: DataTypes.INTEGER
+    },
+    idFrequency: {
       type: DataTypes.TEXT
-    }
+    },
   }, {});
   PB_PMSlaProcedure.associate = function(models) {
-    /*
-    MS_Member.belongsToMany(models.FE_Scrum, {
-      through: 'FE_MembersScrums',
-      as: 'scrums',
-      foreignKey: 'idMember'
-    });
-    MS_Member.hasMany(models.PB_Playbook, {
-        foreignKey: 'idMember',
-        as: 'playbooks',
-        onDelete: 'CASCADE',
-      });
-      */
+    PB_PMSlaProcedure.belongsTo(models.PB_ServiceLevelAgreement, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_PMSlaProcedure.belongsTo(models.PB_Frequency, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+
   };
   return PB_PMSlaProcedure;
 };

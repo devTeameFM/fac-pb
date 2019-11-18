@@ -17,11 +17,14 @@ module.exports = {
       idPenalty: {
         type: Sequelize.INTEGER
       },
+      idKPI: {
+        type : Sequelize.INTEGER
+      },
       idValueType: {
         type: Sequelize.INTEGER
       },
       value:{
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       idUnitMeasure: {
         type: Sequelize.INTEGER

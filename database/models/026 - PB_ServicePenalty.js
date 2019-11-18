@@ -28,18 +28,19 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   PB_ServicePenalty.associate = function(models) {
-    /*
-    MS_Member.belongsToMany(models.FE_Scrum, {
-      through: 'FE_MembersScrums',
-      as: 'scrums',
-      foreignKey: 'idMember'
-    });
-    MS_Member.hasMany(models.PB_Playbook, {
-        foreignKey: 'idMember',
-        as: 'playbooks',
+    PB_ServicePenalty.belongsTo(models.PB_ServicePenaltyScope, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServicePenalty.belongsTo(models.PB_ServicePenaltyPerimeter, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServicePenalty.hasMany(models.PB_ServiceSlaPenalty, {
+        foreignKey: 'idPenalty',
         onDelete: 'CASCADE',
       });
-      */
+
   };
   return PB_ServicePenalty;
 };

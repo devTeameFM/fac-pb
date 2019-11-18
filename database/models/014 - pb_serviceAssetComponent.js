@@ -16,18 +16,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   PB_ServiceAssetComponent.associate = function(models) {
-    /*
-    MS_Member.belongsToMany(models.FE_Scrum, {
-      through: 'FE_MembersScrums',
-      as: 'scrums',
-      foreignKey: 'idMember'
-    });
-    MS_Member.hasMany(models.PB_Playbook, {
-        foreignKey: 'idMember',
-        as: 'playbooks',
+    PB_ServiceAssetComponent.belongsTo(models.PB_Service, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceAssetComponent.hasMany(models.PB_PMProcedure, {
+        foreignKey: 'idServiceAsset',
         onDelete: 'CASCADE',
       });
-      */
+
   };
   return PB_ServiceAssetComponent;
 };

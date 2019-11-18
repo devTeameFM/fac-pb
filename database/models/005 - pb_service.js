@@ -12,6 +12,32 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   PB_Service.associate = function(models) {
+    PB_Service.belongsTo(models.PB_ServiceClass, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_Service.hasMany(models.PB_ServiceSlaResponseType, {
+        foreignKey: 'idService',
+        onDelete: 'CASCADE',
+      });
+    PB_Service.hasMany(models.PB_ServiceRequirement, {
+        foreignKey: 'idService',
+        onDelete: 'CASCADE',
+      });
+    PB_Service.hasMany(models.PB_ServiceAssetComponent, {
+        foreignKey: 'idService',
+        onDelete: 'CASCADE',
+      });
+    PB_Service.hasMany(models.PB_ServiceSlaKPI, {
+        foreignKey: 'idService',
+        onDelete: 'CASCADE',
+      });
+    PB_Service.hasMany(models.PB_ServiceSlaPenalty, {
+        foreignKey: 'idService',
+        onDelete: 'CASCADE',
+      });
+
+
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',

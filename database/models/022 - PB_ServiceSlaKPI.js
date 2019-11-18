@@ -31,6 +31,30 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   PB_ServiceSlaKPI.associate = function(models) {
+    PB_ServiceSlaKPI.belongsTo(models.PB_Service, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaKPI.belongsTo(models.PB_UnitMeasure, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaKPI.belongsTo(models.PB_ConditionIndex, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaKPI.belongsTo(models.PB_ServiceSlaKPI, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaKPI.belongsTo(models.PB_ServiceKPI, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
+    PB_ServiceSlaKPI.belongsTo(models.PB_Frequency, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',

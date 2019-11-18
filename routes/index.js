@@ -28,7 +28,10 @@ router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
 router.get('/dynamic/:tableName',controllers.getDynamicOptions)
 router.delete('/clean',controllers.cleandDB)
 router.post('/surveys/import', controllers.importQuestionsFromJSON);
-//router.get('/test/:tableName',controllers.test)
+router.get('/services', controllers.getAllServices);
+router.get('/serviceResponseType', controllers.getServiceResponseType);
+router.get('/serviceLevelAgreement', controllers.getServiceLevelAgreement);
+
 
 
 module.exports = router;

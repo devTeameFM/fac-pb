@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
 
   }, {});
   PB_ServiceRequirement.associate = function(models) {
+    PB_ServiceRequirement.belongsTo(models.PB_Service, {
+            foreignKey: 'id',
+            onDelete: 'CASCADE'
+        });
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',
