@@ -13,8 +13,7 @@ module.exports = {
       },
       valueMeasureUnit: {
         type: Sequelize.TEXT
-      }
-      ,
+      },
       createdAt: {
         allowNull: true,
         type: Sequelize.DATE

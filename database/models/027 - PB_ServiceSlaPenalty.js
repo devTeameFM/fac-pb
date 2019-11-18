@@ -1,18 +1,30 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const PB_ServiceActivityActivationMethod = sequelize.define('PB_ServiceActivityActivationMethod', {
+  const PB_ServiceSlaPenalty = sequelize.define('PB_ServiceSlaPenalty', {
     id: {
       type : DataTypes.INTEGER,
       primaryKey: true
     },
-    idActivityType: {
+    idService: {
       type: DataTypes.INTEGER
     },
-    idRemunerationMethod: {
+    idSLA: {
+      type: DataTypes.INTEGER
+    },
+    idPenalty: {
+      type: DataTypes.INTEGER
+    },
+    idValueType: {
+      type: DataTypes.INTEGER
+    },
+    value:{
+      type: DataTypes.INTEGER
+    },
+    idUnitMeasure: {
       type: DataTypes.INTEGER
     }
   }, {});
-  PB_ServiceActivityActivationMethod.associate = function(models) {
+  PB_ServiceSlaPenalty.associate = function(models) {
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',
@@ -26,5 +38,5 @@ module.exports = (sequelize, DataTypes) => {
       });
       */
   };
-  return PB_ServiceActivityActivationMethod;
+  return PB_ServiceSlaPenalty;
 };

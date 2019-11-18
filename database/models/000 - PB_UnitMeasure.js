@@ -1,18 +1,15 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const PB_ServiceActivityActivationMethod = sequelize.define('PB_ServiceActivityActivationMethod', {
+  const PB_UnitMeasure = sequelize.define('PB_UnitMeasure', {
     id: {
       type : DataTypes.INTEGER,
       primaryKey: true
     },
-    idActivityType: {
-      type: DataTypes.INTEGER
-    },
-    idRemunerationMethod: {
-      type: DataTypes.INTEGER
+    unitMeasure: {
+      type: DataTypes.STRING
     }
   }, {});
-  PB_ServiceActivityActivationMethod.associate = function(models) {
+  PB_UnitMeasure.associate = function(models) {
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',
@@ -26,5 +23,5 @@ module.exports = (sequelize, DataTypes) => {
       });
       */
   };
-  return PB_ServiceActivityActivationMethod;
+  return PB_UnitMeasure;
 };

@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_ServicePenaltyPerimeter', {
+    return queryInterface.createTable('PB_ServicePenaltyPerimeters', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -22,6 +22,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_ServicePenaltyPerimeter');
+    return queryInterface.dropTable('PB_ServicePenaltyPerimeters');
   }
 };

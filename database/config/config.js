@@ -6,7 +6,8 @@ module.exports = {
     dialect: 'postgres',
     define: {
       timestamps: false  // I don't want timestamp fields by default
-    }
+    },
+    logging: false
   },
   test: {
     url: process.env.DATABASE_URL,

@@ -5,16 +5,12 @@ module.exports = {
       {
         idActivityType  : 1,
         idRemunerationMethod : 1,
-        activityTypeName: "Scheduled activities",
-        remunerationMethodTypeName: "Fixed Fee",
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         idActivityType  : 1,
         idRemunerationMethod : 4,
-        activityTypeName: "Scheduled activities",
-        remunerationMethodTypeName: "Out of scope",
         createdAt: new Date(),
         updatedAt: new Date()
       }

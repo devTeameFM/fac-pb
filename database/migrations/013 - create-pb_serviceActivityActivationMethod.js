@@ -13,13 +13,7 @@ module.exports = {
       },
       idRemunerationMethod: {
         type: Sequelize.INTEGER
-      },
-      activityTypeName: {
-        type: Sequelize.STRING
-      },
-      remunerationMethodTypeName: {
-        type: Sequelize.STRING
-      },
+      },      
       createdAt: {
         allowNull: true,
         type: Sequelize.DATE

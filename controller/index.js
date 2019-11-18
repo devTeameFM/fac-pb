@@ -200,7 +200,10 @@ const getContractById = async (req, res) => {
     obj["context"]["answers"] = await models['SM_SurveyAnswer'].findAll({
       where: {
         playBookId: playbook.id
-      }
+      },
+      order: [
+            ['questionId', 'ASC']
+        ],
     });
     return res.status(200).json(obj)
 
@@ -668,7 +671,7 @@ const createPlaybook = async (req, res) => {
     console.log("------------ END SURVEY -------------------");
 
     return res.status(201).json(
-      pb
+      post.id
     );
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -722,8 +725,6 @@ function camelCode(s) {
 }
 
 const updateContract = async (req, res) => {
-
-
   try {
     let  playbook  = req.body;
     let tableRows=[];
@@ -778,9 +779,11 @@ const updateContract = async (req, res) => {
             let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
             console.log("change on question code : " + question.code);
             console.log("change on question name : " + question.name);
+            let result;
+            let par2update={};
 
-            switch(question.name) {
-              case "Building":
+            switch(question.code) {
+              case "building":
                 switch(answers[answer].value) {
                   case "51 Melcher St":
                     //UPDATE cover
@@ -801,22 +804,43 @@ const updateContract = async (req, res) => {
                   where: { id: playbook.id }
                 });
 
-                let parameters={
+                console.log('\x1b[33m');
+                console.log("answers[answer].questionId " + JSON.stringify(answers[answer].questionId,null,2));
+                console.log('\x1b[0m');
+
+                par2update={
                   "value" : answers[answer].value
                 }
-
-                await models.SM_SurveyParameter.update(parameters, {
+                console.log('\x1b[33m');
+                console.log("par2update " + JSON.stringify(par2update,null,2));
+                console.log('\x1b[0m');
+                await models.SM_SurveyParameter.update(par2update, {
                   where: { questionId:answers[answer].questionId }
                 });
-                //playbook=updatePb(playbook,parameters[p].questionId,true)
                 break;
-              case "Service type" :
+              case "serviceHours" :
+                par2update={
+                  "value" : answers[answer].value
+                }
+                await models.SM_SurveyParameter.update(par2update, {
+                  where: { questionId:answers[answer].questionId }
+                });
+                break;
+              case "duration" :
+                par2update={
+                  "value" : answers[answer].value
+                }
+                await models.SM_SurveyParameter.update(par2update, {
+                  where: { questionId:answers[answer].questionId }
+                });
+                break;
+              case "serviceType" :
                 for (sur in playbook.surveys) {
                   for (sec in playbook.surveys[sur].sections) {
                     for (q in playbook.surveys[sur].sections[sec].questions) {
                       if (playbook.surveys[sur].sections[sec].questions[q].code==="table1") {
                         playbook.surveys[sur].sections[sec].questions[q]
-                        var result={
+                        result={
                           "surveyId" : sur,
                           "sectionId" : sec,
                           "questionId" : q
@@ -837,7 +861,7 @@ const updateContract = async (req, res) => {
                 );
 
                 tableRow={
-                  "code": "system1Name",
+                  "code": "serviceTypeDetails",
                   "name": "Service Type Details",
                   "tooltip": "Select the systems that must be provided",
                   "nameI98n": "",
@@ -881,16 +905,8 @@ const updateContract = async (req, res) => {
                   await models.SM_SurveySectionQuestionOption.create(optionAdd);
                 }
 
-                tableRows.push(tableRow)
-                /*
-                parameters={
-                  "value" : answers[answer].value
-                }
+                tableRows.push(tableRow);
 
-                await models.SM_SurveyParameter.update(parameters, {
-                  where: { questionId:answers[answer].questionId }
-                });
-                */
 
                 let facilityIndex= await models['PB_ConditionIndex'].findAll({attributes: [['levelTypeName', 'name'],['levelTypeName', 'defaultValue']]});
                 tableRow={
@@ -936,20 +952,32 @@ const updateContract = async (req, res) => {
                   await models.SM_SurveySectionQuestionOption.create(optionAdd);
                 }
                 tableRows.push(tableRow);
-                /*
-                parameters={
+                par2update={
                   "value" : answers[answer].value
                 }
-
-                await models.SM_SurveyParameter.update(parameters, {
+                await models.SM_SurveyParameter.update(par2update, {
                   where: { questionId:answers[answer].questionId }
-                });*/
+                });
 
                 //aggiungo le question al play book
                 playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
                 playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
                 break;
-              case "Service Type Details":
+              case "serviceTypeDetails":
+                for (sur in playbook.surveys) {
+                  for (sec in playbook.surveys[sur].sections) {
+                    for (q in playbook.surveys[sur].sections[sec].questions) {
+                      if (playbook.surveys[sur].sections[sec].questions[q].code==="table2") {
+                        playbook.surveys[sur].sections[sec].questions[q]
+                        result={
+                          "surveyId" : sur,
+                          "sectionId" : sec,
+                          "questionId" : q
+                        }
+                      }
+                    }
+                  }
+                }
                 tableRows=[];
                 tableHeader: ["System","Component","# of components of served area sf","Add any other useful information"]
                 let serviceAssetComponent= await models['PB_ServiceAssetComponent'].findAll({where: { serviceName: answers[answer].value }});
@@ -1000,9 +1028,60 @@ const updateContract = async (req, res) => {
 
                   tableRows.push(tableRow);
                 }
+
+                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
+                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
                 console.log('\x1b[33m');
                 console.log("tableRows:" + JSON.stringify(tableRows,null,2));
                 console.log('\x1b[0m');
+                break;
+              case "facilityServiceCondition" :
+                par2update={
+                  "value" : answers[answer].value
+                }
+                await models.SM_SurveyParameter.update(par2update, {
+                  where: { questionId:answers[answer].questionId }
+                });
+                break;
+              case "serviceLevel" :
+                par2update={
+                  "value" : answers[answer].value
+                }
+                await models.SM_SurveyParameter.update(par2update, {
+                  where: { questionId:answers[answer].questionId }
+                });
+                break;
+              case "preventiveMaintenance" :
+                par2update={
+                  "value" : answers[answer].value
+                }
+                await models.SM_SurveyParameter.update(par2update, {
+                  where: { questionId:answers[answer].questionId }
+                });
+                break;
+              case "correctiveActivities" :
+                par2update={
+                  "value" : answers[answer].value
+                }
+                await models.SM_SurveyParameter.update(par2update, {
+                  where: { questionId:answers[answer].questionId }
+                });
+                break;
+              case "serviceRequest" :
+                par2update={
+                  "value" : answers[answer].value
+                }
+                await models.SM_SurveyParameter.update(par2update, {
+                  where: { questionId:answers[answer].questionId }
+                });
+                break;
+              case "onSiteTeam" :
+                par2update={
+                  "value" : answers[answer].value
+                }
+                await models.SM_SurveyParameter.update(par2update, {
+                  where: { questionId:answers[answer].questionId }
+                });
                 break;
             }
           }
@@ -1106,7 +1185,7 @@ const importQuestionsFromJSON = async (req,res) => {
       var surveyEntity={
         //"id" : surveyModel[survey].id,
         "name" : surveyModel[survey].name,
-        "code" : surveyModel[survey].code,
+        "code" : camelCode(surveyModel[survey].name),
         "nextStatus" : surveyModel[survey].nextStatus,
         "imageURL" : surveyModel[survey].imageURL,
         "surveyType" : "PLAYBOOK",
@@ -1122,7 +1201,7 @@ const importQuestionsFromJSON = async (req,res) => {
           //"id" : surveyModel[survey].sections[section].id,
           "idSurvey" : sur.id,
           "name" :  surveyModel[survey].sections[section].name,
-          "code" : surveyModel[survey].sections[section].code,
+          "code" : camelCode(surveyModel[survey].sections[section].name),
           "tooltip" : surveyModel[survey].sections[section].tooltip,
           "nameI18n" : surveyModel[survey].sections[section].nameI18n,
           "imageURL" : surveyModel[survey].sections[section].imageURL,
@@ -1138,7 +1217,7 @@ const importQuestionsFromJSON = async (req,res) => {
             var surveySectionQuestionEntity={
               //"id" : surveyModel[survey].sections[section].questions[question].id,
               "idSection" : surSec.id,
-              "code" : surveyModel[survey].sections[section].questions[question].code,
+              "code" : camelCode(surveyModel[survey].sections[section].questions[question].name),
               "name" : surveyModel[survey].sections[section].questions[question].name,
               "tooltip" : surveyModel[survey].sections[section].questions[question].tooltip,
               "nameI98n" : surveyModel[survey].sections[section].questions[question].nameI98n,
@@ -1167,7 +1246,7 @@ const importQuestionsFromJSON = async (req,res) => {
             var surveySectionQuestionEntity={
               //"id" : surveyModel[survey].sections[section].questions[question].id,
               "idSection" : surSec.id,
-              "code" : surveyModel[survey].sections[section].questions[question].code,
+              "code" : camelCode(surveyModel[survey].sections[section].questions[question].name),
               "name" : surveyModel[survey].sections[section].questions[question].name,
               "tooltip" : surveyModel[survey].sections[section].questions[question].tooltip,
               "nameI98n" : surveyModel[survey].sections[section].questions[question].nameI98n,

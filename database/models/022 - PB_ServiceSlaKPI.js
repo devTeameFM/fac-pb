@@ -1,18 +1,36 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const PB_ServiceActivityActivationMethod = sequelize.define('PB_ServiceActivityActivationMethod', {
+  const PB_ServiceSlaKPI = sequelize.define('PB_ServiceSlaKPI', {
     id: {
       type : DataTypes.INTEGER,
       primaryKey: true
     },
-    idActivityType: {
+    idService: {
       type: DataTypes.INTEGER
     },
-    idRemunerationMethod: {
+    idSLA: {
+      type: DataTypes.INTEGER
+    },
+    idCondition: {
+      type: DataTypes.INTEGER
+    },
+    idKPI: {
+      type: DataTypes.BOOLEAN
+    },
+    idFrequency:{
+      type: DataTypes.INTEGER
+    },
+    idValueType: {
+      type: DataTypes.INTEGER
+    },
+    value: {
+      type: DataTypes.STRING
+    },
+    idUnitMeasure: {
       type: DataTypes.INTEGER
     }
   }, {});
-  PB_ServiceActivityActivationMethod.associate = function(models) {
+  PB_ServiceSlaKPI.associate = function(models) {
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',
@@ -26,5 +44,5 @@ module.exports = (sequelize, DataTypes) => {
       });
       */
   };
-  return PB_ServiceActivityActivationMethod;
+  return PB_ServiceSlaKPI;
 };
