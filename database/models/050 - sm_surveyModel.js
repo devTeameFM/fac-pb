@@ -1,6 +1,7 @@
 
 module.exports = (sequelize, DataTypes) => {
   const SM_Survey = sequelize.define('SM_Survey', {
+    idPlaybook: DataTypes.INTEGER,
     name: DataTypes.STRING,
     code: DataTypes.STRING,
     nextStatus: DataTypes.STRING,

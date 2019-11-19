@@ -15,6 +15,7 @@ router.get('/members',controllers.getAllMembers);
 router.get('/contract',controllers.getAllContracts);
 router.get('/contract/:contractId',controllers.getContractById);
 router.post('/contract',controllers.createPlaybook);
+router.post('/contractWithSurvey',controllers.createPlaybookWithSurvey);
 router.delete('/contract',controllers.deletePlaybooks);
 
 router.put('/contract',controllers.updateContract);
@@ -28,6 +29,7 @@ router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
 router.get('/dynamic/:tableName',controllers.getDynamicOptions)
 router.delete('/clean',controllers.cleandDB)
 router.post('/surveys/import', controllers.importQuestionsFromJSON);
+router.post('/surveys/import/:playBookId', controllers.addSurvey);
 router.get('/services', controllers.getAllServices);
 router.get('/serviceResponseType', controllers.getServiceResponseType);
 router.get('/serviceLevelAgreement', controllers.getServiceLevelAgreement);

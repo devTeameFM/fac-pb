@@ -1,6 +1,10 @@
 
 module.exports = (sequelize, DataTypes) => {
   const SM_SurveyParameter = sequelize.define('SM_SurveyParameter', {
+    playBookId: {
+      allowNull: true,
+      type: DataTypes.INTEGER
+    },
     questionId: {
       allowNull: false,
       type: DataTypes.INTEGER

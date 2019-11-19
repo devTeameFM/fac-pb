@@ -8,6 +8,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      idPlaybook: {
+        type: Sequelize.INTEGER
+      },
       idSurvey: {
         type: Sequelize.INTEGER,
         //allowNull:true,

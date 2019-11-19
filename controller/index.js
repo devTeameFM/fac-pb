@@ -749,6 +749,175 @@ const createPlaybook = async (req, res) => {
   }
 };
 
+const createPlaybookWithSurvey = async (req, res) => {
+  try {
+    var  pb=req.body;
+
+
+    pb["coverImg"]="";
+    pb["typeTask"]="PLAYBOOK";
+    pb["status"]="BUILDING_INFO";
+    pb["templateName"]="";
+    pb["fileName"]="";
+    pb["context"]={}
+    pb["context"]["name"]=req.body.name;
+    pb["context"]["status"]="BUILDING_INFO";
+    pb["context"]["dueDate"]="";
+
+
+
+    let post = await models.PB_Playbook.create(pb);
+
+
+    let playBookId=post.id;
+    pb["surveys"] = await models['SM_Survey'].findAll({
+      where: {idPlaybook:playBookId},
+      include: [
+        {
+          model: models.SM_SurveySection,
+          as: "sections",
+          include: [
+            {
+              model: models.SM_SurveySectionQuestion,
+              as: "questions",
+              include: [
+                {
+                  model: models.SM_SurveySectionQuestionOption,
+                  as: "options"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
+    addSurvey(playBookId);
+
+    //console.log("a" + a);
+    //load and add survey
+
+
+    var playb={
+      "id" : post.id,
+      "taskId" : post.id
+    }
+
+
+    const [updated] = await models.PB_Playbook.update(playb, {
+      where: { id: post.id }
+    });
+
+    var cardList={
+      "idTask":post.id,
+      "idList":"0001"
+    }
+
+
+    pb["id"]=post.id;
+    let now=new Date().toISOString().replace(/\:/g,"-");
+    pb["fileName"]=req.body.name + "_" + post.id + "_" + now + ".docx";
+
+    let surveys = await models['SM_Survey'].findAll({
+        where: {idPlaybook:playBookId},
+        include: [
+          {
+            model: models.SM_SurveySection,
+            as: "sections",
+            include: [
+              {
+                model: models.SM_SurveySectionQuestion,
+                as: "questions"
+              }
+            ]
+          }
+        ]
+      });
+
+    for (survey in surveys) {
+        for (section in surveys[survey].sections) {
+          for (question in surveys[survey].sections[section].questions) {
+            if (surveys[survey].sections[section].questions[question].type === "TABLE") {
+
+            }
+            if (surveys[survey].sections[section].questions[question].type === "SELECT") {
+                if (surveys[survey].sections[section].questions[question].tableInput.length>0) {
+                  console.log("TABLE --> " + surveys[survey].sections[section].questions[question].tableInput);
+                  var tableQuery=surveys[survey].sections[section].questions[question].tableInput;
+                  var fieldInput=surveys[survey].sections[section].questions[question].valueInput;
+                  let options = await models[tableQuery].findAll({});
+
+                  for (o in options) {
+                    var option={
+                      "idPlaybook" : post.id,
+                      "idQuestion" : surveys[survey].sections[section].questions[question].id,
+                      "name" : options[o][fieldInput],
+                      "defaultValue" : options[o][fieldInput],
+                      "disabled" : false,
+                      "createdAt" : new Date(),
+                      "updatedAt" : new Date()
+                    }
+                    console.log(option);
+                    await models.SM_SurveySectionQuestionOption.create(option);
+                  }
+                }
+              } else {
+                var option={
+                  "idPlaybook" : post.id,
+                  "idQuestion" : surveys[survey].sections[section].questions[question].id,
+                  "name" : "",
+                  "defaultValue" : "",
+                  "disabled" : false,
+                  "createdAt" : new Date(),
+                  "updatedAt" : new Date()
+                }
+                console.log(option);
+                await models.SM_SurveySectionQuestionOption.create(option);
+            }
+          }
+	       }
+    }
+    let ins = await models.FE_CardsList.create(cardList);
+
+    console.log("------------ BEGIN SURVEY -------------------");
+    var risposte={};
+    for (survey in pb["surveys"]) {
+      console.log("pb.surveys[survey].id --> " + pb.surveys[survey].id);
+      var ID=pb.surveys[survey].id;
+      risposte[ID]={};
+      for (section in pb.surveys[survey].sections) {
+        var sectionCode=pb.surveys[survey].sections[section].code.toString();
+        risposte[ID][sectionCode]={};
+        for (question in pb.surveys[survey].sections[section].questions) {
+          var QUESTION_ID=pb.surveys[survey].sections[section].questions[question].id;
+          var QUESTION_CODE=pb.surveys[survey].sections[section].questions[question].code;
+          var answer={
+            "playBookId" : post.id,
+            "questionId" : QUESTION_ID,
+            "value": ""
+          }
+          //pb.surveys[survey].sections[section].questions[question].updated=false;
+
+          let a = await models.SM_SurveyAnswer.create(answer);
+          risposte[ID][sectionCode][QUESTION_CODE]={};
+          risposte[ID][sectionCode][QUESTION_CODE]["questionId"]=QUESTION_ID;
+          risposte[ID][sectionCode][QUESTION_CODE]["value"]="";
+        }
+      }
+
+    }
+    console.log(risposte);
+    pb["context"]["answers"]=risposte;
+    console.log("------------ END SURVEY -------------------");
+
+    return res.status(201).json(
+      post.id
+    );
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 const deletePlaybooks = async (req, res) => {
   try {
     const deleted = await models.PB_Playbook.destroy({
@@ -1419,6 +1588,119 @@ const importQuestionsFromJSON = async (req,res) => {
     return res.status(200).json({});
 }
 
+const addSurvey = async (playBookId) => {
+    let surveyModel=require("../tracciati/survey-backend.json");
+    //let playBookId= req.params.playBookId;
+    for (survey in surveyModel) {
+      var surveyEntity={
+        //"id" : surveyModel[survey].id,
+        "idPlaybook" : playBookId,
+        "name" : surveyModel[survey].name,
+        "code" : camelCode(surveyModel[survey].name),
+        "nextStatus" : surveyModel[survey].nextStatus,
+        "imageURL" : surveyModel[survey].imageURL,
+        "surveyType" : "PLAYBOOK",
+        "createdAt" : new Date(),
+        "updatedAt" : new Date()
+      }
+      let sur=await models.SM_Survey.create(surveyEntity);
+      console.log('\x1b[33m');
+      console.log("surveyEntity " + JSON.stringify(surveyEntity,null,2));
+      console.log('\x1b[0m');
+      for (section in surveyModel[survey].sections) {
+        var surveySectionEntity={
+          //"id" : surveyModel[survey].sections[section].id,
+          "idPlaybook" : playBookId,
+          "idSurvey" : sur.id,
+          "name" :  surveyModel[survey].sections[section].name,
+          "code" : camelCode(surveyModel[survey].sections[section].name),
+          "tooltip" : surveyModel[survey].sections[section].tooltip,
+          "nameI18n" : surveyModel[survey].sections[section].nameI18n,
+          "imageURL" : surveyModel[survey].sections[section].imageURL,
+          "createdAt" : new Date(),
+          "updatedAt" : new Date()
+        }
+        let surSec=await models.SM_SurveySection.create(surveySectionEntity);
+        console.log('\x1b[36m');
+        console.log("surveySectionEntity " + JSON.stringify(surveySectionEntity,null,2));
+        console.log('\x1b[0m');
+        for (question in surveyModel[survey].sections[section].questions) {
+          if (surveyModel[survey].sections[section].questions[question].type=="TABLE") {
+            var surveySectionQuestionEntity={
+              //"id" : surveyModel[survey].sections[section].questions[question].id,
+              "idPlaybook" : playBookId,
+              "idSection" : surSec.id,
+              "code" : camelCode(surveyModel[survey].sections[section].questions[question].name),
+              "name" : surveyModel[survey].sections[section].questions[question].name,
+              "tooltip" : surveyModel[survey].sections[section].questions[question].tooltip,
+              "nameI98n" : surveyModel[survey].sections[section].questions[question].nameI98n,
+              "type" : surveyModel[survey].sections[section].questions[question].type,
+              "icon" : surveyModel[survey].sections[section].questions[question].icon,
+              "required" : surveyModel[survey].sections[section].questions[question].required,
+              "flow" : surveyModel[survey].sections[section].questions[question].flow,
+              "tableInput" : "",
+              "valueInput" : "",
+            }
+            if (surveyModel[survey].sections[section].questions[question].tableHeader) {
+              var tableHeader = surveyModel[survey].sections[section].questions[question].tableHeader.toString();
+              var tableRows = surveyModel[survey].sections[section].questions[question].tableRows.toString();
+            }
+            surveySectionQuestionEntity["tableHeader"]=tableHeader;
+            surveySectionQuestionEntity["tableRows"]=tableRows;
+            console.log('\x1b[34m');
+          } else {
+            var isParameter=false;
+            var tableInput="";
+            var valueInput="";
+            if (surveyModel[survey].sections[section].questions[question].tableInput) {
+              tableInput=surveyModel[survey].sections[section].questions[question].tableInput;
+            }
+            if (surveyModel[survey].sections[section].questions[question].valueInput) {
+              valueInput=surveyModel[survey].sections[section].questions[question].valueInput;
+            }
+            if (surveyModel[survey].sections[section].questions[question].isParameter) {
+              isParameter=true;
+            }
+            var surveySectionQuestionEntity={
+              //"id" : surveyModel[survey].sections[section].questions[question].id,
+              "idPlaybook" : playBookId,
+              "idSection" : surSec.id,
+              "code" : camelCode(surveyModel[survey].sections[section].questions[question].name),
+              "name" : surveyModel[survey].sections[section].questions[question].name,
+              "tooltip" : surveyModel[survey].sections[section].questions[question].tooltip,
+              "nameI98n" : surveyModel[survey].sections[section].questions[question].nameI98n,
+              "type" : surveyModel[survey].sections[section].questions[question].type,
+              "icon" : surveyModel[survey].sections[section].questions[question].icon,
+              "required" : surveyModel[survey].sections[section].questions[question].required,
+              "flow" : surveyModel[survey].sections[section].questions[question].flow,
+              "tableInput" : tableInput,
+              "valueInput" : valueInput,
+              "isParameter" : isParameter
+            }
+            console.log('\x1b[32m');
+        }
+        let surSecQue=await models.SM_SurveySectionQuestion.create(surveySectionQuestionEntity);
+
+        // insert SM_SurveyParameters
+        if (surveySectionQuestionEntity.isParameter) {
+          var surveyParameter={
+            "playBookId" : playBookId,
+            "questionId" : surSecQue.id,
+            "value" : "",
+            "name" : surveySectionQuestionEntity.code
+          }
+          let surParam=await models.SM_SurveyParameter.create(surveyParameter);
+        }
+
+        console.log("surveySectionQuestionEntity " + JSON.stringify(surveySectionQuestionEntity,null,2));
+        console.log('\x1b[0m');
+        }
+      }
+
+    }
+
+    return;
+}
 
 module.exports = {
   getDynamicOptions,
@@ -1442,5 +1724,7 @@ module.exports = {
   test,
   getAllServices,
   getServiceResponseType,
-  getServiceLevelAgreement
+  getServiceLevelAgreement,
+  addSurvey,
+  createPlaybookWithSurvey
 };
