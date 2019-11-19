@@ -13,11 +13,15 @@ router.get('/scrums',controllers.getAllScrums);
 router.get('/members',controllers.getAllMembers);
 
 router.get('/contract',controllers.getAllContracts);
+
+router.get('/playbook/:contractId',controllers.getContractById);
 router.get('/contract/:contractId',controllers.getContractById);
 router.post('/contract',controllers.createPlaybook);
 router.post('/contractWithSurvey',controllers.createPlaybookWithSurvey);
 router.delete('/contract',controllers.deletePlaybooks);
 
+
+router.put('/playbook/:playBookId',controllers.updateContract);
 router.put('/contract/:playBookId',controllers.updateContract);
 router.post('/updateQuestions', controllers.generateQuestions);
 
