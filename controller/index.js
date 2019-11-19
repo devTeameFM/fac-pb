@@ -989,8 +989,7 @@ const updateContract = async (req, res) => {
     //UPDATE status
 
     //UPDATE answers
-    var answers=playbook.context.answers;
-    //console.log(JSON.stringify(answers));
+    var answers=playbook.answers;
 
     for (answer in answers) {
       const updated= await models.SM_SurveyAnswer.update(answers[answer], {

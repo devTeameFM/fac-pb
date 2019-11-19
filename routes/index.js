@@ -18,10 +18,8 @@ router.post('/contract',controllers.createPlaybook);
 router.post('/contractWithSurvey',controllers.createPlaybookWithSurvey);
 router.delete('/contract',controllers.deletePlaybooks);
 
-router.put('/contract',controllers.updateContract);
+router.put('/contract/:playBookId',controllers.updateContract);
 router.post('/updateQuestions', controllers.generateQuestions);
-
-
 
 //SOLO PER DEVELOP
 router.get('/surveys', controllers.getAllSurveyDynamics);
@@ -33,6 +31,9 @@ router.post('/surveys/import/:playBookId', controllers.addSurvey);
 router.get('/services', controllers.getAllServices);
 router.get('/serviceResponseType', controllers.getServiceResponseType);
 router.get('/serviceLevelAgreement', controllers.getServiceLevelAgreement);
+
+
+
 
 
 
