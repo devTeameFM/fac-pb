@@ -183,7 +183,7 @@
 				"questions": [
 					{
 						"id": 110009,
-						"code": "facilityService",
+						"code": "",
 						"name": "Service type",
 						"tooltip": "Select the Macro-Service in the scope of work",
 						"nameI98n": "",
@@ -196,8 +196,8 @@
 						"valueInput" : "name"
 					},
 					{
-						"code" : "table1",
-						"name" : "table1",
+						"code" : "",
+						"name" : "Service type table",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -206,8 +206,8 @@
 						"defaultValue": " "
 					},
 					{
-						"code" : "table2",
-						"name" : "table2",
+						"code" : "",
+						"name" : "service Type Details Table",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -250,7 +250,7 @@
 						"options" : []
 					},
 					{
-						"code": "sAActive",
+						"code": "",
 						"name": "Preventive Maintenance",
 						"tooltip": "Define if the «Preventive Maintenance» (time-based scheduled activities) is required and the remuneration method",
 						"nameI98n": "",
@@ -265,7 +265,22 @@
 						"options" : []
 					},
 					{
-						"code": "cAActive",
+						"code": "",
+						"name": "Preventive Maintenance Remuneration",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"type": "SELECT",
+						"icon": "sentiment_satisfied_alt",
+						"flow": true,
+						"required": true,
+						"isParameter" : true,
+						"tableInput" : "PB_ServiceActivationMethod",
+						"valueInput" : "remunerationMethodTypeName",
+						"options" : []
+					},
+					{
+						"code": "",
 						"name": "Corrective Activities",
 						"tooltip": "Define if the «Corrective Activities» (on demand request for failures or malfunctions) are included and the remuneration method",
 						"nameI98n": "",
@@ -279,7 +294,21 @@
 						"options" : []
 					},
 					{
-						"code": "eAActive",
+						"code": "",
+						"name": "Corrective Activities Remuneration",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"type": "SELECT",
+						"flow": true,
+						"required": true,
+						"isParameter" : true,
+						"tableInput" : "PB_ServiceActivationMethod",
+						"valueInput" : "remunerationMethodTypeName",
+						"options" : []
+					},
+					{
+						"code": "",
 						"name": "Service Request",
 						"tooltip": "Define if the «Service Request» (on demand request of services) are included and the remuneration method",
 						"nameI98n": "",
@@ -293,9 +322,37 @@
 						"options" : []
 					},
 					{
-						"code": "osAActive",
+						"code": "",
+						"name": "Service Request Remuneration",
+						"tooltip": "",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"type": "SELECT",
+						"flow": true,
+						"required": true,
+						"isParameter" : true,
+						"tableInput" : "PB_ServiceActivationMethod",
+						"valueInput" : "remunerationMethodTypeName",
+						"options" : []
+					},
+					{
+						"code": "",
 						"name": "On site team",
 						"tooltip": "Define if the «On site presence» (dedicated team in the building) are included and the remuneration method",
+						"nameI98n": "",
+						"tooltipI18n": "",
+						"type": "SELECT",
+						"flow": true,
+						"required": true,
+						"isParameter" : true,
+						"tableInput" : "PB_ServiceActivationMethod",
+						"valueInput" : "remunerationMethodTypeName",
+						"options" : []
+					},
+					{
+						"code": "",
+						"name": "On site team Remuneration",
+						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
 						"type": "SELECT",
@@ -336,7 +393,7 @@
 				"questions": [
 					{
 						"code" : "table4",
-						"name" : "table4",
+						"name" : "Generic Technical Requirements",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -344,8 +401,8 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": [""],
+						"tableRows": [""]
 					}
 				]
 			},
@@ -359,7 +416,7 @@
 				"questions": [
 					{
 						"code" : "table5",
-						"name" : "table5",
+						"name" : "Priority definition",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -367,12 +424,12 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["PRIORITY","DEFINITION"],
+						"tableRows": ["",""]
 					},
 					{
 						"code" : "table6",
-						"name" : "table6",
+						"name" : "Response time",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -380,12 +437,12 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["DEFINITION","RELATED KPI"],
+						"tableRows": ["",""]
 					},
 					{
 						"code" : "table7",
-						"name" : "table7",
+						"name" : "Contract Level Response Time",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -393,12 +450,12 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["PRIORITY","CONTRACT SERVICE LEVEL","RESPONSE TIME (Working hours)"],
+						"tableRows": ["","",""]
 					},
 					{
 						"code" : "table8",
-						"name" : "table8",
+						"name" : "Correction time",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -406,12 +463,12 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["DEFINITION","RELATED KPI"],
+						"tableRows": ["",""]
 					},
 					{
 						"code" : "table9",
-						"name" : "table9",
+						"name" : "Contract Level Correction Time",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -419,12 +476,12 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["URGENCY LEVEL","CONTRACT SERVICE LEVEL","CORRECTION TIME (Working hours)"],
+						"tableRows": ["","",""]
 					},
 					{
 						"code" : "table10",
-						"name" : "table10",
+						"name" : "Estimation Time",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -432,12 +489,12 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["DEFINITION","RELATED KPI"],
+						"tableRows": ["",""]
 					},
 					{
-						"code" : "table11",
-						"name" : "table11",
+						"code" : "",
+						"name" : "Contract Level Estimation Time",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -445,8 +502,8 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["PRIORITY","CONTRACT SERVICE LEVEL","ESTIMATION TIME (Working hours)"],
+						"tableRows": ["","",""]
 					}
 				]
 			},
@@ -460,7 +517,7 @@
 				"questions": [
 				{
 					"code" : "table12",
-					"name" : "table12",
+					"name" : "Availability",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -469,11 +526,11 @@
 					"flow": true,
 					"required": true,
 					"tableHeader": [],
-					"tableRows": []
+					"tableRows": ["",""]
 				},
 				{
 					"code" : "table13",
-					"name" : "table13",
+					"name" : "Correction Time For Urgency Request",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -482,11 +539,11 @@
 					"flow": true,
 					"required": true,
 					"tableHeader": [],
-					"tableRows": []
+					"tableRows": ["","",""]
 				},
 				{
 					"code" : "table14",
-					"name" : "table14",
+					"name" : "System Condition Index",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -494,12 +551,12 @@
 					"type": "TABLE",
 					"flow": true,
 					"required": true,
-					"tableHeader": [],
+					"tableHeader": ["Facility Condition Value","No. of estimated on demand activities","DEFINITION"],
 					"tableRows": []
 				},
 				{
 					"code" : "table15",
-					"name" : "table15",
+					"name" : "Availability Index",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -507,12 +564,12 @@
 					"type": "TABLE",
 					"flow": true,
 					"required": true,
-					"tableHeader": [],
-					"tableRows": []
+					"tableHeader": ["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE"],
+					"tableRows": ["","","","",""]
 				},
 				{
 					"code" : "table16",
-					"name" : "table16",
+					"name" : "Quality Provided",
 					"tooltip": "",
 					"nameI98n": "",
 					"tooltipI18n": "",
@@ -520,8 +577,8 @@
 					"type": "TABLE",
 					"flow": true,
 					"required": true,
-					"tableHeader": [],
-					"tableRows": []
+					"tableHeader": ["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE"],
+					"tableRows": ["","","","",""]
 				}
 			]
 			},
@@ -535,7 +592,7 @@
 				"questions": [
 					{
 						"code" : "table17",
-						"name" : "table17",
+						"name" : "Penalties Related Monitoring System",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -543,12 +600,12 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["KPI (KEY PERFORMANCE INDICATORS)","SLA","PENALTY"],
+						"tableRows": ["","",""]
 					},
 					{
 						"code" : "table18",
-						"name" : "table18",
+						"name" : "Penalties Related Non Conformities",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -556,8 +613,8 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["SPECIFIC INDICATOR AREA","DESCRIPTION","PERIMETER","PENALTY"],
+						"tableRows": ["","",""]
 					}
 				]
 			},
@@ -571,7 +628,7 @@
 				"questions": [
 					{
 						"code" : "table19",
-						"name" : "table19",
+						"name" : "Preventive Maintenance Procedures",
 						"tooltip": "",
 						"nameI98n": "",
 						"tooltipI18n": "",
@@ -579,8 +636,8 @@
 						"type": "TABLE",
 						"flow": true,
 						"required": true,
-						"tableHeader": [],
-						"tableRows": []
+						"tableHeader": ["SYSTEM","COMPONENT","ACTIVITY","FREQUENCIES"],
+						"tableRows": ["","","",""]
 					}
 				]
 			}

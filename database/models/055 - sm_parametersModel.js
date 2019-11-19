@@ -7,6 +7,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     value :{
       type: DataTypes.STRING
+    },
+    name :{
+      type: DataTypes.STRING
     }
   }, {});
   SM_SurveyParameter.associate = function(models) {

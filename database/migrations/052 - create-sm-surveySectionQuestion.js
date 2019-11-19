@@ -34,6 +34,16 @@ module.exports = {
       icon: {
         type: Sequelize.STRING
       },
+      tableHeader: {
+        type: Sequelize.TEXT
+      },
+      tableRows: {
+        type: Sequelize.TEXT
+      },
+      updated : {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
 	    required: {
         type: Sequelize.BOOLEAN
       },

@@ -8,11 +8,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      playBookId: {
+        allowNull: true,
+        type: Sequelize.INTEGER
+      },
       questionId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
       value :{
+        type: Sequelize.STRING
+      },
+      name :{
         type: Sequelize.STRING
       },
       createdAt: {

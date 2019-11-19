@@ -240,6 +240,7 @@ const getContractById = async (req, res) => {
             tooltipI18n : survey[sur].sections[sec].questions[que].tooltipI18n,
             type : survey[sur].sections[sec].questions[que].type,
             icon : survey[sur].sections[sec].questions[que].icon,
+            updated : survey[sur].sections[sec].questions[que].updated,
             required : survey[sur].sections[sec].questions[que].required,
             flow : survey[sur].sections[sec].questions[que].flow,
           }
@@ -254,7 +255,10 @@ const getContractById = async (req, res) => {
             }
           }
           if (survey[sur].sections[sec].questions[que].type=="TABLE") {
-
+            if (temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader) {
+              temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader.split(",");
+              temp_question.tableRows=survey[sur].sections[sec].questions[que].tableRows.split(",");
+            }
           }
           temp_section.questions.push(temp_question);
         }
@@ -806,6 +810,13 @@ const updateContract = async (req, res) => {
     const [updated] = await models.PB_Playbook.update(pb, {
       where: { id: pb.id }
     });
+
+    var quest={
+      "updated" : false
+    }
+    await models.SM_SurveySectionQuestion.update(quest, {
+      where: { createdAt: null }
+    });
     //UPDATE status
 
     //UPDATE answers
@@ -926,7 +937,7 @@ const updateContract = async (req, res) => {
               for (sur in playbook.surveys) {
                 for (sec in playbook.surveys[sur].sections) {
                   for (q in playbook.surveys[sur].sections[sec].questions) {
-                    if (playbook.surveys[sur].sections[sec].questions[q].code==="table1") {
+                    if (playbook.surveys[sur].sections[sec].questions[q].code==="serviceTypeTable") {
                       playbook.surveys[sur].sections[sec].questions[q]
                       result={
                         "surveyId" : sur,
@@ -937,9 +948,11 @@ const updateContract = async (req, res) => {
                   }
                 }
               }
-
+              console.log("RESULT : " + result);
+              //
               tableRows=[];
               tableHeader=["Select the service that must be provided","Select the average facility condition of your physical assets"];
+              //
               let serviceType = await models['PB_ServiceClass'].findOne({where: { name: answers[answer].value }});
               let service = await models['PB_Service'].findAll(
                 {
@@ -1008,8 +1021,8 @@ const updateContract = async (req, res) => {
   								"tooltipI18n": "",
   								"icon": "signal_cellular_alt",
   								"type": "SELECT",
-  								"flow": false,
-  								"required": false,
+  								"flow": true,
+  								"required": true,
   								"defaultValue": "",
                   "isParameter" : true,
                   "updated" : true,
@@ -1081,7 +1094,7 @@ const updateContract = async (req, res) => {
                 for (sur in playbook.surveys) {
                   for (sec in playbook.surveys[sur].sections) {
                     for (q in playbook.surveys[sur].sections[sec].questions) {
-                      if (playbook.surveys[sur].sections[sec].questions[q].code==="table2") {
+                      if (playbook.surveys[sur].sections[sec].questions[q].code==="serviceTypeDetailsTable") {
                         playbook.surveys[sur].sections[sec].questions[q]
                         result={
                           "surveyId" : sur,
@@ -1149,7 +1162,7 @@ const updateContract = async (req, res) => {
                 console.log("tableRows:" + JSON.stringify(tableRows,null,2));
                 console.log('\x1b[0m');
                 par2update={
-                  "value" : answers[answer].value
+                  "value" : answers[answer].value,
                 }
                 await models.SM_SurveyParameter.update(par2update, {
                   where: { questionId:answers[answer].questionId }
@@ -1346,9 +1359,14 @@ const importQuestionsFromJSON = async (req,res) => {
               "required" : surveyModel[survey].sections[section].questions[question].required,
               "flow" : surveyModel[survey].sections[section].questions[question].flow,
               "tableInput" : "",
-              "valueInput" : ""
-
+              "valueInput" : "",
             }
+            if (surveyModel[survey].sections[section].questions[question].tableHeader) {
+              var tableHeader = surveyModel[survey].sections[section].questions[question].tableHeader.toString();
+              var tableRows = surveyModel[survey].sections[section].questions[question].tableRows.toString();
+            }
+            surveySectionQuestionEntity["tableHeader"]=tableHeader;
+            surveySectionQuestionEntity["tableRows"]=tableRows;
             console.log('\x1b[34m');
           } else {
             var isParameter=false;
@@ -1386,7 +1404,8 @@ const importQuestionsFromJSON = async (req,res) => {
         if (surveySectionQuestionEntity.isParameter) {
           var surveyParameter={
             "questionId" : surSecQue.id,
-            "value" : ""
+            "value" : "",
+            "name" : surveySectionQuestionEntity.code
           }
           let surParam=await models.SM_SurveyParameter.create(surveyParameter);
         }
