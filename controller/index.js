@@ -178,10 +178,8 @@ const getContractById = async (req, res) => {
     var obj = Object.assign({}, playbook.dataValues);
     obj["templateName"]="";
     obj["fileName"]="";
-    obj["context"]={}
-    obj["context"]["name"]=playbook.name;
-    obj["context"]["status"]="BUILDING_INFO";
-    obj["context"]["dueDate"]="";
+    obj["status"]="BUILDING_INFO";
+    obj["dueDate"]="";
     survey = await models['SM_Survey'].findAll({
       order: [
         [ { model: models.SM_SurveySection , as: 'sections'}, 'id', 'ASC'],
@@ -210,6 +208,8 @@ const getContractById = async (req, res) => {
     });
 
     obj["surveys"]=[];
+    obj["answers"] = {}
+    obj["answers"][contractId] = {}
     for (sur in survey) {
       var temp_survey={
         id : survey[sur].id,
@@ -220,6 +220,7 @@ const getContractById = async (req, res) => {
         sections : []
       }
       for (sec in survey[sur].sections) {
+
         var temp_section={
           name : survey[sur].sections[sec].name,
           code : survey[sur].sections[sec].code,
@@ -229,8 +230,10 @@ const getContractById = async (req, res) => {
           imageURL : survey[sur].sections[sec].imageURL,
           questions : []
         }
+        obj["answers"][contractId][temp_section.code]={}
         //temp_survey.sections.push(temp_section);
         for (que in survey[sur].sections[sec].questions) {
+
           var temp_question={
             id : survey[sur].sections[sec].questions[que].id,
             code : survey[sur].sections[sec].questions[que].code,
@@ -243,6 +246,10 @@ const getContractById = async (req, res) => {
             updated : survey[sur].sections[sec].questions[que].updated,
             required : survey[sur].sections[sec].questions[que].required,
             flow : survey[sur].sections[sec].questions[que].flow,
+          }
+          obj["answers"][contractId][temp_section.code][temp_question.code]={
+            "questionId" : temp_question.id,
+            "value" : ""
           }
           if (survey[sur].sections[sec].questions[que].type=="SELECT") {
             temp_question.options=[];
@@ -268,7 +275,10 @@ const getContractById = async (req, res) => {
     }
 
 
-    obj["context"]["answers"] = await models['SM_SurveyAnswer'].findAll({
+
+
+    /*
+    let answers= await models['SM_SurveyAnswer'].findAll({
       where: {
         playBookId: playbook.id
       },
@@ -276,6 +286,13 @@ const getContractById = async (req, res) => {
             ['questionId', 'ASC']
         ],
     });
+
+
+    for (a in answers) {
+      console.log(JSON.stringify(answers[a]));
+    }*/
+
+
     return res.status(200).json(obj)
 
   } catch (error) {
