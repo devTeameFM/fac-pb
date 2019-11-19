@@ -1150,7 +1150,7 @@ const updateContract = async (req, res) => {
                   "value" : ""
                 }
                 let answ0=await models.SM_SurveyAnswer.create(answerAdd0);
-                playbook.context.answers.push(answ0);
+                //playbook.context.answers.push(answ0);
                 if (tableRow.isParameter) {
                   let paramAdd0={
                     "playBookId" : playbook.id,
@@ -1223,7 +1223,7 @@ const updateContract = async (req, res) => {
                     "value" : ""
                   }
                   let answ1=await models.SM_SurveyAnswer.create(answerAdd1);
-                  playbook.context.answers.push(answ1);
+                  //playbook.context.answers.push(answ1);
                   if (tableRow.isParameter) {
                     let paramAdd1={
                       "playBookId" : playbook.id,
@@ -1295,7 +1295,7 @@ const updateContract = async (req, res) => {
                       "value" : ""
                     }
                     let answerAdded01=await models.SM_SurveyAnswer.create(answer2add01);
-                    playbook.context.answers.push(answerAdded01);
+                    //playbook.context.answers.push(answerAdded01);
                     let question2add02={
                       "code": camelCode(serviceAssetComponent[sAC].assetComponentType) + "Notes",
                       "name": "Information or comments",
@@ -1316,7 +1316,7 @@ const updateContract = async (req, res) => {
                       "value" : ""
                     }
                     let answerAdded02=await models.SM_SurveyAnswer.create(answer2add02);
-                    playbook.context.answers.push(answerAdded02);
+                    //playbook.context.answers.push(answerAdded02);
                     tableRow=[serviceAssetComponent[sAC].serviceName,serviceAssetComponent[sAC].assetComponentType,question2add01,question2add02]
 
                     tableRows.push(tableRow);
