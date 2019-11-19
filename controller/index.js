@@ -1114,7 +1114,7 @@ const updateContract = async (req, res) => {
                     }
                   }
                 }
-                console.log("RESULT : " + result);
+                console.log("RESULT : " + JSON.stringify(result));
                 //
                 tableRows=[];
                 tableHeader=["Select the service that must be provided","Select the average facility condition of your physical assets"];
@@ -1167,7 +1167,8 @@ const updateContract = async (req, res) => {
                     "idQuestion" : surSecQue0.id,
                     "name" : tableRow.options[q].dataValues.name,
                     "defaultValue" : tableRow.options[q].dataValues.defaultValue,
-                    "disabled" : false
+                    "disabled" : false,
+                    "updated" : true
                   }
                   await models.SM_SurveySectionQuestionOption.create(optionAdd);
                 }
@@ -1253,6 +1254,7 @@ const updateContract = async (req, res) => {
                   where: { questionId:answers[a][b].questionId }
                 });
                 //aggiungo le question al play book
+                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].updated=true;
                 playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
                 playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
                   break;
@@ -1271,6 +1273,7 @@ const updateContract = async (req, res) => {
                       }
                     }
                   }
+                  playbook.surveys[sur].sections[sec].questions[q].update=true;
                   tableRows=[];
                   tableHeader: ["System","Component","# of components of served area sf","Add any other useful information"]
                   let serviceAssetComponent= await models['PB_ServiceAssetComponent'].findAll({where: { serviceName: answers[a][b].value }});
