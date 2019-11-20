@@ -265,14 +265,14 @@ const getContractById = async (req, res) => {
             "value" : answerValueFromQuestionId(dbAnswers,temp_question.id)
           }
           if (survey[sur].sections[sec].questions[que].type=="SELECT") {
-            temp_question.options=[];
-            for (opt in survey[sur].sections[sec].questions[que].options) {
-                 var temp_option={
-                   "name" : survey[sur].sections[sec].questions[que].options[opt].name,
-                   "defaultValue" : survey[sur].sections[sec].questions[que].options[opt].defaultValue
-                 }
-                 temp_question.options.push(temp_option)
-            }
+              temp_question.options=[];
+              for (opt in survey[sur].sections[sec].questions[que].options) {
+                   var temp_option={
+                     "name" : survey[sur].sections[sec].questions[que].options[opt].name,
+                     "defaultValue" : survey[sur].sections[sec].questions[que].options[opt].defaultValue
+                   }
+                   temp_question.options.push(temp_option)
+              }
           }
           if (survey[sur].sections[sec].questions[que].type=="TABLE") {
             if (temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader) {
@@ -1149,7 +1149,7 @@ const updateContract = async (req, res) => {
                   "tooltip": "Select the systems that must be provided",
                   "nameI98n": "",
                   "tooltipI18n": "",
-                  "type": "SELECT",
+                  "type": "SELECT_NESTED",
                   "flow": true,
                   "required": true,
                   "isParameter" : true,
@@ -1159,7 +1159,12 @@ const updateContract = async (req, res) => {
                   "tableHeader" : ""
                 }
                 let surSecQue0=await models.SM_SurveySectionQuestion.create(tableRow);
-
+                let answerAdd0={
+                  "playBookId" : playbook.id,
+                  "questionId" : surSecQue0.id,
+                  "value" : ""
+                }
+                let answ0=await models.SM_SurveyAnswer.create(answerAdd0);
                 for (q in service) {
                   let optionAdd={
                     "idPlaybook" : playbook.id,
@@ -1203,13 +1208,14 @@ const updateContract = async (req, res) => {
   								"nameI98n": "",
   								"tooltipI18n": "",
   								"icon": "signal_cellular_alt",
-  								"type": "SELECT",
+  								"type": "SELECT_NESTED",
   								"flow": false,
   								"required": false,
   								"defaultValue": "",
                   "isParameter" : true,
                   "updated" : true,
-                  "options": facilityIndex
+                  "options": facilityIndex,
+                  "tableName" : "serviceTypeTable",
                 }
 
                 let surSecQue1=await models.SM_SurveySectionQuestion.create(tableRow);
@@ -1225,6 +1231,12 @@ const updateContract = async (req, res) => {
                   await models.SM_SurveySectionQuestionOption.create(optionAdd);
                 }
                 tableRows.push([tableRow]);
+                let answerAdd1={
+                  "playBookId" : playbook.id,
+                  "questionId" : surSecQue1.id,
+                  "value" : ""
+                }
+                let answ1=await models.SM_SurveyAnswer.create(answerAdd1);
                 /*
                 let answerAdd1={
                   "playBookId" : playbook.id,
@@ -1246,8 +1258,9 @@ const updateContract = async (req, res) => {
 
                 // ******************************************************** facilityServiceCondition ***********************************/
                 //aggiungo le question al play book
+                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].update=true;
                 playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableName="serviceTypeDetails";
-                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
+                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=["Select the service that must be provided","Select the average facility condition of your physical assets"];
                 playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
                   break;
                 case "serviceTypeDetails":
