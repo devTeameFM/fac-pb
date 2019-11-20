@@ -37,6 +37,9 @@ module.exports = {
       icon: {
         type: Sequelize.STRING
       },
+      tableName: {
+        type: Sequelize.STRING
+      },
       tableHeader: {
         type: Sequelize.TEXT
       },

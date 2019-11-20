@@ -165,6 +165,14 @@ const getAllScrums = async (req, res) => {
   }
 };
 
+function answerValueFromQuestionId(answers,questionId) {
+  value="";
+  for (a in answers) {
+    if (answers[a].questionId===questionId) value=answers[a].value
+  }
+  return value
+}
+
 const getContractById = async (req, res) => {
   try {
     const contractId= req.params.contractId;
@@ -210,6 +218,11 @@ const getContractById = async (req, res) => {
     obj["surveys"]=[];
     obj["answers"] = {}
     obj["answers"][contractId] = {}
+    dbAnswers=await models['SM_SurveyAnswer'].findAll({
+      where: {
+        playBookId: playbook.id
+      }
+    });
     for (sur in survey) {
       var temp_survey={
         id : survey[sur].id,
@@ -249,7 +262,7 @@ const getContractById = async (req, res) => {
           }
           obj["answers"][contractId][temp_section.code][temp_question.code]={
             "questionId" : temp_question.id,
-            "value" : ""
+            "value" : answerValueFromQuestionId(dbAnswers,temp_question.id)
           }
           if (survey[sur].sections[sec].questions[que].type=="SELECT") {
             temp_question.options=[];
@@ -958,6 +971,7 @@ function camelCode(s) {
     }
     camelType+=listWords[w];
   }
+  camelType = camelType.replace(/[^\w\s]/gi, '')
   return camelType;
 }
 
@@ -1117,7 +1131,7 @@ const updateContract = async (req, res) => {
                 console.log("RESULT : " + JSON.stringify(result));
                 //
                 tableRows=[];
-                tableHeader=["Select the service that must be provided","Select the average facility condition of your physical assets"];
+                tableHeader=[["Select the service that must be provided"],["Select the average facility condition of your physical assets"]];
                 //
                 let serviceType = await models['PB_ServiceClass'].findOne({where: { name: answers[a][b].value }});
                 let service = await models['PB_Service'].findAll(
@@ -1138,7 +1152,9 @@ const updateContract = async (req, res) => {
                   "required": true,
                   "isParameter" : true,
                   "updated" : true,
-                  "options": service
+                  "options": service,
+                  "tableName" : "serviceTypeTable",
+                  "tableHeader" : ["Select the service that must be provided"],
                 }
                 // aggiunge le question alla sectionID
 
@@ -1147,9 +1163,10 @@ const updateContract = async (req, res) => {
                 let answerAdd0={
                   "playBookId" : playbook.id,
                   "questionId" : surSecQue0.id,
-                  "value" : ""
+                  "value" : "",
                 }
                 let answ0=await models.SM_SurveyAnswer.create(answerAdd0);
+
                 //playbook.context.answers.push(answ0);
                 if (tableRow.isParameter) {
                   let paramAdd0={
@@ -1173,7 +1190,7 @@ const updateContract = async (req, res) => {
                   await models.SM_SurveySectionQuestionOption.create(optionAdd);
                 }
 
-                tableRows.push(tableRow);
+                tableRows.push([tableRow]);
 
                 let checkfacilityServiceCondition=await models['SM_SurveySectionQuestion'].findOne({where: { code: "facilityServiceCondition" }})
                 if (checkfacilityServiceCondition) {
@@ -1243,7 +1260,7 @@ const updateContract = async (req, res) => {
                     }
                     await models.SM_SurveySectionQuestionOption.create(optionAdd);
                   }
-                  tableRows.push(tableRow);
+                  tableRows.push([tableRow]);
 
                 }
 
@@ -1254,7 +1271,7 @@ const updateContract = async (req, res) => {
                   where: { questionId:answers[a][b].questionId }
                 });
                 //aggiungo le question al play book
-                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].updated=true;
+                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableName="serviceTypeDetails";
                 playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
                 playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
                   break;
