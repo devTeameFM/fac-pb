@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     tooltip: DataTypes.STRING,
     type: DataTypes.STRING,
     icon: DataTypes.STRING,
+    tableName : DataTypes.STRING,
     tableHeader: DataTypes.STRING,
     tableRows: DataTypes.TEXT,
     updated: DataTypes.BOOLEAN,

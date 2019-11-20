@@ -438,7 +438,7 @@
 						"flow": true,
 						"required": true,
 						"tableHeader": ["DEFINITION","RELATED KPI"],
-						"tableRows": ["",""]
+						"tableRows": [[""],[""]]
 					},
 					{
 						"code" : "table7",
@@ -451,7 +451,7 @@
 						"flow": true,
 						"required": true,
 						"tableHeader": ["PRIORITY","CONTRACT SERVICE LEVEL","RESPONSE TIME (Working hours)"],
-						"tableRows": ["","",""]
+						"tableRows": [[""],[""],[""]]
 					},
 					{
 						"code" : "table8",
@@ -464,7 +464,7 @@
 						"flow": true,
 						"required": true,
 						"tableHeader": ["DEFINITION","RELATED KPI"],
-						"tableRows": ["",""]
+						"tableRows": [[""],[""]]
 					},
 					{
 						"code" : "table9",
@@ -477,7 +477,7 @@
 						"flow": true,
 						"required": true,
 						"tableHeader": ["URGENCY LEVEL","CONTRACT SERVICE LEVEL","CORRECTION TIME (Working hours)"],
-						"tableRows": ["","",""]
+						"tableRows": [[""],[""],[""]]
 					},
 					{
 						"code" : "table10",
@@ -490,7 +490,7 @@
 						"flow": true,
 						"required": true,
 						"tableHeader": ["DEFINITION","RELATED KPI"],
-						"tableRows": ["",""]
+						"tableRows": [[""],[""]]
 					},
 					{
 						"code" : "",
@@ -503,7 +503,7 @@
 						"flow": true,
 						"required": true,
 						"tableHeader": ["PRIORITY","CONTRACT SERVICE LEVEL","ESTIMATION TIME (Working hours)"],
-						"tableRows": ["","",""]
+						"tableRows": [[""],[""],[""]]
 					}
 				]
 			},
@@ -526,7 +526,7 @@
 					"flow": true,
 					"required": true,
 					"tableHeader": [],
-					"tableRows": ["",""]
+					"tableRows": [[""],[""]]
 				},
 				{
 					"code" : "table13",
@@ -539,7 +539,7 @@
 					"flow": true,
 					"required": true,
 					"tableHeader": [],
-					"tableRows": ["","",""]
+					"tableRows": [[""],[""],[""]]
 				},
 				{
 					"code" : "table14",
@@ -565,7 +565,7 @@
 					"flow": true,
 					"required": true,
 					"tableHeader": ["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE"],
-					"tableRows": ["","","","",""]
+					"tableRows": [[""],[""],[""],[""],[""]]
 				},
 				{
 					"code" : "table16",
@@ -578,7 +578,7 @@
 					"flow": true,
 					"required": true,
 					"tableHeader": ["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE"],
-					"tableRows": ["","","","",""]
+					"tableRows": [[""],[""],[""],[""],[""]]
 				}
 			]
 			},
@@ -601,7 +601,7 @@
 						"flow": true,
 						"required": true,
 						"tableHeader": ["KPI (KEY PERFORMANCE INDICATORS)","SLA","PENALTY"],
-						"tableRows": ["","",""]
+						"tableRows": [[""],[""],[""]]
 					},
 					{
 						"code" : "table18",
@@ -614,7 +614,7 @@
 						"flow": true,
 						"required": true,
 						"tableHeader": ["SPECIFIC INDICATOR AREA","DESCRIPTION","PERIMETER","PENALTY"],
-						"tableRows": ["","",""]
+						"tableRows": [[""],[""],[""]]
 					}
 				]
 			},
@@ -637,7 +637,7 @@
 						"flow": true,
 						"required": true,
 						"tableHeader": ["SYSTEM","COMPONENT","ACTIVITY","FREQUENCIES"],
-						"tableRows": ["","","",""]
+						"tableRows": [[""],[""],[""],[""]]
 					}
 				]
 			}
