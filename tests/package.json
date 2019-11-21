@@ -1,0 +1,14 @@
+{
+  "name": "playbook-test-tool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node-red -v test.json"
+  },
+  "author": "Matteo Masina",
+  "license": "ISC",
+  "dependencies": {
+    "node-red": "^1.0.2"
+  }
+}

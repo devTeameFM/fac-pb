@@ -1,16 +1,4 @@
 const models = require("../database/models");
-
-async function f(table) {
-  let result = models[table].findAll();
-  return result
-}
-
-const test = async (req, res) => {
-    const tableName= req.params.tableName;
-    const output = await f(tableName);
-    return res.status(200).json({ output });
-};
-
 const getDynamicOptions = async (req, res) => {
     const { tableName } = req.params;
     //console.log(tableName);
@@ -20,7 +8,7 @@ const getDynamicOptions = async (req, res) => {
     for (q in questions) {
       //console.log("TEST:" + q);
       if (questions[q].type==="SELECT") {
-        console.log("TEST:" + questions[q].tableInput);
+        //console.log("TEST:" + questions[q].tableInput);
         var datas=await models[questions[q].tableInput].findAll();
         table.push(datas);
       }
@@ -58,7 +46,6 @@ const getDynamicOptions = async (req, res) => {
 
     return res.status(200).json({ output });
 };
-
 const getAllServices = async (req, res) => {
   try {
     const services = await models.PB_Service.findAll({
@@ -85,7 +72,6 @@ const getAllServices = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
 const getServiceResponseType= async (req, res) => {
   try {
     const responseType = await models.PB_ServiceResponseType.findAll({
@@ -103,7 +89,6 @@ const getServiceResponseType= async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
 const getServiceLevelAgreement= async (req, res) => {
   try {
     const responseType = await models.PB_ServiceLevelAgreement.findAll({
@@ -124,8 +109,6 @@ const getServiceLevelAgreement= async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
-
 const getAllScrums = async (req, res) => {
   try {
     const scrums = await models.FE_Scrum.findAll({
@@ -172,68 +155,77 @@ function answerValueFromQuestionId(answers,questionId) {
   }
   return value
 }
+function consoleLog(message,color) {
+  console.log(color);
+  console.log("message " + JSON.stringify(message,null,2));
+  console.log(color);
+}
 
-const getContractById = async (req, res) => {
-  try {
-    const contractId= req.params.contractId;
-    let pb={};
+const getPlayBookFromId = async (contractId) => {
+  //console.log("contractId --> " + JSON.stringify(req.params));
+  const playbook = await models.PB_Playbook.findOne({
+    where: { id: contractId},
+  });
 
-    //console.log("contractId --> " + JSON.stringify(req.params));
-    const playbook = await models.PB_Playbook.findOne({
-      where: { id: contractId},
-    });
+  var obj = Object.assign({}, playbook.dataValues);
+  obj["templateName"]="";
+  obj["fileName"]="";
+  obj["status"]="BUILDING_INFO";
+  obj["dueDate"]="";
 
-    var obj = Object.assign({}, playbook.dataValues);
-    obj["templateName"]="";
-    obj["fileName"]="";
-    obj["status"]="BUILDING_INFO";
-    obj["dueDate"]="";
-    survey = await models['SM_Survey'].findAll({
-      order: [
-        [ { model: models.SM_SurveySection , as: 'sections'}, 'id', 'ASC'],
-        [ { model: models.SM_SurveySection , as: 'sections'}, { model: models.SM_SurveySectionQuestion, as: 'questions' }, 'id', 'ASC'],
-        [ { model: models.SM_SurveySection , as: 'sections'}, { model: models.SM_SurveySectionQuestion, as: 'questions' },{ model: models.SM_SurveySectionQuestionOption, as: 'options' }, 'id', 'ASC']
-      ],
-      include: [
-        {
-          model: models.SM_SurveySection,
-          as: "sections",
-          include: [
-            {
-              model: models.SM_SurveySectionQuestion,
-              as: "questions" ,
-              include: [
-                {
-                  where: {'idPlaybook': contractId},
-                  model: models.SM_SurveySectionQuestionOption,
-                  as: "options"
-                }
-              ]
-            }
-          ]
+  let answersFromDB=await models['SM_SurveyAnswer'].findAll(
+      {
+        where : {
+          playBookId:contractId
         }
-      ]
-    });
-
-    obj["surveys"]=[];
-    obj["answers"] = {}
-    obj["answers"][contractId] = {}
-    dbAnswers=await models['SM_SurveyAnswer'].findAll({
-      where: {
-        playBookId: playbook.id
       }
-    });
-    for (sur in survey) {
-      var temp_survey={
-        id : survey[sur].id,
-        name : survey[sur].name,
-        code : survey[sur].code,
-        nextStatus : survey[sur].nextStatus,
-        imageURL : survey[sur].imageURL,
-        sections : []
-      }
-      for (sec in survey[sur].sections) {
+  )
 
+  survey = await models['SM_Survey'].findAll({
+    order: [
+      [ { model: models.SM_SurveySection , as: 'sections'}, 'id', 'ASC'],
+      [ { model: models.SM_SurveySection , as: 'sections'}, { model: models.SM_SurveySectionQuestion, as: 'questions' }, 'id', 'ASC'],
+      [ { model: models.SM_SurveySection , as: 'sections'}, { model: models.SM_SurveySectionQuestion, as: 'questions' },{ model: models.SM_SurveySectionQuestionOption, as: 'options' }, 'id', 'ASC']
+    ],
+    include: [
+      {
+        model: models.SM_SurveySection,
+        as: "sections",
+        include: [
+          {
+            model: models.SM_SurveySectionQuestion,
+            as: "questions" ,
+            include: [
+              {
+                where: {'idPlaybook': contractId},
+                model: models.SM_SurveySectionQuestionOption,
+                as: "options"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  });
+
+
+  obj["surveys"]=[];
+  obj["answers"]={}
+  obj["answers"][contractId]={}
+
+
+  for (sur in survey) {
+    var temp_survey={
+      id : survey[sur].id,
+      name : survey[sur].name,
+      code : survey[sur].code,
+      nextStatus : survey[sur].nextStatus,
+      imageURL : survey[sur].imageURL,
+      sections : []
+    }
+    obj["answers"][contractId][survey[sur].code]={}
+    for (sec in survey[sur].sections) {
+        obj["answers"][contractId][survey[sur].code][survey[sur].sections[sec].code]={}
         var temp_section={
           name : survey[sur].sections[sec].name,
           code : survey[sur].sections[sec].code,
@@ -243,27 +235,25 @@ const getContractById = async (req, res) => {
           imageURL : survey[sur].sections[sec].imageURL,
           questions : []
         }
-        obj["answers"][contractId][temp_section.code]={}
-        //temp_survey.sections.push(temp_section);
-        for (que in survey[sur].sections[sec].questions) {
-
-          var temp_question={
-            id : survey[sur].sections[sec].questions[que].id,
-            code : survey[sur].sections[sec].questions[que].code,
-            name : survey[sur].sections[sec].questions[que].name,
-            tooltip : survey[sur].sections[sec].questions[que].tooltip,
-            nameI98n : survey[sur].sections[sec].questions[que].nameI98n,
-            tooltipI18n : survey[sur].sections[sec].questions[que].tooltipI18n,
-            type : survey[sur].sections[sec].questions[que].type,
-            icon : survey[sur].sections[sec].questions[que].icon,
-            updated : survey[sur].sections[sec].questions[que].updated,
-            required : survey[sur].sections[sec].questions[que].required,
-            flow : survey[sur].sections[sec].questions[que].flow,
-          }
-          obj["answers"][contractId][temp_section.code][temp_question.code]={
-            "questionId" : temp_question.id,
-            "value" : answerValueFromQuestionId(dbAnswers,temp_question.id)
-          }
+      //temp_survey.sections.push(temp_section);
+      for (que in survey[sur].sections[sec].questions) {
+        obj["answers"][contractId][survey[sur].code][survey[sur].sections[sec].code][survey[sur].sections[sec].questions[que].code]={
+          "value" : answerValueFromQuestionId(answersFromDB,survey[sur].sections[sec].questions[que].id)
+        }
+        var temp_question={
+          id : survey[sur].sections[sec].questions[que].id,
+          code : survey[sur].sections[sec].questions[que].code,
+          name : survey[sur].sections[sec].questions[que].name,
+          tooltip : survey[sur].sections[sec].questions[que].tooltip,
+          nameI98n : survey[sur].sections[sec].questions[que].nameI98n,
+          tooltipI18n : survey[sur].sections[sec].questions[que].tooltipI18n,
+          type : survey[sur].sections[sec].questions[que].type,
+          icon : survey[sur].sections[sec].questions[que].icon,
+          updated : survey[sur].sections[sec].questions[que].updated,
+          required : survey[sur].sections[sec].questions[que].required,
+          flow : survey[sur].sections[sec].questions[que].flow,
+        }
+        if (survey[sur].sections[sec].questions[que].tableName==null) {
           if (survey[sur].sections[sec].questions[que].type=="SELECT") {
               temp_question.options=[];
               for (opt in survey[sur].sections[sec].questions[que].options) {
@@ -281,17 +271,34 @@ const getContractById = async (req, res) => {
             }
           }
           temp_section.questions.push(temp_question);
+        } else {
+          //temp_section=
+          addToTable(temp_section,survey[sur].sections[sec].questions[que]);
+
         }
-        temp_survey.sections.push(temp_section);
       }
-      obj["surveys"].push(temp_survey);
+      temp_survey.sections.push(temp_section);
     }
+    obj["surveys"].push(temp_survey);
+  }
+
+    //obj["answers"]=await loadAnswersFromDB(contractId);
+    return obj;
+
+}
+
+const getContractById = async (req, res) => {
+  try {
+    const contractId= req.params.contractId;
+    let pb={};
+    let obj=await getPlayBookFromId(contractId);
+
     return res.status(200).json(obj)
 
   } catch (error) {
     return res.status(500).send(error.message);
   }
-};
+}
 
 function initPlayBook(pb) {
   pb["typeTask"]="PLAYBOOK";
@@ -305,7 +312,6 @@ function initPlayBook(pb) {
 
   return pb;
 }
-
 function sortByProperty(property){
    return function(a,b){
       if(a[property] > b[property])
@@ -316,10 +322,9 @@ function sortByProperty(property){
       return 0;
    }
 }
-
 const getAllContracts= async (req, res) => {
   try {
-    console.log("getAllPlaybooks");
+    //console.log("getAllPlaybooks");
 
     const playbooks = await models.PB_Playbook.findAll({
     });
@@ -378,7 +383,7 @@ const getAllContracts= async (req, res) => {
           playBookId: playbooks[contract].id
         }
       });
-      console.log("obj[context][answers] --> " + obj["context"]["answers"]);
+      //console.log("obj[context][answers] --> " + obj["context"]["answers"]);
       listPlayBooks.push(obj);
     }
 
@@ -393,7 +398,6 @@ const getAllContracts= async (req, res) => {
   }
 
 };
-
 const getAllMembers = async (req, res) => {
   try {
     const members = await models.MS_Member.findAll({
@@ -410,7 +414,6 @@ const getAllMembers = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
 const getAllSurveyDynamics = async (req, res) => {
   try {
     const surveys = await models['SM_Survey'].findAll({
@@ -437,7 +440,7 @@ const getAllSurveyDynamics = async (req, res) => {
     for (survey in surveys) {
         for (section in surveys[survey].sections) {
           for (question in surveys[survey].sections[section].questions) {
-            //console.log("questions:" + surveys[survey].sections[section].questions[question].name);
+            console.log("questions:" + surveys[survey].sections[section].questions[question].name);
             if (surveys[survey].sections[section].questions[question].type === "SELECT") {
               surveys[survey].sections[section].questions[question].set("options",[]);
               //surveys[survey].sections[section].questions[question].push("test");
@@ -454,7 +457,6 @@ const getAllSurveyDynamics = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
 const getAllSurveyByType = async (req, res) => {
   try {
     const { surveyType } = req.params;
@@ -484,7 +486,6 @@ const getAllSurveyByType = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
 const getAllSurvey = async (req, res) => {
   try {
     const surveys = await models.SM_Survey.findAll({
@@ -518,7 +519,6 @@ const getAllSurvey = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
 const getSurveyById = async (req, res) => {
   try {
     const { surveyId } = req.params;
@@ -539,7 +539,6 @@ const getSurveyById = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
 const getScrumById = async (req,res) => {
   try {
     const { scrumId } = req.params;
@@ -579,7 +578,6 @@ const getScrumById = async (req,res) => {
     return res.status(500).send(error.message);
   }
 }
-
 const getAllScrumsByMember = async (req, res) => {
   try {
     const { memberId } = req.params;
@@ -608,7 +606,6 @@ const getAllScrumsByMember = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
-
 const createPlaybook = async (req, res) => {
   try {
     var  pb=req.body;
@@ -684,7 +681,7 @@ const createPlaybook = async (req, res) => {
             }
             if (surveys[survey].sections[section].questions[question].type === "SELECT") {
                 if (surveys[survey].sections[section].questions[question].tableInput.length>0) {
-                  console.log("TABLE --> " + surveys[survey].sections[section].questions[question].tableInput);
+                  //console.log("TABLE --> " + surveys[survey].sections[section].questions[question].tableInput);
                   var tableQuery=surveys[survey].sections[section].questions[question].tableInput;
                   var fieldInput=surveys[survey].sections[section].questions[question].valueInput;
                   let options = await models[tableQuery].findAll({});
@@ -699,7 +696,7 @@ const createPlaybook = async (req, res) => {
                       "createdAt" : new Date(),
                       "updatedAt" : new Date()
                     }
-                    console.log(option);
+                    //console.log(option);
                     await models.SM_SurveySectionQuestionOption.create(option);
                   }
                 }
@@ -713,7 +710,7 @@ const createPlaybook = async (req, res) => {
                   "createdAt" : new Date(),
                   "updatedAt" : new Date()
                 }
-                console.log(option);
+                //console.log(option);
                 await models.SM_SurveySectionQuestionOption.create(option);
             }
           }
@@ -721,7 +718,7 @@ const createPlaybook = async (req, res) => {
     }
     let ins = await models.FE_CardsList.create(cardList);
 
-    console.log("------------ BEGIN SURVEY -------------------");
+    //console.log("------------ BEGIN SURVEY -------------------");
     var risposte={};
     for (survey in pb["surveys"]) {
       var ID=pb.surveys[survey].id;
@@ -747,9 +744,9 @@ const createPlaybook = async (req, res) => {
       }
 
     }
-    console.log(risposte);
+    //console.log(risposte);
     pb["context"]["answers"]=risposte;
-    console.log("------------ END SURVEY -------------------");
+    //console.log("------------ END SURVEY -------------------");
 
     return res.status(201).json(
       post.id
@@ -758,176 +755,6 @@ const createPlaybook = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-
-const createPlaybookWithSurvey = async (req, res) => {
-  try {
-    var  pb=req.body;
-
-
-    pb["coverImg"]="";
-    pb["typeTask"]="PLAYBOOK";
-    pb["status"]="BUILDING_INFO";
-    pb["templateName"]="";
-    pb["fileName"]="";
-    pb["context"]={}
-    pb["context"]["name"]=req.body.name;
-    pb["context"]["status"]="BUILDING_INFO";
-    pb["context"]["dueDate"]="";
-
-
-
-    let post = await models.PB_Playbook.create(pb);
-
-
-    let playBookId=post.id;
-    pb["surveys"] = await models['SM_Survey'].findAll({
-      where: {idPlaybook:playBookId},
-      include: [
-        {
-          model: models.SM_SurveySection,
-          as: "sections",
-          include: [
-            {
-              model: models.SM_SurveySectionQuestion,
-              as: "questions",
-              include: [
-                {
-                  model: models.SM_SurveySectionQuestionOption,
-                  as: "options"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    });
-
-    addSurvey(playBookId);
-
-    //console.log("a" + a);
-    //load and add survey
-
-
-    var playb={
-      "id" : post.id,
-      "taskId" : post.id
-    }
-
-
-    const [updated] = await models.PB_Playbook.update(playb, {
-      where: { id: post.id }
-    });
-
-    var cardList={
-      "idTask":post.id,
-      "idList":"0001"
-    }
-
-
-    pb["id"]=post.id;
-    let now=new Date().toISOString().replace(/\:/g,"-");
-    pb["fileName"]=req.body.name + "_" + post.id + "_" + now + ".docx";
-
-    let surveys = await models['SM_Survey'].findAll({
-        where: {idPlaybook:playBookId},
-        include: [
-          {
-            model: models.SM_SurveySection,
-            as: "sections",
-            include: [
-              {
-                model: models.SM_SurveySectionQuestion,
-                as: "questions"
-              }
-            ]
-          }
-        ]
-      });
-
-    for (survey in surveys) {
-        for (section in surveys[survey].sections) {
-          for (question in surveys[survey].sections[section].questions) {
-            if (surveys[survey].sections[section].questions[question].type === "TABLE") {
-
-            }
-            if (surveys[survey].sections[section].questions[question].type === "SELECT") {
-                if (surveys[survey].sections[section].questions[question].tableInput.length>0) {
-                  console.log("TABLE --> " + surveys[survey].sections[section].questions[question].tableInput);
-                  var tableQuery=surveys[survey].sections[section].questions[question].tableInput;
-                  var fieldInput=surveys[survey].sections[section].questions[question].valueInput;
-                  let options = await models[tableQuery].findAll({});
-
-                  for (o in options) {
-                    var option={
-                      "idPlaybook" : post.id,
-                      "idQuestion" : surveys[survey].sections[section].questions[question].id,
-                      "name" : options[o][fieldInput],
-                      "defaultValue" : options[o][fieldInput],
-                      "disabled" : false,
-                      "createdAt" : new Date(),
-                      "updatedAt" : new Date()
-                    }
-                    console.log(option);
-                    await models.SM_SurveySectionQuestionOption.create(option);
-                  }
-                }
-              } else {
-                var option={
-                  "idPlaybook" : post.id,
-                  "idQuestion" : surveys[survey].sections[section].questions[question].id,
-                  "name" : "",
-                  "defaultValue" : "",
-                  "disabled" : false,
-                  "createdAt" : new Date(),
-                  "updatedAt" : new Date()
-                }
-                console.log(option);
-                await models.SM_SurveySectionQuestionOption.create(option);
-            }
-          }
-	       }
-    }
-    let ins = await models.FE_CardsList.create(cardList);
-
-    console.log("------------ BEGIN SURVEY -------------------");
-    var risposte={};
-    for (survey in pb["surveys"]) {
-      console.log("pb.surveys[survey].id --> " + pb.surveys[survey].id);
-      var ID=pb.surveys[survey].id;
-      risposte[ID]={};
-      for (section in pb.surveys[survey].sections) {
-        var sectionCode=pb.surveys[survey].sections[section].code.toString();
-        risposte[ID][sectionCode]={};
-        for (question in pb.surveys[survey].sections[section].questions) {
-          var QUESTION_ID=pb.surveys[survey].sections[section].questions[question].id;
-          var QUESTION_CODE=pb.surveys[survey].sections[section].questions[question].code;
-          var answer={
-            "playBookId" : post.id,
-            "questionId" : QUESTION_ID,
-            "value": ""
-          }
-          //pb.surveys[survey].sections[section].questions[question].updated=false;
-
-          let a = await models.SM_SurveyAnswer.create(answer);
-          risposte[ID][sectionCode][QUESTION_CODE]={};
-          risposte[ID][sectionCode][QUESTION_CODE]["questionId"]=QUESTION_ID;
-          risposte[ID][sectionCode][QUESTION_CODE]["value"]="";
-        }
-      }
-
-    }
-    console.log(risposte);
-    pb["context"]["answers"]=risposte;
-    console.log("------------ END SURVEY -------------------");
-
-    return res.status(201).json(
-      post.id
-    );
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
-
 const deletePlaybooks = async (req, res) => {
   try {
     const deleted = await models.PB_Playbook.destroy({
@@ -948,7 +775,7 @@ function updatePb(pb,questionId,updated) {
       for (q in pb.surveys[sur].sections[sec].questions) {
         if (pb.surveys[sur].sections[sec].questions[q].id==questionId) {
           pb.surveys[sur].sections[sec].questions[q]["updated"]=updated;
-          console.log("AGGIORNATO --> " + pb.surveys[sur].sections[sec].questions[q].name)
+          //console.log("AGGIORNATO --> " + pb.surveys[sur].sections[sec].questions[q].name)
         }
       }
     }
@@ -956,9 +783,25 @@ function updatePb(pb,questionId,updated) {
 
   return pb
 }
-
+function addToTable(section,obj2add) {
+  for (q in section.questions) {
+    if (section.questions[q].code===obj2add.tableName) {
+      if (section.questions[q].tableRows) {
+        section.questions[q].tableHeader.push(obj2add.tableHeader)
+        section.questions[q].tableRows.push([obj2add])
+      } else {
+        section.questions[q]["tableHeader"]=[];
+        section.questions[q].tableHeader.push(obj2add.tableHeader)
+        section.questions[q]["tableRows"]=[];
+        section.questions[q].tableRows.push([obj2add])
+      }
+    }
+  }
+  //console.log('\x1b[33m');
+  //console.log("section " + JSON.stringify(section,null,2));
+//  console.log('\x1b[0m');
+}
 // ***************** funzioni temporanee da sistemare per generalizzare ****************************
-
 function camelCode(s) {
   let listWords=s.split(" ");
   let camelType="";
@@ -974,7 +817,6 @@ function camelCode(s) {
   camelType = camelType.replace(/[^\w\s]/gi, '')
   return camelType;
 }
-
 const updateContract = async (req, res) => {
   try {
     let  playbook  = req.body;
@@ -1007,12 +849,11 @@ const updateContract = async (req, res) => {
       }
     }
 
-
     //UPDATE CARD Status
     let listCard = await models.FE_ScrumsList.findOne({
       where: { status: playbook.status }
     });
-    console.log("listCard" + JSON.stringify(listCard));
+    //console.log("listCard" + JSON.stringify(listCard));
     let idList=listCard.id;
     var card={
       "idList": idList
@@ -1035,235 +876,28 @@ const updateContract = async (req, res) => {
             } else {
               //cerco question code:
               let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
-              console.log("change on question code : " + question.code);
-              console.log("change on question name : " + question.name);
+              //console.log("change on question code : " + question.code);
+              //console.log("change on question name : " + question.name);
               let result;
               let par2update={};
 
               switch(question.code) {
                 case "building":
-                  switch(answers[a][b].value) {
-                    // da togliere la cablatura a codice
-                    case "51 Melcher St":
-                      //UPDATE cover
-                      var pb={
-                        "id" : playbook.id,
-                        "coverImg" : "facility/fort-point-office-space-15.jpg"
-                      }
-                      break;
-                    case "625 Massachusetts Ave":
-                      //UPDATE cover
-                      var pb={
-                        "id" : playbook.id,
-                        "coverImg" : "facility/WEBSITE-IMAGE-1.jpg"
-                      }
-                      break;
-                  }
-                  const [updated] = await models.PB_Playbook.update(pb, {
-                    where: { id: playbook.id }
-                  });
-
-
-
-                  par2update={
-                    "value" : answers[a][b].value
-                  }
-
-                  await models.SM_SurveyParameter.update(par2update, {
-                    where: { questionId:answers[a][b].questionId }
-                  });
+                  updateBuilding(answers[a][b].value,playbook.id);
+                  updateParams(answers[a][b],playbook.id);
                   break;
                 case "serviceHours" :
-                  par2update={
-                    "value" : answers[a][b].value
-                  }
-                  await models.SM_SurveyParameter.update(par2update, {
-                    where: { questionId:answers[a][b].questionId }
-                  });
+                  updateParams(answers[a][b],playbook.id);
                   break;
                 case "duration" :
-                  par2update={
-                    "value" : answers[a][b].value
-                  }
-                  await models.SM_SurveyParameter.update(par2update, {
-                    where: { questionId:answers[a][b].questionId }
-                  });
+                  updateParams(answers[a][b],playbook.id);
                   break;
                 case "serviceType" :
-                // verifico se esiste la question :serviceTypeDetails
-                console.log("VERIFICO SE serviceTypeDetails ESISTE")
-                // ******************************************************** serviceTypeDetails ***********************************/
-                // serviceTypeDetails --> lista dei servizi legati alla tipologia scelta --> serviceType
-                let checkServiceType=await models['SM_SurveySectionQuestion'].findOne({where: { code: "serviceTypeDetails" }})
-                if (checkServiceType) {
-                  //esiste
-                  console.log("serviceTypeDetails ESISTE : id --> " + checkServiceType.id)
-                  //elimino QUESTION:
-                  const deleted = await models.SM_SurveySectionQuestion.destroy({ where: { id: checkServiceType.id }});
-                  console.log("Question deleted --> " + deleted );
-                  await models.SM_SurveyAnswer.destroy({ where: { questionId: checkServiceType.id, playBookId: playbook.id}});
-                  await models.SM_SurveySectionQuestionOption.destroy({ where: { idQuestion: checkServiceType.id, idPlaybook: playbook.id }});
-                  console.log("Option deleted --> " + deleted );
-                  //console.log("playBookId --> " + pb.id );
-
-                  if (deleted)  console.log("serviceTypeDetails DELETED")
-                  //elimina sia la question che option che answers
-                } else {
-                  console.log("serviceTypeDetails NON ESISTE")
-                }
-
-                for (sur in playbook.surveys) {
-                  for (sec in playbook.surveys[sur].sections) {
-                    for (q in playbook.surveys[sur].sections[sec].questions) {
-                      if (playbook.surveys[sur].sections[sec].questions[q].code==="serviceTypeTable") {
-                        //playbook.surveys[sur].sections[sec].questions[q]
-                        /*result={
-                          "surveyId" : playbook.surveys[sur].id,
-                          "sectionId" : playbook.surveys[sur].sections[sec].code,
-                          "questionId" : playbook.surveys[sur].sections[sec].questions[q].id
-                        }*/
-                        result={
-                          "surveyId" : sur,
-                          "sectionId" : sec,
-                          "questionId" : q
-                        }
-                      }
-                    }
-                  }
-                }
-                tableRows=[];
-                let serviceType = await models['PB_ServiceClass'].findOne({where: { name: answers[a][b].value }});
-                let service = await models['PB_Service'].findAll(
-                  {
-                    attributes: [['serviceName', 'name'],['serviceName', 'defaultValue']],
-                    where: { idServiceClass: serviceType.id }
-                  });
-
-                let serviceTypeQuestion = await models['SM_SurveySectionQuestion'].findOne({where: { code: "serviceType" }});
-                tableRow={
-                  //"idSection" :idSection=result.sectionId,
-                  "idPlaybook" : playbook.id,
-                  "idSection" : serviceTypeQuestion.idSection,
-                  "code": "serviceTypeDetails",
-                  "name": "Service Type Details",
-                  "tooltip": "Select the systems that must be provided",
-                  "nameI98n": "",
-                  "tooltipI18n": "",
-                  "type": "SELECT_NESTED",
-                  "flow": true,
-                  "required": true,
-                  "isParameter" : true,
-                  "updated" : true,
-                  "options": service,
-                  "tableName" : "serviceTypeTable",
-                  "tableHeader" : ""
-                }
-                let surSecQue0=await models.SM_SurveySectionQuestion.create(tableRow);
-                let answerAdd0={
-                  "playBookId" : playbook.id,
-                  "questionId" : surSecQue0.id,
-                  "value" : ""
-                }
-                let answ0=await models.SM_SurveyAnswer.create(answerAdd0);
-                for (q in service) {
-                  let optionAdd={
-                    "idPlaybook" : playbook.id,
-                    "idQuestion" : surSecQue0.id,
-                    "name" : service[q].dataValues.name,
-                    "defaultValue" : service[q].dataValues.defaultValue,
-                    "disabled" : false,
-                    "updated" : true
-                  }
-                  await models.SM_SurveySectionQuestionOption.create(optionAdd);
-                }
-                tableRows.push([tableRow]);
-                // ******************************************************** serviceTypeDetails ***********************************/
-
-                // ******************************************************** facilityServiceCondition ***********************************/
-                let checkfacilityServiceCondition=await models['SM_SurveySectionQuestion'].findOne({where: { code: "facilityServiceCondition" }})
-                if (checkfacilityServiceCondition) {
-                  //esiste
-                  console.log("facilityIndex ESISTE");
-                  //esiste
-                  console.log("serviceTypeDetails ESISTE : id --> " + checkfacilityServiceCondition.id)
-                  //elimino QUESTION:
-                  const deleted = await models.SM_SurveySectionQuestion.destroy({ where: { id: checkfacilityServiceCondition.id }});
-                  console.log("Question deleted --> " + deleted );
-                  await models.SM_SurveyAnswer.destroy({ where: { questionId: checkfacilityServiceCondition.id, playBookId: playbook.id}});
-                  await models.SM_SurveySectionQuestionOption.destroy({ where: { idQuestion: checkfacilityServiceCondition.id, idPlaybook: playbook.id }});
-                  console.log("Option deleted --> " + deleted );
-                  //console.log("playBookId --> " + pb.id );
-
-                  if (deleted)  console.log("serviceTypeDetails DELETED")
-                } else {
-                  console.log("facilityIndex NON ESISTE");
-                }
-                let facilityIndex= await models['PB_ConditionIndex'].findAll({attributes: [['levelTypeName', 'name'],['levelTypeName', 'defaultValue']]});
-                tableRow={
-                  "idPlaybook" : playbook.id,
-                  "idSection" : serviceTypeQuestion.idSection,
-                  "code": "facilityServiceCondition",
-  								"name": "Facility Condition value",
-  								"tooltip": "Select the average facility condition of your physical assets",
-  								"nameI98n": "",
-  								"tooltipI18n": "",
-  								"icon": "signal_cellular_alt",
-  								"type": "SELECT_NESTED",
-  								"flow": false,
-  								"required": false,
-  								"defaultValue": "",
-                  "isParameter" : true,
-                  "updated" : true,
-                  "options": facilityIndex,
-                  "tableName" : "serviceTypeTable",
-                }
-
-                let surSecQue1=await models.SM_SurveySectionQuestion.create(tableRow);
-
-                for (q in facilityIndex) {
-                  let optionAdd={
-                    "idPlaybook" : playbook.id,
-                    "idQuestion" : surSecQue1.id,
-                    "name" : facilityIndex[q].dataValues.name,
-                    "defaultValue" : facilityIndex[q].dataValues.defaultValue,
-                    "disabled" : false
-                  }
-                  await models.SM_SurveySectionQuestionOption.create(optionAdd);
-                }
-                tableRows.push([tableRow]);
-                let answerAdd1={
-                  "playBookId" : playbook.id,
-                  "questionId" : surSecQue1.id,
-                  "value" : ""
-                }
-                let answ1=await models.SM_SurveyAnswer.create(answerAdd1);
-                /*
-                let answerAdd1={
-                  "playBookId" : playbook.id,
-                  "questionId" : surSecQue1.id,
-                  "value" : ""
-                }
-                let answ1=await models.SM_SurveyAnswer.create(answerAdd1);
-                //playbook.context.answers.push(answ1);
-                if (tableRow.isParameter) {
-                  let paramAdd1={
-                    "playBookId" : playbook.id,
-                    "questionId" : surSecQue1.id,
-                    "value" : ""
-                  }
-                  await models.SM_SurveyParameter.create(paramAdd1)
-                }*/
-
-
-
-                // ******************************************************** facilityServiceCondition ***********************************/
-                //aggiungo le question al play book
-                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].update=true;
-                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableName="serviceTypeDetails";
-                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=["Select the service that must be provided","Select the average facility condition of your physical assets"];
-                playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
+                  updateServiceType(answers[a][b],playbook);
+                  updateParams(answers[a][b],playbook.id);
                   break;
                 case "serviceTypeDetails":
+                  console.log("serviceTypeDetails")
                   for (sur in playbook.surveys) {
                     for (sec in playbook.surveys[sur].sections) {
                       for (q in playbook.surveys[sur].sections[sec].questions) {
@@ -1278,6 +912,7 @@ const updateContract = async (req, res) => {
                       }
                     }
                   }
+                  consoleLog(result,"")
                   playbook.surveys[sur].sections[sec].questions[q].update=true;
                   tableRows=[];
                   tableHeader: ["System","Component","# of components of served area sf","Add any other useful information"]
@@ -1332,9 +967,9 @@ const updateContract = async (req, res) => {
 
                   playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
                   playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
-                  console.log('\x1b[33m');
-                  console.log("tableRows:" + JSON.stringify(tableRows,null,2));
-                  console.log('\x1b[0m');
+                  //console.log('\x1b[33m');
+                  //console.log("tableRows:" + JSON.stringify(tableRows,null,2));
+                  //console.log('\x1b[0m');
                   par2update={
                     "value" : answers[a][b].value,
                   }
@@ -1396,13 +1031,13 @@ const updateContract = async (req, res) => {
         }
       }
     }
+    let updatedPlaybook = await getPlayBookFromId(pb.id);
 
-    return res.status(200).json( playbook );
+    return res.status(200).json( updatedPlaybook );
   } catch (error) {
     return res.status(500).send(error.message);
   }
 };
-
 const cleandDB = async (req,res) => {
   try {
 
@@ -1433,7 +1068,6 @@ const cleandDB = async (req,res) => {
     return res.status(500).send(error.message);
   }
 }
-
 const generateQuestions = async (req,res) => {
   try {
     let surveys = await models['SM_Survey'].findAll({
@@ -1457,7 +1091,7 @@ const generateQuestions = async (req,res) => {
             //console.log("questions:" + surveys[survey].sections[section].questions[question].name);
             if (surveys[survey].sections[section].questions[question].type === "SELECT") {
               if (surveys[survey].sections[section].questions[question].tableInput.length>0) {
-                console.log("TABLE --> " + surveys[survey].sections[section].questions[question].tableInput);
+                //console.log("TABLE --> " + surveys[survey].sections[section].questions[question].tableInput);
                 var tableQuery=surveys[survey].sections[section].questions[question].tableInput;
                 var fieldInput=surveys[survey].sections[section].questions[question].valueInput;
                 let options = await models[tableQuery].findAll({});
@@ -1472,7 +1106,7 @@ const generateQuestions = async (req,res) => {
                     "createdAt" : new Date(),
                     "updatedAt" : new Date()
                   }
-                  console.log(option);
+                  //console.log(option);
                   await models.SM_SurveySectionQuestionOption.create(option);
                 }
             }
@@ -1487,7 +1121,6 @@ const generateQuestions = async (req,res) => {
     return res.status(500).send(error.message);
   }
 }
-
 const importQuestionsFromJSON = async (req,res) => {
     let surveyModel=require("../tracciati/survey-backend.json");
     for (survey in surveyModel) {
@@ -1502,9 +1135,9 @@ const importQuestionsFromJSON = async (req,res) => {
         "updatedAt" : new Date()
       }
       let sur=await models.SM_Survey.create(surveyEntity);
-      console.log('\x1b[33m');
-      console.log("surveyEntity " + JSON.stringify(surveyEntity,null,2));
-      console.log('\x1b[0m');
+      //console.log('\x1b[33m');
+      //console.log("surveyEntity " + JSON.stringify(surveyEntity,null,2));
+      //console.log('\x1b[0m');
       for (section in surveyModel[survey].sections) {
         var surveySectionEntity={
           //"id" : surveyModel[survey].sections[section].id,
@@ -1518,9 +1151,9 @@ const importQuestionsFromJSON = async (req,res) => {
           "updatedAt" : new Date()
         }
         let surSec=await models.SM_SurveySection.create(surveySectionEntity);
-        console.log('\x1b[36m');
-        console.log("surveySectionEntity " + JSON.stringify(surveySectionEntity,null,2));
-        console.log('\x1b[0m');
+        //console.log('\x1b[36m');
+        //console.log("surveySectionEntity " + JSON.stringify(surveySectionEntity,null,2));
+        //console.log('\x1b[0m');
         for (question in surveyModel[survey].sections[section].questions) {
           if (surveyModel[survey].sections[section].questions[question].type=="TABLE") {
             var surveySectionQuestionEntity={
@@ -1543,7 +1176,7 @@ const importQuestionsFromJSON = async (req,res) => {
             }
             surveySectionQuestionEntity["tableHeader"]=tableHeader;
             surveySectionQuestionEntity["tableRows"]=tableRows;
-            console.log('\x1b[34m');
+            //console.log('\x1b[34m');
           } else {
             var isParameter=false;
             var tableInput="";
@@ -1572,7 +1205,7 @@ const importQuestionsFromJSON = async (req,res) => {
               "valueInput" : valueInput,
               "isParameter" : isParameter
             }
-            console.log('\x1b[32m');
+            //console.log('\x1b[32m');
         }
         let surSecQue=await models.SM_SurveySectionQuestion.create(surveySectionQuestionEntity);
 
@@ -1586,8 +1219,8 @@ const importQuestionsFromJSON = async (req,res) => {
           let surParam=await models.SM_SurveyParameter.create(surveyParameter);
         }
 
-        console.log("surveySectionQuestionEntity " + JSON.stringify(surveySectionQuestionEntity,null,2));
-        console.log('\x1b[0m');
+        //console.log("surveySectionQuestionEntity " + JSON.stringify(surveySectionQuestionEntity,null,2));
+        //console.log('\x1b[0m');
         }
       }
 
@@ -1595,6 +1228,221 @@ const importQuestionsFromJSON = async (req,res) => {
     return res.status(200).json({});
 }
 
+
+const viewPlayBookById = async (playBookId) => {
+  survey = await models['SM_Survey'].findAll({
+    where: {'idPlaybook': playBookId},
+    order: [
+      [ { model: models.SM_SurveySection , as: 'sections'}, 'id', 'ASC'],
+      [ { model: models.SM_SurveySection , as: 'sections'}, { model: models.SM_SurveySectionQuestion, as: 'questions' }, 'id', 'ASC'],
+      [ { model: models.SM_SurveySection , as: 'sections'}, { model: models.SM_SurveySectionQuestion, as: 'questions' },{ model: models.SM_SurveySectionQuestionOption, as: 'options' }, 'id', 'ASC']
+    ],
+    include: [
+      {
+        where: {'idPlaybook': playBookId},
+        model: models.SM_SurveySection,
+        as: "sections",
+
+        include: [
+          {
+            where: {'idPlaybook': playBookId},
+            model: models.SM_SurveySectionQuestion,
+            attributes:['code','name','tooltip','type','icon','updated','required','flow'],
+            as: "questions" ,
+            include: [
+              {
+                where: {'idPlaybook': playBookId},
+                attributes:['name','defaultValue'],
+                model: models.SM_SurveySectionQuestionOption,
+                as: "options"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  });
+  return survey[0];
+}
+
+
+const createPlaybookWithSurvey = async (req, res) => {
+  try {
+    var  pb=req.body;
+
+
+    pb["coverImg"]="";
+    pb["typeTask"]="PLAYBOOK";
+    pb["status"]="BUILDING_INFO";
+    pb["templateName"]="";
+    pb["fileName"]="";
+    pb["context"]={}
+    pb["context"]["name"]=req.body.name;
+    pb["context"]["status"]="BUILDING_INFO";
+    pb["context"]["dueDate"]="";
+
+
+
+    let post = await models.PB_Playbook.create(pb);
+
+
+    let playBookId=post.id;
+    //console.log(playBookId);
+    let s= await addSurvey(playBookId);
+    pb["surveys"] = await models['SM_Survey'].findAll({
+      where: {idPlaybook:post.id},
+      include: [
+        {
+          model: models.SM_SurveySection,
+          as: "sections",
+          include: [
+            {
+              model: models.SM_SurveySectionQuestion,
+              as: "questions",
+              include: [
+                {
+                  model: models.SM_SurveySectionQuestionOption,
+                  as: "options"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
+
+
+    //console.log("a" + a);
+    //load and add survey
+
+
+    var playb={
+      "id" : post.id,
+      "taskId" : post.id
+    }
+
+
+    const [updated] = await models.PB_Playbook.update(playb, {
+      where: { id: post.id }
+    });
+
+    var cardList={
+      "idTask":post.id,
+      "idList":"0001"
+    }
+
+
+    pb["id"]=post.id;
+    let now=new Date().toISOString().replace(/\:/g,"-");
+    pb["fileName"]=req.body.name + "_" + post.id + "_" + now + ".docx";
+
+    let surveys = await models['SM_Survey'].findAll({
+        where: {idPlaybook:playBookId},
+        include: [
+          {
+            model: models.SM_SurveySection,
+            as: "sections",
+            include: [
+              {
+                model: models.SM_SurveySectionQuestion,
+                as: "questions"
+              }
+            ]
+          }
+        ]
+      });
+
+    for (survey in surveys) {
+        for (section in surveys[survey].sections) {
+          for (question in surveys[survey].sections[section].questions) {
+            if (surveys[survey].sections[section].questions[question].type === "TABLE") {
+
+            }
+            if (surveys[survey].sections[section].questions[question].type === "SELECT") {
+                if (surveys[survey].sections[section].questions[question].tableInput.length>0) {
+                  //console.log("TABLE --> " + surveys[survey].sections[section].questions[question].tableInput);
+                  var tableQuery=surveys[survey].sections[section].questions[question].tableInput;
+                  var fieldInput=surveys[survey].sections[section].questions[question].valueInput;
+                  let options = await models[tableQuery].findAll({});
+
+                  for (o in options) {
+                    var option={
+                      "idPlaybook" : post.id,
+                      "idQuestion" : surveys[survey].sections[section].questions[question].id,
+                      "name" : options[o][fieldInput],
+                      "defaultValue" : options[o][fieldInput],
+                      "disabled" : false,
+                      "createdAt" : new Date(),
+                      "updatedAt" : new Date()
+                    }
+                    //console.log(option);
+                    await models.SM_SurveySectionQuestionOption.create(option);
+                  }
+                }
+              } else {
+                var option={
+                  "idPlaybook" : post.id,
+                  "idQuestion" : surveys[survey].sections[section].questions[question].id,
+                  "name" : "",
+                  "defaultValue" : "",
+                  "disabled" : false,
+                  "createdAt" : new Date(),
+                  "updatedAt" : new Date()
+                }
+                //console.log(option);
+                await models.SM_SurveySectionQuestionOption.create(option);
+            }
+          }
+	       }
+    }
+    let ins = await models.FE_CardsList.create(cardList);
+
+    //console.log("------------ BEGIN SURVEY -------------------");
+    var risposte={};
+    //console.log(pb["surveys"]);
+    for (survey in pb["surveys"]) {
+      //console.log("pb.surveys[survey].id --> " + pb.surveys[survey].id);
+      var ID=pb.surveys[survey].id;
+      risposte[ID]={};
+      //console.log("------------ SURVEY -------------------");
+      for (section in pb.surveys[survey].sections) {
+        var sectionCode=pb.surveys[survey].sections[section].code.toString();
+        risposte[ID][sectionCode]={};
+        //console.log("------------ SECTION -------------------");
+        for (question in pb.surveys[survey].sections[section].questions) {
+          //console.log("------------ QUESTION -------------------");
+          var QUESTION_ID=pb.surveys[survey].sections[section].questions[question].id;
+          var QUESTION_CODE=pb.surveys[survey].sections[section].questions[question].code;
+          var answer={
+            "playBookId" : post.id,
+            "questionId" : QUESTION_ID,
+            "value": ""
+          }
+
+          //pb.surveys[survey].sections[section].questions[question].updated=false;
+
+          let a=await models.SM_SurveyAnswer.create(answer);
+          //console.log(a);
+          risposte[ID][sectionCode][QUESTION_CODE]={};
+          risposte[ID][sectionCode][QUESTION_CODE]["questionId"]=QUESTION_ID;
+          risposte[ID][sectionCode][QUESTION_CODE]["value"]="";
+
+        }
+      }
+
+    }
+    //console.log(risposte);
+    pb["context"]["answers"]=risposte;
+    //console.log("------------ END SURVEY -------------------");
+
+    return res.status(201).json(
+      post.id
+    );
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 const addSurvey = async (playBookId) => {
     let surveyModel=require("../tracciati/survey-backend.json");
     //let playBookId= req.params.playBookId;
@@ -1611,9 +1459,9 @@ const addSurvey = async (playBookId) => {
         "updatedAt" : new Date()
       }
       let sur=await models.SM_Survey.create(surveyEntity);
-      console.log('\x1b[33m');
-      console.log("surveyEntity " + JSON.stringify(surveyEntity,null,2));
-      console.log('\x1b[0m');
+      //console.log('\x1b[33m');
+      //console.log("surveyEntity " + JSON.stringify(surveyEntity,null,2));
+      //console.log('\x1b[0m');
       for (section in surveyModel[survey].sections) {
         var surveySectionEntity={
           //"id" : surveyModel[survey].sections[section].id,
@@ -1628,9 +1476,9 @@ const addSurvey = async (playBookId) => {
           "updatedAt" : new Date()
         }
         let surSec=await models.SM_SurveySection.create(surveySectionEntity);
-        console.log('\x1b[36m');
-        console.log("surveySectionEntity " + JSON.stringify(surveySectionEntity,null,2));
-        console.log('\x1b[0m');
+        //console.log('\x1b[36m');
+        //console.log("surveySectionEntity " + JSON.stringify(surveySectionEntity,null,2));
+        //console.log('\x1b[0m');
         for (question in surveyModel[survey].sections[section].questions) {
           if (surveyModel[survey].sections[section].questions[question].type=="TABLE") {
             var surveySectionQuestionEntity={
@@ -1654,7 +1502,7 @@ const addSurvey = async (playBookId) => {
             }
             surveySectionQuestionEntity["tableHeader"]=tableHeader;
             surveySectionQuestionEntity["tableRows"]=tableRows;
-            console.log('\x1b[34m');
+            //console.log('\x1b[34m');
           } else {
             var isParameter=false;
             var tableInput="";
@@ -1684,7 +1532,7 @@ const addSurvey = async (playBookId) => {
               "valueInput" : valueInput,
               "isParameter" : isParameter
             }
-            console.log('\x1b[32m');
+            //console.log('\x1b[32m');
         }
         let surSecQue=await models.SM_SurveySectionQuestion.create(surveySectionQuestionEntity);
 
@@ -1699,8 +1547,8 @@ const addSurvey = async (playBookId) => {
           let surParam=await models.SM_SurveyParameter.create(surveyParameter);
         }
 
-        console.log("surveySectionQuestionEntity " + JSON.stringify(surveySectionQuestionEntity,null,2));
-        console.log('\x1b[0m');
+        //console.log("surveySectionQuestionEntity " + JSON.stringify(surveySectionQuestionEntity,null,2));
+        //console.log('\x1b[0m');
         }
       }
 
@@ -1708,6 +1556,243 @@ const addSurvey = async (playBookId) => {
 
     return;
 }
+
+// ************************************************
+// funzioni update playBook
+const loadAnswersFromDB = async (playBookId) => {
+}
+
+const updateParams = async (answer,playbookId) => {
+  /*
+  console.log('\x1b[33m');
+  console.log("answer " + JSON.stringify(answer,null,2));
+  console.log('\x1b[0m');*/
+  par2update={
+    "value" : answer.value
+  }
+
+  let response=await models.SM_SurveyParameter.update(par2update, {
+    where: {
+      questionId:answer.questionId,
+      playBookId: playbookId
+    }
+  });
+}
+const updateBuilding = async (answerValue,playbookId) => {
+  switch(answerValue) {
+    // da togliere la cablatura a codice
+    case "51 Melcher St":
+      //UPDATE cover
+      var pb={
+        "id" : playbookId,
+        "coverImg" : "facility/fort-point-office-space-15.jpg"
+      }
+      break;
+    case "625 Massachusetts Ave":
+      //UPDATE cover
+      var pb={
+        "id" : playbook.id,
+        "coverImg" : "facility/WEBSITE-IMAGE-1.jpg"
+      }
+      break;
+  }
+  const [updated] = await models.PB_Playbook.update(pb, {
+    where: { id: playbookId }
+  });
+}
+const updateServiceType= async (answer,playbook) => {
+  // ******************************************************** serviceTypeDetails ***********************************/
+  // serviceTypeDetails --> lista dei servizi legati alla tipologia scelta --> serviceType
+  let checkServiceType=await models['SM_SurveySectionQuestion'].findOne(
+    {
+      where: {
+        code: "serviceTypeDetails",
+        idPlaybook : playbook.id
+      }
+    }
+  )
+  if (checkServiceType) {
+    const deleted = await models.SM_SurveySectionQuestion.destroy(
+      {
+        where: {
+          id: checkServiceType.id,
+          idPlaybook : playbook.id
+        }
+      });
+    await models.SM_SurveyAnswer.destroy(
+      { where:
+        {
+          questionId: checkServiceType.id,
+          playBookId: playbook.id
+        }
+      });
+    await models.SM_SurveySectionQuestionOption.destroy(
+      { where: {
+        idQuestion: checkServiceType.id,
+        idPlaybook: playbook.id
+      }
+    });
+    if (deleted)  console.log("serviceTypeDetails DELETED")
+  }
+  for (sur in playbook.surveys) {
+    for (sec in playbook.surveys[sur].sections) {
+      for (q in playbook.surveys[sur].sections[sec].questions) {
+        if (playbook.surveys[sur].sections[sec].questions[q].code==="serviceTypeTable") {
+          result={
+            "surveyId" : sur,
+            "sectionId" : sec,
+            "questionId" : q
+          }
+        }
+      }
+    }
+  }
+  tableRows=[];
+  let serviceType = await models['PB_ServiceClass'].findOne(
+    {
+      where: {
+        name: answer.value
+      }
+    });
+  let service = await models['PB_Service'].findAll(
+    {
+      attributes: [['serviceName', 'name'],['serviceName', 'defaultValue']],
+      where: { idServiceClass: serviceType.id }
+    });
+  let serviceTypeQuestion = await models['SM_SurveySectionQuestion'].findOne({
+    where: {
+      code: "serviceType",
+      idPlaybook: playbook.id
+    }
+  });
+  tableRow={
+    //"idSection" :idSection=result.sectionId,
+    "idPlaybook" : playbook.id,
+    "idSection" : serviceTypeQuestion.idSection,
+    "code": "serviceTypeDetails",
+    "name": "Service Type Details",
+    "tooltip": "Select the systems that must be provided",
+    "nameI98n": "",
+    "tooltipI18n": "",
+    "type": "SELECT",
+    "flow": true,
+    "required": true,
+    "isParameter" : true,
+    "updated" : true,
+    "options": service,
+    "tableName" : "serviceTypeTable",
+    "tableHeader" : "Select the systems that must be provided"
+  }
+  let surSecQue0=await models.SM_SurveySectionQuestion.create(tableRow);
+  let answerAdd0={
+    "playBookId" : playbook.id,
+    "questionId" : surSecQue0.id,
+    "value" : ""
+  }
+  let answ0=await models.SM_SurveyAnswer.create(answerAdd0);
+  for (q in service) {
+    let optionAdd={
+      "idPlaybook" : playbook.id,
+      "idQuestion" : surSecQue0.id,
+      "name" : service[q].dataValues.name,
+      "defaultValue" : service[q].dataValues.defaultValue,
+      "disabled" : false,
+      "updated" : true
+    }
+    await models.SM_SurveySectionQuestionOption.create(optionAdd);
+  }
+  let newParam01={
+    "idPlaybook" : playbook.id,
+    "questionId" : surSecQue0.id,
+    "value" : ""
+  }
+  consoleLog(newParam01);
+  await models.SM_SurveyParameter.create(newParam01);
+  tableRows.push([tableRow]);
+  // ******************************************************** serviceTypeDetails ***********************************/
+
+  // ******************************************************** facilityServiceCondition ***********************************/
+  let checkfacilityServiceCondition=await models['SM_SurveySectionQuestion'].findOne(
+    {
+      where: { code: "facilityServiceCondition",
+      idPlaybook : playbook.id
+    }
+  })
+  if (checkfacilityServiceCondition) {
+    const deleted = await models.SM_SurveySectionQuestion.destroy({ where: { id: checkfacilityServiceCondition.id }});
+    await models.SM_SurveyAnswer.destroy(
+      {
+        where:
+        {
+          questionId: checkfacilityServiceCondition.id,
+          playBookId: playbook.id
+        }
+      });
+    await models.SM_SurveySectionQuestionOption.destroy(
+      {
+        where: {
+          idQuestion: checkfacilityServiceCondition.id,
+          idPlaybook: playbook.id
+        }
+      });
+    if (deleted)  console.log("serviceTypeDetails DELETED")
+  }
+  let facilityIndex= await models['PB_ConditionIndex'].findAll(
+    {
+      attributes: [['levelTypeName', 'name'],['levelTypeName', 'defaultValue']]
+    });
+  tableRow={
+    "idPlaybook" : playbook.id,
+    "idSection" : serviceTypeQuestion.idSection,
+    "code": "facilityServiceCondition",
+    "name": "Facility Condition value",
+    "tooltip": "Select the average facility condition of your physical assets",
+    "nameI98n": "",
+    "tooltipI18n": "",
+    "icon": "signal_cellular_alt",
+    "type": "SELECT",
+    "flow": false,
+    "required": false,
+    "defaultValue": "",
+    "isParameter" : true,
+    "updated" : true,
+    "options": facilityIndex,
+    "tableName" : "serviceTypeTable",
+    "tableHeader" : "Select the average facility condition of your physical assets"
+  }
+  let surSecQue1=await models.SM_SurveySectionQuestion.create(tableRow);
+  for (q in facilityIndex) {
+    let optionAdd={
+      "idPlaybook" : playbook.id,
+      "idQuestion" : surSecQue1.id,
+      "name" : facilityIndex[q].dataValues.name,
+      "defaultValue" : facilityIndex[q].dataValues.defaultValue,
+      "disabled" : false
+    }
+    await models.SM_SurveySectionQuestionOption.create(optionAdd);
+  }
+  let newParam02={
+    "idPlaybook" : playbook.id,
+    "questionId" : surSecQue1.id,
+    "value" : ""
+  }
+  consoleLog(newParam02);
+  await models.SM_SurveyParameter.create(newParam02);
+  tableRows.push([tableRow]);
+  let answerAdd1={
+    "playBookId" : playbook.id,
+    "questionId" : surSecQue1.id,
+    "value" : ""
+  }
+  let answ1=await models.SM_SurveyAnswer.create(answerAdd1);
+  // ******************************************************** facilityServiceCondition ***********************************/
+  //aggiungo le question al play book
+  playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableName="serviceTypeDetails";
+  playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=[,"Select the average facility condition of your physical assets"];
+  playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
+}
+// funzioni update playBook
+// ************************************************
 
 module.exports = {
   getDynamicOptions,
@@ -1728,10 +1813,12 @@ module.exports = {
   generateQuestions,
   importQuestionsFromJSON,
   deletePlaybooks,
-  test,
+
   getAllServices,
   getServiceResponseType,
   getServiceLevelAgreement,
   addSurvey,
-  createPlaybookWithSurvey
+  createPlaybookWithSurvey,
+  viewPlayBookById,
+
 };

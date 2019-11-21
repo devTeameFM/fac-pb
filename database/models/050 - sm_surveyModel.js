@@ -1,6 +1,12 @@
 
 module.exports = (sequelize, DataTypes) => {
   const SM_Survey = sequelize.define('SM_Survey', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     idPlaybook: DataTypes.INTEGER,
     name: DataTypes.STRING,
     code: DataTypes.STRING,
@@ -25,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'surveys',
         onDelete: 'CASCADE',
     });*/
+
   };
   return SM_Survey;
 };

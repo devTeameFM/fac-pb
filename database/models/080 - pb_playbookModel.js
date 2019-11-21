@@ -1,6 +1,12 @@
 
 module.exports = (sequelize, DataTypes) => {
   const PB_Playbook = sequelize.define('PB_Playbook', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     idMember: DataTypes.STRING,
     taskId: DataTypes.STRING,
     typeTask:DataTypes.STRING,
@@ -11,7 +17,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   PB_Playbook.associate = function(models) {
 
-    /*PB_Playbook.hasMany(models.SM_SurveySectionQuestionOption, {
+    PB_Playbook.belongsToMany(models.FE_ScrumsList, {
+      through: 'FE_CardsList',
+      as: 'cards',
+      foreignKey: 'idTask'
+    });
+    /*
+    PB_Playbook.hasMany(models.SM_SurveySectionQuestionOption, {
         foreignKey: 'idPlaybook',
         as: 'option',
         onDelete: 'CASCADE',
@@ -24,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
 
     PB_Playbook.belongsTo(models.SM_SurveySectionQuestion, {
         foreignKey: 'id',
-        as: 'options',
+        as: 'questions',
         onDelete: 'CASCADE',
     });
 
@@ -33,14 +45,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'surveys',
       foreignKey: 'idTask'
     });
-
-    PB_Playbook.belongsToMany(models.FE_ScrumsList, {
-      through: 'FE_CardsList',
-      as: 'cards',
-      foreignKey: 'idTask'
-    });
-
-
+    /*
+    PB_Playbook.hasMany(models.SM_SurveyParameter, {
+      foreignKey: 'playBookId'
+    });*/
 
   };
   return PB_Playbook;

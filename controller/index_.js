@@ -1,6 +1,15 @@
 const models = require("../database/models");
 
+async function f(table) {
+  let result = models[table].findAll();
+  return result
+}
 
+const test = async (req, res) => {
+    const tableName= req.params.tableName;
+    const output = await f(tableName);
+    return res.status(200).json({ output });
+};
 /*
 const getPlaybookById = async (id,res) => {
   try {
@@ -95,7 +104,7 @@ const getContractByIdOriginal = async (req, res) => {
     const contractId= req.params.contractId;
     let pb={};
 
-    //console.log("contractId --> " + JSON.stringify(req.params));
+    console.log("contractId --> " + JSON.stringify(req.params));
     const playbook = await models.PB_Playbook.findOne({
       where: { id: contractId},
     });
@@ -150,12 +159,12 @@ const getContractByIdOriginal = async (req, res) => {
 
 const getDynamicOptions = async (req, res) => {
     const { tableName } = req.params;
-    //console.log(tableName);
+    console.log(tableName);
     var questions=await models['SM_SurveySectionQuestion'].findAll();
 
     var table=[];
     for (q in questions) {
-      //console.log("TEST:" + q);
+      console.log("TEST:" + q);
       if (questions[q].type==="SELECT") {
         console.log("TEST:" + questions[q].tableInput);
         var datas=await models[questions[q].tableInput].findAll();
@@ -313,7 +322,7 @@ const getAllSurveyDynamics = async (req, res) => {
     for (survey in surveys) {
         for (section in surveys[survey].sections) {
           for (question in surveys[survey].sections[section].questions) {
-            //console.log("questions:" + surveys[survey].sections[section].questions[question].name);
+            console.log("questions:" + surveys[survey].sections[section].questions[question].name);
             if (surveys[survey].sections[section].questions[question].type === "SELECT") {
 
               surveys[survey].sections[section].questions[question].set("options",[]);
@@ -921,7 +930,7 @@ const updateContract = async (req, res) => {
           if (answers[answer].value) console.log("answer " + answers[answer].value)
           if (parameters[p].value) console.log("parameter " + parameters[p].value)
           if (answers[answer].value === parameters[p].value) {
-            //console.log("no changes")
+            console.log("no changes")
           } else {
             //cerco question code:
             let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
@@ -996,7 +1005,7 @@ const updateContract = async (req, res) => {
                 await models.SM_SurveyAnswer.destroy({ where: { questionId: checkServiceType.id, playBookId: playbook.id}});
                 await models.SM_SurveySectionQuestionOption.destroy({ where: { idQuestion: checkServiceType.id, idPlaybook: playbook.id }});
                 console.log("Option deleted --> " + deleted );
-                //console.log("playBookId --> " + pb.id );
+                console.log("playBookId --> " + pb.id );
 
                 if (deleted)  console.log("serviceTypeDetails DELETED")
                 //elimina sia la question che option che answers
@@ -1302,7 +1311,7 @@ const getContractById = async (req, res) => {
     const contractId= req.params.contractId;
     let pb={};
 
-    //console.log("contractId --> " + JSON.stringify(req.params));
+    console.log("contractId --> " + JSON.stringify(req.params));
     const playbook = await models.PB_Playbook.findOne({
       where: { id: contractId},
     });

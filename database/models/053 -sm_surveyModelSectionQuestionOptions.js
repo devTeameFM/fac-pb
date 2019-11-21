@@ -1,6 +1,12 @@
 
 module.exports = (sequelize, DataTypes) => {
   const SM_SurveySectionQuestionOption = sequelize.define('SM_SurveySectionQuestionOption', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     idPlaybook: DataTypes.INTEGER,
     idQuestion: DataTypes.INTEGER,
     name: DataTypes.STRING,
@@ -15,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   SM_SurveySectionQuestionOption.associate = function(models) {
+
     SM_SurveySectionQuestionOption.belongsTo(models.SM_SurveySectionQuestion, {
         foreignKey: 'id',
         as: 'options',
@@ -23,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     /*
     SM_SurveySectionQuestionOption.belongsTo(models.PB_Playbook, {
         foreignKey: 'idPlaybook',
-        as: 'options',
+        as: 'option',
         onDelete: 'CASCADE',
     });*/
   };

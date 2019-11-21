@@ -1,6 +1,12 @@
 
 module.exports = (sequelize, DataTypes) => {
   const SM_SurveySectionQuestion = sequelize.define('SM_SurveySectionQuestion', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     idPlaybook: DataTypes.INTEGER,
     idSection: DataTypes.INTEGER,
     code: DataTypes.STRING,
@@ -19,16 +25,29 @@ module.exports = (sequelize, DataTypes) => {
     isParameter:DataTypes.BOOLEAN
   }, {});
   SM_SurveySectionQuestion.associate = function(models) {
-    SM_SurveySectionQuestion.belongsTo(models.SM_SurveySection, {
-        foreignKey: 'id',
-        //as: 'question',
-        onDelete: 'CASCADE',
-    });
     SM_SurveySectionQuestion.hasMany(models.SM_SurveySectionQuestionOption, {
         foreignKey: 'idQuestion',
         as: 'options',
         onDelete: 'CASCADE',
       });
+
+    SM_SurveySectionQuestion.belongsTo(models.SM_SurveySection, {
+        foreignKey: 'id',
+        as: 'sections',
+        onDelete: 'CASCADE',
+    });
+
+    SM_SurveySectionQuestion.hasMany(models.SM_SurveyAnswer, {
+        foreignKey: 'questionId',
+        as: 'answers',
+        onDelete: 'CASCADE',
+      });
+    SM_SurveySectionQuestion.hasMany(models.SM_SurveyParameter, {
+        foreignKey: 'questionId',
+        as: 'parameters',
+        onDelete: 'CASCADE',
+      });
+      
   };
   return SM_SurveySectionQuestion;
 };
