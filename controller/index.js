@@ -789,7 +789,7 @@ function addToTable(section,obj2add) {
     if (section.questions[q].code===obj2add.tableName) {
       if (section.questions[q].tableRows) {
         section.questions[q].tableHeader.push(obj2add.tableHeader)
-        section.questions[q].tableRows.push([obj2add])
+        section.questions[q].tableRows[0].push(obj2add)
       } else {
         section.questions[q]["tableHeader"]=[];
         section.questions[q].tableHeader.push(obj2add.tableHeader)
@@ -1749,7 +1749,7 @@ const updateServiceType= async (answer,playbook) => {
   }
   consoleLog(newParam01);
   await models.SM_SurveyParameter.create(newParam01);
-  tableRows.push([tableRow]);
+  tableRows.push(tableRow);
   // ******************************************************** serviceTypeDetails ***********************************/
 
   // ******************************************************** facilityServiceCondition ***********************************/
@@ -1819,7 +1819,7 @@ const updateServiceType= async (answer,playbook) => {
   }
   consoleLog(newParam02);
   await models.SM_SurveyParameter.create(newParam02);
-  tableRows.push([tableRow]);
+  tableRows.push(tableRow);
   let answerAdd1={
     "playBookId" : playbook.id,
     "questionId" : surSecQue1.id,
