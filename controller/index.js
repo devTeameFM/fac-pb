@@ -924,23 +924,27 @@ const updateContract = async (req, res) => {
               						  for (sec in playbook.surveys[sur].sections) {
               							for (q in playbook.surveys[sur].sections[sec].questions) {
               							  if (playbook.surveys[sur].sections[sec].questions[q].code==="serviceTypeDetailsTable") {
-              								playbook.surveys[sur].sections[sec].questions[q]
-              								result={
-              								  "surveyId" : sur,
-              								  "sectionId" : sec,
-              								  "questionId" : q
-              								}
+                                consoleLog(playbook.surveys[sur].sections[sec].questions[q],"")
+                                consoleLog(playbook.surveys[sur].sections[sec],"")
+                								result={
+                								  "surveyId" : sur,
+                								  "sectionId" : sec,
+                								  "questionId" : q
+                								}
               							  }
               							}
               						  }
               						}
               						consoleLog(result,"")
               						playbook.surveys[sur].sections[sec].questions[q].update=true;
+
               						tableRows=[];
               						tableHeader: ["System","Component","# of components of served area sf","Add any other useful information"]
-              						let serviceAssetComponent= await models['PB_ServiceAssetComponent'].findAll({where: { serviceName: answers[a][b].value }});
+              						let serviceAssetComponent= await models['PB_ServiceAssetComponent'].findAll({where: { serviceName: answers[a][b][c].value }});
               						for (sAC in serviceAssetComponent) {
               						  let question2add01={
+                            "idPlaybook" : playbook.id,
+                            "idSection" : 3,
               							"code": camelCode(serviceAssetComponent[sAC].assetComponentType),
               							"name": "# of elements",
               							"tooltip": "",
@@ -962,6 +966,8 @@ const updateContract = async (req, res) => {
               						  let answerAdded01=await models.SM_SurveyAnswer.create(answer2add01);
               						  //playbook.context.answers.push(answerAdded01);
               						  let question2add02={
+                            "idPlaybook" : playbook.id,
+                            "idSection" : 3,
               							"code": camelCode(serviceAssetComponent[sAC].assetComponentType) + "Notes",
               							"name": "Information or comments",
               							"tooltip": "",
