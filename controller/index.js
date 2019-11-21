@@ -170,7 +170,11 @@ const getPlayBookFromId = async (contractId) => {
   var obj = Object.assign({}, playbook.dataValues);
   obj["templateName"]="";
   obj["fileName"]="";
-  obj["status"]="BUILDING_INFO";
+  if (playbook.status) {
+    obj["status"]=playbook.status;
+  } else {
+    obj["status"]="BUILDING_INFO";
+  }
   obj["dueDate"]="";
 
   let answersFromDB=await models['SM_SurveyAnswer'].findAll(
