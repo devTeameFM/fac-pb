@@ -834,12 +834,21 @@ const updateContract = async (req, res) => {
       where: { id: pb.id }
     });
 
+    let questionUdated= {
+      "updated" : false
+    }
+
+    await models.SM_SurveySectionQuestion.update(questionUdated, {
+      where: { idPlaybook: pb.id }
+    });
+
+    /*
     var quest={
       "updated" : false
     }
     await models.SM_SurveySectionQuestion.update(quest, {
       where: { createdAt: null }
-    });
+    });*/
     //UPDATE status
 
     //UPDATE answers
@@ -1677,6 +1686,17 @@ const updateServiceType= async (answer,playbook) => {
   let serviceTypeQuestion = await models['SM_SurveySectionQuestion'].findOne({
     where: {
       code: "serviceType",
+      idPlaybook: playbook.id
+    }
+  });
+
+  letserviceTypeTable={
+    "updated" : true
+  }
+
+  await models['SM_SurveySectionQuestion'].update(letserviceTypeTable,{
+    where: {
+      code: "serviceTypeTable",
       idPlaybook: playbook.id
     }
   });
