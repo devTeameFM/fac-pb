@@ -156,8 +156,36 @@ function answerValueFromQuestionId(answers,questionId) {
   return value
 }
 function consoleLog(message,color) {
+  /*
+  Reset = "\x1b[0m"
+  Bright = "\x1b[1m"
+  Dim = "\x1b[2m"
+  Underscore = "\x1b[4m"
+  Blink = "\x1b[5m"
+  Reverse = "\x1b[7m"
+  Hidden = "\x1b[8m"
+
+  FgBlack = "\x1b[30m"
+  FgRed = "\x1b[31m"
+  FgGreen = "\x1b[32m"
+  FgYellow = "\x1b[33m"
+  FgBlue = "\x1b[34m"
+  FgMagenta = "\x1b[35m"
+  FgCyan = "\x1b[36m"
+  FgWhite = "\x1b[37m"
+
+  BgBlack = "\x1b[40m"
+  BgRed = "\x1b[41m"
+  BgGreen = "\x1b[42m"
+  BgYellow = "\x1b[43m"
+  BgBlue = "\x1b[44m"
+  BgMagenta = "\x1b[45m"
+  BgCyan = "\x1b[46m"
+  BgWhite = "\x1b[47m"
+  */
+  if (!color) color="\x1b[36m";
   console.log(color);
-  console.log("message " + JSON.stringify(message,null,2));
+  console.log(JSON.stringify(message,null,2));
   console.log(color);
 }
 
@@ -170,6 +198,7 @@ const getPlayBookFromId = async (contractId) => {
   var obj = Object.assign({}, playbook.dataValues);
   obj["templateName"]="";
   obj["fileName"]="";
+
   if (playbook.status) {
     obj["status"]=playbook.status;
   } else {
@@ -184,7 +213,6 @@ const getPlayBookFromId = async (contractId) => {
         }
       }
   )
-
   survey = await models['SM_Survey'].findAll({
     order: [
       [ { model: models.SM_SurveySection , as: 'sections'}, 'id', 'ASC'],
@@ -211,12 +239,9 @@ const getPlayBookFromId = async (contractId) => {
       }
     ]
   });
-
-
   obj["surveys"]=[];
   obj["answers"]={}
   //obj["answers"][contractId]={}
-
 
   for (sur in survey) {
     var temp_survey={
@@ -286,23 +311,266 @@ const getPlayBookFromId = async (contractId) => {
     }
     obj["surveys"].push(temp_survey);
   }
-
-    //obj["answers"]=await loadAnswersFromDB(contractId);
-    return obj;
+  let updatePlaybook = await runtimeSummaryCreation(obj);
+  return updatePlaybook;
 
 }
-
 const getContractById = async (req, res) => {
   try {
     const contractId= req.params.contractId;
     let pb={};
     let obj=await getPlayBookFromId(contractId);
+    // check parametri
+
+    // runtime summary creation
+
 
     return res.status(200).json(obj)
 
   } catch (error) {
     return res.status(500).send(error.message);
   }
+}
+const checkParameters = async () => {
+  const playbooks = await models.PB_Playbook.findAll({
+  });
+}
+
+const runtimeSummaryCreation = async (playBook) => {
+  const parameters = await models.SM_SurveyParameter.findAll({
+    attributes: ['value','name'],
+    where : {
+      playBookId : playBook.id
+    }
+  });
+  // funzioni da per generare i dati nel summary
+  // genericTechnicalRequirements
+
+  let techReq=await genericTechnicalRequirements(parameters);
+  let priorityDefinitionInfo=await priorityDefinition(parameters);
+  let responseTimeInfo=await responseTime(parameters);
+  let contractLevelResponseTimeInfo =await contractLevelResponseTime(parameters);
+  let correctionTimeInfo =await correctionTime(parameters);
+
+  let updateplaybook=addInfoTableSummary(playBook,"review","genericTechnicalRequirements",techReq);
+  updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",priorityDefinitionInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",responseTimeInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelResponseTimeInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",correctionTimeInfo);
+
+  //updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",priorityDefinitionInfo);
+
+  return updateplaybook;
+}
+
+function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
+  var obj={};
+  for (sur in playbook.surveys) {
+    if (playbook.surveys[sur].code===surveyCode) {
+      for (sec in playbook.surveys[sur].sections) {
+
+          if (playbook.surveys[sur].sections[sec].code===sectionCode) {
+            //consoleLog(playbook.surveys[sur].sections[sec]);
+            for (q in playbook.surveys[sur].sections[sec].questions) {
+              if (playbook.surveys[sur].sections[sec].questions[q].code===infos.tableName) {
+                consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
+                if (playbook.surveys[sur].sections[sec].questions[q].tableHeader) {
+                  consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
+                  playbook.surveys[sur].sections[sec].questions[q].tableHeader=infos.tableHeader;
+
+                } else {
+                  consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
+                  playbook.surveys[sur].sections[sec].questions[q]['tableHeader']=[]
+                  playbook.surveys[sur].sections[sec].questions[q]['tableHeader']=infos.tableHeader;
+
+                }
+                if (playbook.surveys[sur].sections[sec].questions[q].tableRows) {
+                  playbook.surveys[sur].sections[sec].questions[q]['tableRows']=infos.tableRows;
+                } else {
+                  playbook.surveys[sur].sections[sec].questions[q]['tableRows']=[];
+                  playbook.surveys[sur].sections[sec].questions[q]['tableRows']=infos.tableRows;
+                }
+
+              }
+
+            }
+          }
+        }
+      }
+    }
+ consoleLog(playbook)
+
+  return playbook;
+}
+
+function getParameterValue(parameters,parameterName) {
+  let value="";
+  for (p in parameters) {
+    if (parameters[p].name===parameterName) value= parameters[p].value;
+  }
+  return value;
+}
+
+const priorityDefinition = async (parameters) => {
+   // service requirement
+   // dipende da PB_Services
+   // parametri --> serviceTypeDetails
+   // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+   // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+   /*
+   let p=getParameterValue(parameters,"serviceTypeDetails");
+   const results = await models.PB_ServiceRequirement.findAll({
+     attributes: ['serviceName','serviceRequirementDescription'],
+     where : {
+       serviceName : p
+     }
+   });*/
+   let row=[]
+   let rows=[]
+   let header=["PRIORITY","DEFINITION"]
+
+   row=["Emergency","Activities that, if not performed, may create an immediate risk to people’s health or may damage the building installations/equipment."];
+   rows.push(row);
+   row=["Urgency","Activities that, if not performed, also temporarily, may create a risk to people’s health or may damage the building installations/equipment."];
+   rows.push(row);
+   row=["Routine","Activities that, if not performed quickly, do not pose a risk to people's health or do not damage property, people and buildings."];
+   rows.push(row);
+
+   let response={
+     tableName :"priorityDefinition",
+     tableHeader :header,
+     tableRows : rows
+   }
+   /*
+   for (r in results) {
+     response.tableRows.push([results[r].serviceRequirementDescription])
+   }*/
+   return response;
+}
+const responseTime = async (parameters) => {
+   // service requirement
+   // dipende da PB_Services
+   // parametri --> serviceTypeDetails
+   // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+   // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+   /*
+   let p=getParameterValue(parameters,"serviceTypeDetails");
+   const results = await models.PB_ServiceRequirement.findAll({
+     attributes: ['serviceName','serviceRequirementDescription'],
+     where : {
+       serviceName : p
+     }
+   });*/
+   let row=[]
+   let rows=[]
+   let header=["DEFINITION","RELATED KPI"]
+
+   row=["Feedback regarding each activity delivered by the Provider","B.4 Compliance with the agreed Response Time "];
+   rows.push(row);
+
+
+   let response={
+     tableName :"responseTime",
+     tableHeader :header,
+     tableRows : rows
+   }
+   /*
+   for (r in results) {
+     response.tableRows.push([results[r].serviceRequirementDescription])
+   }*/
+   return response;
+}
+const contractLevelResponseTime = async (parameters) => {
+   // service requirement
+   // dipende da PB_Services
+   // parametri --> serviceTypeDetails
+   // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+   // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+   /*
+   let p=getParameterValue(parameters,"serviceTypeDetails");
+   const results = await models.PB_ServiceRequirement.findAll({
+     attributes: ['serviceName','serviceRequirementDescription'],
+     where : {
+       serviceName : p
+     }
+   });*/
+   let row=[]
+   let rows=[]
+   let header=["PRIOTIRY","CONTRACT LEVEL","RESPONSE TIME (Working Hours)"]
+
+   row=["Emergency","HIGH","<2 hours"];
+   rows.push(row);
+   row=["Urgency","HIGH","<6 hours"];
+   rows.push(row);
+   row=["Routine","HIGH","<12 hours"];
+   rows.push(row);
+
+   let response={
+     tableName :" contractLevelResponseTime",
+     tableHeader :header,
+     tableRows : rows
+   }
+   /*
+   for (r in results) {
+     response.tableRows.push([results[r].serviceRequirementDescription])
+   }*/
+   return response;
+}
+const correctionTime = async (parameters) => {
+   // service requirement
+   // dipende da PB_Services
+   // parametri --> serviceTypeDetails
+   // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+   // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+   /*
+   let p=getParameterValue(parameters,"serviceTypeDetails");
+   const results = await models.PB_ServiceRequirement.findAll({
+     attributes: ['serviceName','serviceRequirementDescription'],
+     where : {
+       serviceName : p
+     }
+   });*/
+   let row=[]
+   let rows=[]
+   let header=["DEFINITION","RELATED KPI"]
+
+   row=["Feedback regarding each activity delivered by the Provider","B.4 Compliance with the agreed Response Time "];
+   rows.push(row);
+
+
+   let response={
+     tableName :" correctionTime",
+     tableHeader :header,
+     tableRows : rows
+   }
+   /*
+   for (r in results) {
+     response.tableRows.push([results[r].serviceRequirementDescription])
+   }*/
+   return response;
+}
+const genericTechnicalRequirements = async (parameters) => {
+   // service requirement
+   // dipende da PB_Services
+   // parametri --> serviceTypeDetails
+   // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+   // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+   let p=getParameterValue(parameters,"serviceTypeDetails");
+   const results = await models.PB_ServiceRequirement.findAll({
+     attributes: ['serviceName','serviceRequirementDescription'],
+     where : {
+       serviceName : p
+     }
+   });
+   let response={
+     tableName :"genericTechnicalRequirements",
+     tableHeader :[p],
+     tableRows : []
+   }
+   for (r in results) {
+     response.tableRows.push([results[r].serviceRequirementDescription])
+   }
+   return response;
 }
 
 function initPlayBook(pb) {
@@ -910,17 +1178,20 @@ const updateContract = async (req, res) => {
                           console.log("answer " + answers[a][b][c].value)
                           console.log("playbook.id " + playbook.id)
                           await updateBuilding(answers[a][b][c].value,playbook.id);
-                          await updateParams(answers[a][b][c],playbook.id);
+                          await updateParams(answers[a][b][c],question.code,playbook.id);
                       break;
                       case "serviceHours" :
-        						      await updateParams(answers[a][b][c],playbook.id);
+        						      await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
           					  case "duration" :
-        						      await updateParams(answers[a][b][c],playbook.id);
+        						      await updateParams(answers[a][b][c],question.code,playbook.id);
+          						break;
+                      case "contractExtensionRule" :
+        						      await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
           					  case "serviceType" :
               						await updateServiceType(answers[a][b][c],playbook);
-              						await updateParams(answers[a][b][c],playbook.id);
+              					  await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
                       case "serviceTypeDetails":
               						console.log("serviceTypeDetails")
@@ -1008,54 +1279,31 @@ const updateContract = async (req, res) => {
               						await models.SM_SurveyParameter.update(par2update, {
               						  where: { questionId:answers[a][b].questionId }
               						});
+                          await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
           					  case "facilityServiceCondition" :
-          						par2update={
-          						  "value" : answers[a][b].value
-          						}
-          						await models.SM_SurveyParameter.update(par2update, {
-          						  where: { questionId:answers[a][b].questionId }
-          						});
+          						    await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
           					  case "serviceLevel" :
-          						par2update={
-          						  "value" : answers[a][b].value
-          						}
-          						await models.SM_SurveyParameter.update(par2update, {
-          						  where: { questionId:answers[a][b].questionId }
-          						});
+          						    await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
           					  case "preventiveMaintenance" :
-          						par2update={
-          						  "value" : answers[a][b].value
-          						}
-          						await models.SM_SurveyParameter.update(par2update, {
-          						  where: { questionId:answers[a][b].questionId }
-          						});
+          						    await updateParams(answers[a][b][c],question.code,playbook.id);
+          						break;
+                      case "preventiveMaintenanceRemuneration" :
+          						    await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
           					  case "correctiveActivities" :
-          						par2update={
-          						  "value" : answers[a][b].value
-          						}
-          						await models.SM_SurveyParameter.update(par2update, {
-          						  where: { questionId:answers[a][b].questionId }
-          						});
+          					      await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
-          					  case "serviceRequest" :
-          						par2update={
-          						  "value" : answers[a][b].value
-          						}
-          						await models.SM_SurveyParameter.update(par2update, {
-          						  where: { questionId:answers[a][b].questionId }
-          						});
+                      case "correctiveActivitiesRemuneration" :
+          					      await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
-          					  case "onSiteTeam" :
-          						par2update={
-          						  "value" : answers[a][b].value
-          						}
-          						await models.SM_SurveyParameter.update(par2update, {
-          						  where: { questionId:answers[a][b].questionId }
-          						});
+          					  case "serviceRequestRemuneration" :
+          						    await updateParams(answers[a][b][c],question.code,playbook.id);
+          						break;
+          					  case "onSiteTeamRemuneration" :
+          						    await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
                     }
 
@@ -1596,13 +1844,14 @@ const addSurvey = async (playBookId) => {
 const loadAnswersFromDB = async (playBookId) => {
 }
 
-const updateParams = async (answer,playbookId) => {
+const updateParams = async (answer,questionCode,playbookId) => {
 
   console.log('\x1b[33m');
   console.log("answer " + JSON.stringify(answer,null,2));
   console.log('\x1b[0m');
   par2update={
-    "value" : answer.value
+    "value" : answer.value,
+    "name" : questionCode
   }
 
   let response=await models.SM_SurveyParameter.update(par2update, {
@@ -1747,9 +1996,10 @@ const updateServiceType= async (answer,playbook) => {
     await models.SM_SurveySectionQuestionOption.create(optionAdd);
   }
   let newParam01={
-    "idPlaybook" : playbook.id,
+    "playBookId" : playbook.id,
     "questionId" : surSecQue0.id,
-    "value" : ""
+    "value" : "",
+    "name" : "serviceTypeDetails"
   }
   consoleLog(newParam01);
   await models.SM_SurveyParameter.create(newParam01);
@@ -1817,9 +2067,10 @@ const updateServiceType= async (answer,playbook) => {
     await models.SM_SurveySectionQuestionOption.create(optionAdd);
   }
   let newParam02={
-    "idPlaybook" : playbook.id,
+    "playBookId" : playbook.id,
     "questionId" : surSecQue1.id,
-    "value" : ""
+    "value" : "",
+    "name" : "facilityServiceCondition"
   }
   consoleLog(newParam02);
   await models.SM_SurveyParameter.create(newParam02);

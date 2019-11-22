@@ -1,0 +1,1191 @@
+{
+    "id": 1,
+    "idMember": "76027g1930450d8bf7b10958",
+    "taskId": 1,
+    "typeTask": "PLAYBOOK",
+    "coverImg": "facility/fort-point-office-space-15.jpg",
+    "name": "Playbook 01",
+    "description": "answers --> scrive risposte",
+    "status": "BUILDING_INFO",
+    "templateName": "",
+    "fileName": "",
+    "dueDate": "",
+    "surveys": [
+        {
+            "id": 1,
+            "name": "Building info",
+            "code": "buildingInfo",
+            "nextStatus": "SLA",
+            "imageURL": "myspot-icons/line/building.png",
+            "sections": [
+                {
+                    "name": "Building Information",
+                    "code": "buildingInformation",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/building-info.png",
+                    "questions": [
+                        {
+                            "id": 1,
+                            "code": "building",
+                            "name": "Building",
+                            "tooltip": "Select building location in the scope of work",
+                            "type": "SELECT",
+                            "icon": "business",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "51 Melcher St",
+                                    "defaultValue": "51 Melcher St"
+                                },
+                                {
+                                    "name": "625 Massachusetts Ave",
+                                    "defaultValue": "625 Massachusetts Ave"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "code": "totalServedAreasqft",
+                            "name": "Total Served Area (sqft)",
+                            "tooltip": "Define the gross total area that must be served",
+                            "type": "NUMBER",
+                            "icon": "tab_unselected",
+                            "updated": false,
+                            "required": true,
+                            "flow": true
+                        },
+                        {
+                            "id": 3,
+                            "code": "numberOfFloors",
+                            "name": "Number of Floors",
+                            "tooltip": "Define the number of floors involved in the service",
+                            "type": "NUMBER",
+                            "icon": "view_agenda",
+                            "updated": false,
+                            "required": true,
+                            "flow": true
+                        },
+                        {
+                            "id": 4,
+                            "code": "serviceHours",
+                            "name": "Service Hours",
+                            "tooltip": "Select the contract service hours",
+                            "type": "SELECT",
+                            "icon": "access_time",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "9 am to 7 pm - Monday to Friday",
+                                    "defaultValue": "9 am to 7 pm - Monday to Friday"
+                                },
+                                {
+                                    "name": "8 am to 8 pm - Monday to Sunday",
+                                    "defaultValue": "8 am to 8 pm - Monday to Sunday"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Contract Period",
+                    "code": "contractPeriod",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/contract-time.png",
+                    "questions": [
+                        {
+                            "id": 5,
+                            "code": "startDate",
+                            "name": "Start date",
+                            "tooltip": "Select the contract’s date start",
+                            "type": "DATE",
+                            "icon": "today",
+                            "updated": false,
+                            "required": true,
+                            "flow": true
+                        },
+                        {
+                            "id": 6,
+                            "code": "duration",
+                            "name": "Duration",
+                            "tooltip": "Insert the contract duration",
+                            "type": "SELECT",
+                            "icon": "today",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "12 months",
+                                    "defaultValue": "12 months"
+                                },
+                                {
+                                    "name": "24 months",
+                                    "defaultValue": "24 months"
+                                },
+                                {
+                                    "name": "36 months",
+                                    "defaultValue": "36 months"
+                                },
+                                {
+                                    "name": "48 months",
+                                    "defaultValue": "48 months"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 7,
+                            "code": "contractExtensionRule",
+                            "name": "Contract extension rule",
+                            "tooltip": "Define the contract extension rule",
+                            "type": "SELECT",
+                            "icon": "refresh",
+                            "updated": false,
+                            "required": false,
+                            "flow": false,
+                            "options": [
+                                {
+                                    "name": "Upon request 30 days before the termination",
+                                    "defaultValue": "Upon request 30 days before the termination"
+                                },
+                                {
+                                    "name": "Upon request 60 days before the termination",
+                                    "defaultValue": "Upon request 60 days before the termination"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Service in Scope",
+                    "code": "serviceInScope",
+                    "tooltip": "Select the requested Service",
+                    "imageURL": "myspot-icons/line/service.png",
+                    "questions": [
+                        {
+                            "id": 8,
+                            "code": "serviceType",
+                            "name": "Service type",
+                            "tooltip": "Select the Macro-Service in the scope of work",
+                            "type": "SELECT",
+                            "icon": null,
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Hard service",
+                                    "defaultValue": "Hard service"
+                                },
+                                {
+                                    "name": "Soft service",
+                                    "defaultValue": "Soft service"
+                                },
+                                {
+                                    "name": "Logistics service",
+                                    "defaultValue": "Logistics service"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 9,
+                            "code": "serviceTypeTable",
+                            "name": "Service type table",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": true,
+                            "required": null,
+                            "flow": null,
+                            "tableHeader": [
+                                "Select the systems that must be provided",
+                                "Select the average facility condition of your physical assets"
+                            ],
+                            "tableRows": [
+                                [
+                                    {
+                                        "id": 36,
+                                        "idPlaybook": 1,
+                                        "idSection": 3,
+                                        "code": "serviceTypeDetails",
+                                        "name": "Service Type Details",
+                                        "tooltip": "Select the systems that must be provided",
+                                        "type": "SELECT",
+                                        "icon": null,
+                                        "tableName": "serviceTypeTable",
+                                        "tableHeader": "Select the systems that must be provided",
+                                        "tableRows": null,
+                                        "updated": true,
+                                        "required": true,
+                                        "flow": true,
+                                        "tableInput": null,
+                                        "valueInput": null,
+                                        "isParameter": true,
+                                        "options": [
+                                            {
+                                                "id": 71,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 36,
+                                                "name": "HVAC",
+                                                "defaultValue": "HVAC",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            },
+                                            {
+                                                "id": 72,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 36,
+                                                "name": "Firefighting",
+                                                "defaultValue": "Firefighting",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            },
+                                            {
+                                                "id": 73,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 36,
+                                                "name": "Electrical system",
+                                                "defaultValue": "Electrical system",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            },
+                                            {
+                                                "id": 74,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 36,
+                                                "name": "Elevators",
+                                                "defaultValue": "Elevators",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            },
+                                            {
+                                                "id": 75,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 36,
+                                                "name": "Plumbing",
+                                                "defaultValue": "Plumbing",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            },
+                                            {
+                                                "id": 76,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 36,
+                                                "name": "Civil works",
+                                                "defaultValue": "Civil works",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            }
+                                        ]
+                                    }
+                                ],
+                                [
+                                    {
+                                        "id": 37,
+                                        "idPlaybook": 1,
+                                        "idSection": 3,
+                                        "code": "facilityServiceCondition",
+                                        "name": "Facility Condition value",
+                                        "tooltip": "Select the average facility condition of your physical assets",
+                                        "type": "SELECT",
+                                        "icon": "signal_cellular_alt",
+                                        "tableName": "serviceTypeTable",
+                                        "tableHeader": "Select the average facility condition of your physical assets",
+                                        "tableRows": null,
+                                        "updated": true,
+                                        "required": false,
+                                        "flow": false,
+                                        "tableInput": null,
+                                        "valueInput": null,
+                                        "isParameter": true,
+                                        "options": [
+                                            {
+                                                "id": 77,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 37,
+                                                "name": "Excellent",
+                                                "defaultValue": "Excellent",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            },
+                                            {
+                                                "id": 78,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 37,
+                                                "name": "Good",
+                                                "defaultValue": "Good",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            },
+                                            {
+                                                "id": 79,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 37,
+                                                "name": "Fair",
+                                                "defaultValue": "Fair",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            },
+                                            {
+                                                "id": 80,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 37,
+                                                "name": "Poor",
+                                                "defaultValue": "Poor",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            },
+                                            {
+                                                "id": 81,
+                                                "idPlaybook": 1,
+                                                "idQuestion": 37,
+                                                "name": "N/A",
+                                                "defaultValue": "N/A",
+                                                "createdAt": null,
+                                                "updatedAt": null
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "id": 10,
+                            "code": "serviceTypeDetailsTable",
+                            "name": "service Type Details Table",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": null,
+                            "flow": null,
+                            "tableHeader": null
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "SLA",
+            "code": "sLA",
+            "nextStatus": "REVIEW",
+            "imageURL": "myspot-icons/line/building.png",
+            "sections": [
+                {
+                    "name": "Activities in Scope",
+                    "code": "activitiesInScope",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/activities-in-scope.png",
+                    "questions": [
+                        {
+                            "id": 11,
+                            "code": "serviceLevel",
+                            "name": "Service Level",
+                            "tooltip": "Select the Level of Service required",
+                            "type": "SELECT",
+                            "icon": "sentiment_satisfied_alt",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "HIGH",
+                                    "defaultValue": "HIGH"
+                                },
+                                {
+                                    "name": "MEDIUM",
+                                    "defaultValue": "MEDIUM"
+                                },
+                                {
+                                    "name": "LOW",
+                                    "defaultValue": "LOW"
+                                },
+                                {
+                                    "name": "BASIC",
+                                    "defaultValue": "BASIC"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 12,
+                            "code": "preventiveMaintenance",
+                            "name": "Preventive Maintenance",
+                            "tooltip": "Define if the «Preventive Maintenance» (time-based scheduled activities) is required and the remuneration method",
+                            "type": "SELECT",
+                            "icon": "sentiment_satisfied_alt",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Fixed Fee",
+                                    "defaultValue": "Fixed Fee"
+                                },
+                                {
+                                    "name": "Extra Fee",
+                                    "defaultValue": "Extra Fee"
+                                },
+                                {
+                                    "name": "Fixed Fee + Threshold",
+                                    "defaultValue": "Fixed Fee + Threshold"
+                                },
+                                {
+                                    "name": "Out of scope",
+                                    "defaultValue": "Out of scope"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 13,
+                            "code": "preventiveMaintenanceRemuneration",
+                            "name": "Preventive Maintenance Remuneration",
+                            "tooltip": "",
+                            "type": "SELECT",
+                            "icon": "sentiment_satisfied_alt",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Fixed Fee",
+                                    "defaultValue": "Fixed Fee"
+                                },
+                                {
+                                    "name": "Extra Fee",
+                                    "defaultValue": "Extra Fee"
+                                },
+                                {
+                                    "name": "Fixed Fee + Threshold",
+                                    "defaultValue": "Fixed Fee + Threshold"
+                                },
+                                {
+                                    "name": "Out of scope",
+                                    "defaultValue": "Out of scope"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 14,
+                            "code": "correctiveActivities",
+                            "name": "Corrective Activities",
+                            "tooltip": "Define if the «Corrective Activities» (on demand request for failures or malfunctions) are included and the remuneration method",
+                            "type": "SELECT",
+                            "icon": null,
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Fixed Fee",
+                                    "defaultValue": "Fixed Fee"
+                                },
+                                {
+                                    "name": "Extra Fee",
+                                    "defaultValue": "Extra Fee"
+                                },
+                                {
+                                    "name": "Fixed Fee + Threshold",
+                                    "defaultValue": "Fixed Fee + Threshold"
+                                },
+                                {
+                                    "name": "Out of scope",
+                                    "defaultValue": "Out of scope"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 15,
+                            "code": "correctiveActivitiesRemuneration",
+                            "name": "Corrective Activities Remuneration",
+                            "tooltip": "",
+                            "type": "SELECT",
+                            "icon": null,
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Fixed Fee",
+                                    "defaultValue": "Fixed Fee"
+                                },
+                                {
+                                    "name": "Extra Fee",
+                                    "defaultValue": "Extra Fee"
+                                },
+                                {
+                                    "name": "Fixed Fee + Threshold",
+                                    "defaultValue": "Fixed Fee + Threshold"
+                                },
+                                {
+                                    "name": "Out of scope",
+                                    "defaultValue": "Out of scope"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 16,
+                            "code": "serviceRequest",
+                            "name": "Service Request",
+                            "tooltip": "Define if the «Service Request» (on demand request of services) are included and the remuneration method",
+                            "type": "SELECT",
+                            "icon": null,
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Fixed Fee",
+                                    "defaultValue": "Fixed Fee"
+                                },
+                                {
+                                    "name": "Extra Fee",
+                                    "defaultValue": "Extra Fee"
+                                },
+                                {
+                                    "name": "Fixed Fee + Threshold",
+                                    "defaultValue": "Fixed Fee + Threshold"
+                                },
+                                {
+                                    "name": "Out of scope",
+                                    "defaultValue": "Out of scope"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 17,
+                            "code": "serviceRequestRemuneration",
+                            "name": "Service Request Remuneration",
+                            "tooltip": "",
+                            "type": "SELECT",
+                            "icon": null,
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Fixed Fee",
+                                    "defaultValue": "Fixed Fee"
+                                },
+                                {
+                                    "name": "Extra Fee",
+                                    "defaultValue": "Extra Fee"
+                                },
+                                {
+                                    "name": "Fixed Fee + Threshold",
+                                    "defaultValue": "Fixed Fee + Threshold"
+                                },
+                                {
+                                    "name": "Out of scope",
+                                    "defaultValue": "Out of scope"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 18,
+                            "code": "onSiteTeam",
+                            "name": "On site team",
+                            "tooltip": "Define if the «On site presence» (dedicated team in the building) are included and the remuneration method",
+                            "type": "SELECT",
+                            "icon": null,
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Fixed Fee",
+                                    "defaultValue": "Fixed Fee"
+                                },
+                                {
+                                    "name": "Extra Fee",
+                                    "defaultValue": "Extra Fee"
+                                },
+                                {
+                                    "name": "Fixed Fee + Threshold",
+                                    "defaultValue": "Fixed Fee + Threshold"
+                                },
+                                {
+                                    "name": "Out of scope",
+                                    "defaultValue": "Out of scope"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 19,
+                            "code": "onSiteTeamRemuneration",
+                            "name": "On site team Remuneration",
+                            "tooltip": "",
+                            "type": "SELECT",
+                            "icon": null,
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "options": [
+                                {
+                                    "name": "Fixed Fee",
+                                    "defaultValue": "Fixed Fee"
+                                },
+                                {
+                                    "name": "Extra Fee",
+                                    "defaultValue": "Extra Fee"
+                                },
+                                {
+                                    "name": "Fixed Fee + Threshold",
+                                    "defaultValue": "Fixed Fee + Threshold"
+                                },
+                                {
+                                    "name": "Out of scope",
+                                    "defaultValue": "Out of scope"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Review",
+            "code": "review",
+            "nextStatus": "PB_READY",
+            "imageURL": "myspot-icons/line/building.png",
+            "sections": [
+                {
+                    "name": "Review",
+                    "code": "review",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/activities-in-scope.png",
+                    "questions": []
+                },
+                {
+                    "name": "Generic Technical Requirements",
+                    "code": "genericTechnicalRequirements",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/activities-in-scope.png",
+                    "questions": [
+                        {
+                            "id": 20,
+                            "code": "genericTechnicalRequirements",
+                            "name": "Generic Technical Requirements",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Priorities and response times definition",
+                    "code": "prioritiesAndResponseTimesDefinition",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/activities-in-scope.png",
+                    "questions": [
+                        {
+                            "id": 21,
+                            "code": "priorityDefinition",
+                            "name": "Priority definition",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "PRIORITY",
+                                "DEFINITION"
+                            ],
+                            "tableRows": [
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "id": 22,
+                            "code": "responseTime",
+                            "name": "Response time",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "DEFINITION",
+                                "RELATED KPI"
+                            ],
+                            "tableRows": [
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "id": 23,
+                            "code": "contractLevelResponseTime",
+                            "name": "Contract Level Response Time",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "PRIORITY",
+                                "CONTRACT SERVICE LEVEL",
+                                "RESPONSE TIME (Working hours)"
+                            ],
+                            "tableRows": [
+                                "",
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "id": 24,
+                            "code": "correctionTime",
+                            "name": "Correction time",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "DEFINITION",
+                                "RELATED KPI"
+                            ],
+                            "tableRows": [
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "id": 25,
+                            "code": "contractLevelCorrectionTime",
+                            "name": "Contract Level Correction Time",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "URGENCY LEVEL",
+                                "CONTRACT SERVICE LEVEL",
+                                "CORRECTION TIME (Working hours)"
+                            ],
+                            "tableRows": [
+                                "",
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "id": 26,
+                            "code": "estimationTime",
+                            "name": "Estimation Time",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "DEFINITION",
+                                "RELATED KPI"
+                            ],
+                            "tableRows": [
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "id": 27,
+                            "code": "contractLevelEstimationTime",
+                            "name": "Contract Level Estimation Time",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "PRIORITY",
+                                "CONTRACT SERVICE LEVEL",
+                                "ESTIMATION TIME (Working hours)"
+                            ],
+                            "tableRows": [
+                                "",
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Key Performance Indicators",
+                    "code": "keyPerformanceIndicators",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/activities-in-scope.png",
+                    "questions": [
+                        {
+                            "id": 28,
+                            "code": "availability",
+                            "name": "Availability",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": ""
+                        },
+                        {
+                            "id": 29,
+                            "code": "correctionTimeForUrgencyRequest",
+                            "name": "Correction Time For Urgency Request",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": ""
+                        },
+                        {
+                            "id": 30,
+                            "code": "systemConditionIndex",
+                            "name": "System Condition Index",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "Facility Condition Value",
+                                "No. of estimated on demand activities",
+                                "DEFINITION"
+                            ],
+                            "tableRows": [
+                                ""
+                            ]
+                        },
+                        {
+                            "id": 31,
+                            "code": "availabilityIndex",
+                            "name": "Availability Index",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "KPI (KEY PERFORMANCE INDICATORS)",
+                                "YES/NO",
+                                "MEASURING PROCEDURE",
+                                "MEASUREMENT METHOD",
+                                "CALCULATION PROCEDURE"
+                            ],
+                            "tableRows": [
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "id": 32,
+                            "code": "qualityProvided",
+                            "name": "Quality Provided",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "KPI (KEY PERFORMANCE INDICATORS)",
+                                "YES/NO",
+                                "MEASURING PROCEDURE",
+                                "MEASUREMENT METHOD",
+                                "CALCULATION PROCEDURE"
+                            ],
+                            "tableRows": [
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Penalties",
+                    "code": "penalties",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/activities-in-scope.png",
+                    "questions": [
+                        {
+                            "id": 33,
+                            "code": "penaltiesRelatedMonitoringSystem",
+                            "name": "Penalties Related Monitoring System",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "KPI (KEY PERFORMANCE INDICATORS)",
+                                "SLA",
+                                "PENALTY"
+                            ],
+                            "tableRows": [
+                                "",
+                                "",
+                                ""
+                            ]
+                        },
+                        {
+                            "id": 34,
+                            "code": "penaltiesRelatedNonConformities",
+                            "name": "Penalties Related Non Conformities",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "SPECIFIC INDICATOR AREA",
+                                "DESCRIPTION",
+                                "PERIMETER",
+                                "PENALTY"
+                            ],
+                            "tableRows": [
+                                "",
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Preventive Maintenance Procedures",
+                    "code": "preventiveMaintenanceProcedures",
+                    "tooltip": "",
+                    "imageURL": "myspot-icons/line/activities-in-scope.png",
+                    "questions": [
+                        {
+                            "id": 35,
+                            "code": "preventiveMaintenanceProcedures",
+                            "name": "Preventive Maintenance Procedures",
+                            "tooltip": "",
+                            "type": "TABLE",
+                            "icon": "airport_shuttle",
+                            "updated": false,
+                            "required": true,
+                            "flow": true,
+                            "tableHeader": [
+                                "SYSTEM",
+                                "COMPONENT",
+                                "ACTIVITY",
+                                "FREQUENCIES"
+                            ],
+                            "tableRows": [
+                                "",
+                                "",
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "answers": {
+        "buildingInfo": {
+            "buildingInformation": {
+                "building": {
+                    "questionId": 1,
+                    "value": "51 Melcher St"
+                },
+                "totalServedAreasqft": {
+                    "questionId": 2,
+                    "value": ""
+                },
+                "numberOfFloors": {
+                    "questionId": 3,
+                    "value": ""
+                },
+                "serviceHours": {
+                    "questionId": 4,
+                    "value": "9 am to 7 pm - Monday to Friday"
+                }
+            },
+            "contractPeriod": {
+                "startDate": {
+                    "questionId": 5,
+                    "value": ""
+                },
+                "duration": {
+                    "questionId": 6,
+                    "value": "12 months"
+                },
+                "contractExtensionRule": {
+                    "questionId": 7,
+                    "value": "Upon request 60 days before the termination"
+                }
+            },
+            "serviceInScope": {
+                "serviceType": {
+                    "questionId": 8,
+                    "value": "Hard service"
+                },
+                "serviceTypeTable": {
+                    "questionId": 9,
+                    "value": ""
+                },
+                "serviceTypeDetailsTable": {
+                    "questionId": 10,
+                    "value": ""
+                },
+                "serviceTypeDetails": {
+                    "questionId": 36,
+                    "value": "HVAC"
+                },
+                "facilityServiceCondition": {
+                    "questionId": 37,
+                    "value": "Fair"
+                }
+            }
+        },
+        "sLA": {
+            "activitiesInScope": {
+                "serviceLevel": {
+                    "questionId": 11,
+                    "value": "MEDIUM"
+                },
+                "preventiveMaintenance": {
+                    "questionId": 12,
+                    "value": "Extra Fee"
+                },
+                "preventiveMaintenanceRemuneration": {
+                    "questionId": 13,
+                    "value": "Fixed Fee"
+                },
+                "correctiveActivities": {
+                    "questionId": 14,
+                    "value": "Fixed Fee"
+                },
+                "correctiveActivitiesRemuneration": {
+                    "questionId": 15,
+                    "value": "Fixed Fee"
+                },
+                "serviceRequest": {
+                    "questionId": 16,
+                    "value": "Fixed Fee"
+                },
+                "serviceRequestRemuneration": {
+                    "questionId": 17,
+                    "value": "Fixed Fee"
+                },
+                "onSiteTeam": {
+                    "questionId": 18,
+                    "value": "Fixed Fee"
+                },
+                "onSiteTeamRemuneration": {
+                    "questionId": 19,
+                    "value": "Fixed Fee"
+                }
+            }
+        },
+        "review": {
+            "review": {},
+            "genericTechnicalRequirements": {
+                "genericTechnicalRequirements": {
+                    "questionId": 20,
+                    "value": ""
+                }
+            },
+            "prioritiesAndResponseTimesDefinition": {
+                "priorityDefinition": {
+                    "questionId": 21,
+                    "value": ""
+                },
+                "responseTime": {
+                    "questionId": 22,
+                    "value": ""
+                },
+                "contractLevelResponseTime": {
+                    "questionId": 23,
+                    "value": ""
+                },
+                "correctionTime": {
+                    "questionId": 24,
+                    "value": ""
+                },
+                "contractLevelCorrectionTime": {
+                    "questionId": 25,
+                    "value": ""
+                },
+                "estimationTime": {
+                    "questionId": 26,
+                    "value": ""
+                },
+                "contractLevelEstimationTime": {
+                    "questionId": 27,
+                    "value": ""
+                }
+            },
+            "keyPerformanceIndicators": {
+                "availability": {
+                    "questionId": 28,
+                    "value": ""
+                },
+                "correctionTimeForUrgencyRequest": {
+                    "questionId": 29,
+                    "value": ""
+                },
+                "systemConditionIndex": {
+                    "questionId": 30,
+                    "value": ""
+                },
+                "availabilityIndex": {
+                    "questionId": 31,
+                    "value": ""
+                },
+                "qualityProvided": {
+                    "questionId": 32,
+                    "value": ""
+                }
+            },
+            "penalties": {
+                "penaltiesRelatedMonitoringSystem": {
+                    "questionId": 33,
+                    "value": ""
+                },
+                "penaltiesRelatedNonConformities": {
+                    "questionId": 34,
+                    "value": ""
+                }
+            },
+            "preventiveMaintenanceProcedures": {
+                "preventiveMaintenanceProcedures": {
+                    "questionId": 35,
+                    "value": ""
+                }
+            }
+        }
+    }
+}

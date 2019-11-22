@@ -1,0 +1,25 @@
+Host
+ec2-54-217-225-16.eu-west-1.compute.amazonaws.com
+Database
+d1l0cbqlnuvl0b
+User
+nisoszcepuxtds
+Port
+5432
+Password
+57d0b2ea661a02074b216927d16eebce41e61ad3510aca749618f79092e0ed52
+URI
+postgres://nisoszcepuxtds:57d0b2ea661a02074b216927d16eebce41e61ad3510aca749618f79092e0ed52@ec2-54-217-225-16.eu-west-1.compute.amazonaws.com:5432/d1l0cbqlnuvl0b
+Heroku CLI
+heroku pg:psql postgresql-polished-99232 --app fac-pb
+
+
+folder mio pc per lancio Heroku: C:\Program Files\heroku\bin>
+
+heroku login
+heroku logs --tail -a fac-pb
+heroku run bash --app fac-pb
+
+sequelize -m db:migrate:undo:all
+sequelize -m db:migrate
+sequelize -m db:seed:all
