@@ -189,6 +189,13 @@ function consoleLog(message,color) {
   console.log(color);
 }
 
+function getType(p) {
+    if (Array.isArray(p)) return 'array';
+    else if (typeof p == 'string') return 'string';
+    else if (p != null && typeof p == 'object') return 'object';
+    else return 'other';
+}
+
 const getPlayBookFromId = async (contractId) => {
   //console.log("contractId --> " + JSON.stringify(req.params));
   const playbook = await models.PB_Playbook.findOne({
@@ -214,6 +221,7 @@ const getPlayBookFromId = async (contractId) => {
       }
   )
   survey = await models['SM_Survey'].findAll({
+    where: {'idPlaybook': contractId},
     order: [
       [ { model: models.SM_SurveySection , as: 'sections'}, 'id', 'ASC'],
       [ { model: models.SM_SurveySection , as: 'sections'}, { model: models.SM_SurveySectionQuestion, as: 'questions' }, 'id', 'ASC'],
@@ -264,6 +272,7 @@ const getPlayBookFromId = async (contractId) => {
           imageURL : survey[sur].sections[sec].imageURL,
           questions : []
         }
+      var nestedSelect=[];
       //temp_survey.sections.push(temp_section);
       for (que in survey[sur].sections[sec].questions) {
         obj["answers"][survey[sur].code][survey[sur].sections[sec].code][survey[sur].sections[sec].questions[que].code]={
@@ -295,16 +304,27 @@ const getPlayBookFromId = async (contractId) => {
               }
           }
           if (survey[sur].sections[sec].questions[que].type=="TABLE") {
-            if (temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader) {
-              temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader.split(",");
-              temp_question.tableRows=survey[sur].sections[sec].questions[que].tableRows.split(",");
+            if (survey[sur].sections[sec].questions[que].code=="typeOfActivities") {
+              if (temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader) {
+                temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader.split(",");
+              }
+              let rows=survey[sur].sections[sec].questions[que].tableRows.split(",");
+              tableRows=[];
+              tableRows.push([]);
+              tableRows.push([]);
+              tableRows.push([]);
+              tableRows.push([]);
+                            
             }
           }
           temp_section.questions.push(temp_question);
         } else {
-          //temp_section=
-          addToTable(temp_section,survey[sur].sections[sec].questions[que]);
-
+          if (survey[sur].sections[sec].questions[que].tableName="typeOfActivities") {
+            nestedSelect.push(survey[sur].sections[sec].questions[que]);
+            consoleLog(nestedSelect);
+          } else {
+            addToTable(temp_section,survey[sur].sections[sec].questions[que]);
+          }
         }
       }
       temp_survey.sections.push(temp_section);
@@ -351,13 +371,34 @@ const runtimeSummaryCreation = async (playBook) => {
   let responseTimeInfo=await responseTime(parameters);
   let contractLevelResponseTimeInfo =await contractLevelResponseTime(parameters);
   let correctionTimeInfo =await correctionTime(parameters);
+  //let contractLevelCorrectionTimeInfo =await contractLevelCorrectionTime(parameters);
+  //let estimationTimeInfo =await estimationTime(parameters);
+  //let contractLevelEstimationTimeInfo =await contractLevelEstimationTime(parameters);
+  //let availabilityInfo =await availability(parameters);
+  //let correctionTimeForUrgencyRequestInfo =await correctionTimeForUrgencyRequest(parameters);
+  //let systemConditionIndexInfo =await systemConditionIndex(parameters);
+  //let availabilityIndexInfo =await availabilityIndex(parameters);
+  //let qualityProvidedInfo =await qualityProvided(parameters);
+  //let penaltiesRelatedMonitoringSystemInfo =await penaltiesRelatedMonitoringSystem(parameters);
+  //let penaltiesRelatedNonConformitiesInfo =await penaltiesRelatedNonConformities(parameters);
+  //let preventiveMaintenanceProceduresInfo =await preventiveMaintenanceProcedures(parameters);
 
   let updateplaybook=addInfoTableSummary(playBook,"review","genericTechnicalRequirements",techReq);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",priorityDefinitionInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",responseTimeInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelResponseTimeInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",correctionTimeInfo);
-
+  //updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelCorrectionTimeInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",estimationTimeInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelEstimationTimeInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",availabilityInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",correctionTimeForUrgencyRequestInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",systemConditionIndexInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",availabilityIndexInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",qualityProvidedInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","penalties",penaltiesRelatedMonitoringSystemInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","penalties",penaltiesRelatedNonConformities);
+  //updateplaybook=addInfoTableSummary(playBook,"review","preventiveMaintenanceProcedures",preventiveMaintenanceProceduresInfo);
   //updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",priorityDefinitionInfo);
 
   return updateplaybook;
@@ -373,13 +414,13 @@ function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
             //consoleLog(playbook.surveys[sur].sections[sec]);
             for (q in playbook.surveys[sur].sections[sec].questions) {
               if (playbook.surveys[sur].sections[sec].questions[q].code===infos.tableName) {
-                consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
+                //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
                 if (playbook.surveys[sur].sections[sec].questions[q].tableHeader) {
-                  consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
+                  //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
                   playbook.surveys[sur].sections[sec].questions[q].tableHeader=infos.tableHeader;
 
                 } else {
-                  consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
+                  //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
                   playbook.surveys[sur].sections[sec].questions[q]['tableHeader']=[]
                   playbook.surveys[sur].sections[sec].questions[q]['tableHeader']=infos.tableHeader;
 
@@ -398,7 +439,7 @@ function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
         }
       }
     }
- consoleLog(playbook)
+ //consoleLog(playbook)
 
   return playbook;
 }
@@ -532,14 +573,17 @@ const correctionTime = async (parameters) => {
    });*/
    let row=[]
    let rows=[]
-   let header=["DEFINITION","RELATED KPI"]
+   let header=["PRIOTIRY","CONTRACT LEVEL","RESPONSE TIME (Working Hours)"]
 
-   row=["Feedback regarding each activity delivered by the Provider","B.4 Compliance with the agreed Response Time "];
+   row=["Emergency","HIGH","<2 hours"];
+   rows.push(row);
+   row=["Urgency","HIGH","<6 hours"];
+   rows.push(row);
+   row=["Routine","HIGH","<12 hours"];
    rows.push(row);
 
-
    let response={
-     tableName :" correctionTime",
+     tableName :" contractLevelResponseTime",
      tableHeader :header,
      tableRows : rows
    }
@@ -1199,8 +1243,8 @@ const updateContract = async (req, res) => {
               						  for (sec in playbook.surveys[sur].sections) {
               							for (q in playbook.surveys[sur].sections[sec].questions) {
               							  if (playbook.surveys[sur].sections[sec].questions[q].code==="serviceTypeDetailsTable") {
-                                consoleLog(playbook.surveys[sur].sections[sec].questions[q],"")
-                                consoleLog(playbook.surveys[sur].sections[sec],"")
+                                //consoleLog(playbook.surveys[sur].sections[sec].questions[q],"")
+                                //consoleLog(playbook.surveys[sur].sections[sec],"")
                 								result={
                 								  "surveyId" : sur,
                 								  "sectionId" : sec,
@@ -1210,7 +1254,7 @@ const updateContract = async (req, res) => {
               							}
               						  }
               						}
-              						consoleLog(result,"")
+              						//consoleLog(result,"")
               						playbook.surveys[sur].sections[sec].questions[q].update=true;
 
               						tableRows=[];
@@ -1778,13 +1822,70 @@ const addSurvey = async (playBookId) => {
               "tableInput" : "",
               "valueInput" : "",
             }
+
             if (surveyModel[survey].sections[section].questions[question].tableHeader) {
               var tableHeader = surveyModel[survey].sections[section].questions[question].tableHeader.toString();
-              var tableRows = surveyModel[survey].sections[section].questions[question].tableRows.toString();
+              surveySectionQuestionEntity["tableHeader"]=tableHeader;
             }
-            surveySectionQuestionEntity["tableHeader"]=tableHeader;
-            surveySectionQuestionEntity["tableRows"]=tableRows;
-            //console.log('\x1b[34m');
+            if (surveyModel[survey].sections[section].questions[question].tableRows) {
+              var righe=surveyModel[survey].sections[section].questions[question].tableRows;
+              tableRows=[];
+              for (r0 in righe) {
+              	riga=righe[r0];
+                tableRow=[];
+              	for (r1 in riga) {
+              	  if (getType(riga[r1])=="object") {
+                		if (riga[r1].type=="SELECT") {
+                			var isParameter=false;
+                			var tableInput="";
+                			var valueInput="";
+                			if (riga[r1].tableInput) {
+                			tableInput=riga[r1].tableInput;
+                			}
+                			if (riga[r1].valueInput) {
+                			valueInput=riga[r1].valueInput;
+                			}
+                			if (riga[r1].isParameter) {
+                			isParameter=true;
+                			}
+                			var surveySectionQuestionEntityNested={
+                				"idPlaybook" : playBookId,
+                				"idSection" : surSec.id,
+                				"code" : camelCode(riga[r1].name),
+                				"name" : riga[r1].name,
+                				"tooltip" : riga[r1].tooltip,
+                				"nameI98n" : riga[r1].nameI98n,
+                				"type" : riga[r1].type,
+                				"icon" : riga[r1].icon,
+                				"required" : riga[r1].required,
+                				"flow" : riga[r1].flow,
+                        "tableName" : surveySectionQuestionEntity.code,
+                				"tableInput" : tableInput,
+                				"valueInput" : valueInput,
+                				"isParameter" : isParameter,
+                			}
+                			let surSecQue=await models.SM_SurveySectionQuestion.create(surveySectionQuestionEntityNested);
+                			if (surveySectionQuestionEntityNested.isParameter) {
+                				var surveyParameter={
+                				  "playBookId" : playBookId,
+                				  "questionId" : surSecQue.id,
+                				  "value" : "",
+                				  "name" : surveySectionQuestionEntityNested.code
+                				}
+                				let surParam=await models.SM_SurveyParameter.create(surveyParameter);
+                			}
+                      tableRow.push("SELECT_" +camelCode(riga[r1].name))
+                		}
+              	  } else {
+                    consoleLog(riga[r1])
+                    tableRow.push(riga[r1])
+                  }
+              	}
+                tableRows.push(tableRow.toString());
+              }
+              surveySectionQuestionEntity["tableRows"]=tableRows.toString();
+
+            }
           } else {
             var isParameter=false;
             var tableInput="";
@@ -1816,21 +1917,18 @@ const addSurvey = async (playBookId) => {
             }
             //console.log('\x1b[32m');
         }
-        let surSecQue=await models.SM_SurveySectionQuestion.create(surveySectionQuestionEntity);
+          let surSecQue=await models.SM_SurveySectionQuestion.create(surveySectionQuestionEntity);
 
-        // insert SM_SurveyParameters
-        if (surveySectionQuestionEntity.isParameter) {
-          var surveyParameter={
-            "playBookId" : playBookId,
-            "questionId" : surSecQue.id,
-            "value" : "",
-            "name" : surveySectionQuestionEntity.code
+          // insert SM_SurveyParameters
+          if (surveySectionQuestionEntity.isParameter) {
+            var surveyParameter={
+              "playBookId" : playBookId,
+              "questionId" : surSecQue.id,
+              "value" : "",
+              "name" : surveySectionQuestionEntity.code
+            }
+            let surParam=await models.SM_SurveyParameter.create(surveyParameter);
           }
-          let surParam=await models.SM_SurveyParameter.create(surveyParameter);
-        }
-
-        //console.log("surveySectionQuestionEntity " + JSON.stringify(surveySectionQuestionEntity,null,2));
-        //console.log('\x1b[0m');
         }
       }
 

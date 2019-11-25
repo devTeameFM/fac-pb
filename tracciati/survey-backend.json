@@ -1,646 +1,719 @@
 [
-	{
-		"id": 1231232,
-		"name": "Building info",
-		"code": "buildingInfo",
-		"nextStatus": "SLA",
-		"imageURL": "myspot-icons/line/building.png",
-		"sections": [
-			{
-				"name": "Building Information",
-				"code": "buildingInformation",
-				"tooltip": "",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"imageURL": "myspot-icons/line/building-info.png",
-				"questions": [
-					{
-						"id": 100001,
-						"code": "code",
-						"name": "Building",
-						"tooltip": "Select building location in the scope of work",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"icon": "business",
-						"required": true,
-						"flow": true,
-						"isParameter" : true,
-						"tableInput" : "MS_Building",
-						"valueInput" : "name",
-						"options": [
-							{
-								"name": "51 Melcher St",
-								"defaultValue": "51 Melcher St"
-							},
-							{
-								"name": "625 Massachusetts Ave",
-								"defaultValue": "625 Massachusetts Ave"
-							}
-						]
-					},
-					{
-						"id": 100003,
-						"code": "area",
-						"name": "Total Served Area (sqft)",
-						"tooltip": "Define the gross total area that must be served",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "tab_unselected",
-						"type": "NUMBER",
-						"flow": true,
-						"required": true
-					},
-					{
-						"id": 100004,
-						"code": "floors",
-						"name": "Number of Floors",
-						"tooltip": "Define the number of floors involved in the service",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "view_agenda",
-						"type": "NUMBER",
-						"flow": true,
-						"required": true
-					},
-					{
-						"id": 100005,
-						"code": "serviceHours",
-						"name": "Service Hours",
-						"tooltip": "Select the contract service hours",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "access_time",
-						"type": "SELECT",
-						"required": true,
-						"flow": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceHoursWindow",
-						"valueInput" : "name",
-						"options": [
-							{
-								"name": "9 am to 7 pm - Monday to Friday",
-								"defaultValue": "9 am to 7 pm - Monday to Friday"
-							},
-							{
-								"name": "8 am to 8 pm - Monday to Sunday",
-								"defaultValue": "9 am to 7 pm - Monday to Sunday",
-								"disabled": true
-							}
-						]
-					}
-				]
-			},
-			{
-				"name": "Contract Period",
-				"code": "contractPeriod",
-				"tooltip": "",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"imageURL": "myspot-icons/line/contract-time.png",
-				"questions": [
-					{
-						"id": 100009,
-						"code": "startDate",
-						"name": "Start date",
-						"tooltip": "Select the contract’s date start",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "today",
-						"type": "DATE",
-						"flow": true,
-						"required": true,
-						"defaultValue": " "
-					},
-					{
-						"id": 100007,
-						"code": "duration",
-						"name": "Duration",
-						"tooltip": "Insert the contract duration",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "today",
-						"type": "SELECT",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceDuration",
-						"valueInput" : "name",
-						"options": [
-							{
-								"name": "12 months",
-								"defaultValue": "12 month"
-							},
-							{
-								"name": "24 months",
-								"defaultValue": "24 month",
-								"disabled": true
-							},
-							{
-								"name": "36 months",
-								"defaultValue": "36 month",
-								"disabled": true
-							},
-							{
-								"name": "48 months",
-								"defaultValue": " month",
-								"disabled": true
-							}
-						]
-					},
-					{
-						"id": 100008,
-						"code": "extension",
-						"name": "Contract extension rule",
-						"tooltip": "Define the contract extension rule",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "refresh",
-						"type": "SELECT",
-						"flow": false,
-						"required": false,
-						"defaultValue": "",
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceExtensionRule",
-						"valueInput" : "name",
-						"options": [
-							{
-								"name": "Upon request 30 days before the termination",
-								"defaultValue": "Upon request 30 days before the termination",
-								"icon": "fast"
-							}
-						]
-					}
-				]
-			},
-			{
-				"name": "Service in Scope",
-				"code": "serviceInScope",
-				"imageURL": "myspot-icons/line/service.png",
-				"tooltip": "Select the requested Service",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"questions": [
-					{
-						"id": 110009,
-						"code": "",
-						"name": "Service type",
-						"tooltip": "Select the Macro-Service in the scope of work",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"required": true,
-						"flow": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceClass",
-						"valueInput" : "name"
-					},
-					{
-						"code" : "",
-						"name" : "Service type table",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"defaultValue": " "
-					},
-					{
-						"code" : "",
-						"name" : "service Type Details Table",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"defaultValue": " "
-					}
-				]
-			}
-		]
-	},
-	{
-		"id": 1231233,
-		"name": "SLA",
-		"code": "sla",
-		"nextStatus": "REVIEW",
-		"imageURL": "myspot-icons/line/building.png",
-		"sections": [
-			{
-				"name": "Activities in Scope",
-				"code": "activitiesInScope",
-				"tooltip": "",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"imageURL": "myspot-icons/line/activities-in-scope.png",
-				"questions": [
-					{
-						"code": "contractSla",
-						"name": "Service Level",
-						"tooltip": "Select the Level of Service required",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"icon": "sentiment_satisfied_alt",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceLevelAgreement",
-						"valueInput" : "serviceLevelAgreementName",
-						"options" : []
-					},
-					{
-						"code": "",
-						"name": "Preventive Maintenance",
-						"tooltip": "Define if the «Preventive Maintenance» (time-based scheduled activities) is required and the remuneration method",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"icon": "sentiment_satisfied_alt",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceActivationMethod",
-						"valueInput" : "remunerationMethodTypeName",
-						"options" : []
-					},
-					{
-						"code": "",
-						"name": "Preventive Maintenance Remuneration",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"icon": "sentiment_satisfied_alt",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceActivationMethod",
-						"valueInput" : "remunerationMethodTypeName",
-						"options" : []
-					},
-					{
-						"code": "",
-						"name": "Corrective Activities",
-						"tooltip": "Define if the «Corrective Activities» (on demand request for failures or malfunctions) are included and the remuneration method",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceActivationMethod",
-						"valueInput" : "remunerationMethodTypeName",
-						"options" : []
-					},
-					{
-						"code": "",
-						"name": "Corrective Activities Remuneration",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceActivationMethod",
-						"valueInput" : "remunerationMethodTypeName",
-						"options" : []
-					},
-					{
-						"code": "",
-						"name": "Service Request",
-						"tooltip": "Define if the «Service Request» (on demand request of services) are included and the remuneration method",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceActivationMethod",
-						"valueInput" : "remunerationMethodTypeName",
-						"options" : []
-					},
-					{
-						"code": "",
-						"name": "Service Request Remuneration",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceActivationMethod",
-						"valueInput" : "remunerationMethodTypeName",
-						"options" : []
-					},
-					{
-						"code": "",
-						"name": "On site team",
-						"tooltip": "Define if the «On site presence» (dedicated team in the building) are included and the remuneration method",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceActivationMethod",
-						"valueInput" : "remunerationMethodTypeName",
-						"options" : []
-					},
-					{
-						"code": "",
-						"name": "On site team Remuneration",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"type": "SELECT",
-						"flow": true,
-						"required": true,
-						"isParameter" : true,
-						"tableInput" : "PB_ServiceActivationMethod",
-						"valueInput" : "remunerationMethodTypeName",
-						"options" : []
-					}
-				]
-			}
-		]
-	},
-	{
-		"id": 1231234,
-		"name": "Review",
-		"code": "review",
-		"nextStatus": "PB_READY",
-		"imageURL": "myspot-icons/line/building.png",
-		"sections": [
-			{
-				"name": "Review",
-				"code": "review",
-				"tooltip": "",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"imageURL": "myspot-icons/line/activities-in-scope.png",
-				"questions": []
-			},
-			{
-				"name": "Generic Technical Requirements",
-				"code": "technicalRequirement",
-				"tooltip": "",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"imageURL": "myspot-icons/line/activities-in-scope.png",
-				"questions": [
-					{
-						"code" : "table4",
-						"name" : "Generic Technical Requirements",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": [""],
-						"tableRows": [""]
-					}
-				]
-			},
-			{
-				"name": "Priorities and response times definition",
-				"code": "priorities",
-				"tooltip": "",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"imageURL": "myspot-icons/line/activities-in-scope.png",
-				"questions": [
-					{
-						"code" : "table5",
-						"name" : "Priority definition",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["PRIORITY","DEFINITION"],
-						"tableRows": ["",""]
-					},
-					{
-						"code" : "table6",
-						"name" : "Response time",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["DEFINITION","RELATED KPI"],
-						"tableRows": ["",""]
-					},
-					{
-						"code" : "table7",
-						"name" : "Contract Level Response Time",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["PRIORITY","CONTRACT SERVICE LEVEL","RESPONSE TIME (Working hours)"],
-						"tableRows": ["","",""]
-					},
-					{
-						"code" : "table8",
-						"name" : "Correction time",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["DEFINITION","RELATED KPI"],
-						"tableRows": ["",""]
-					},
-					{
-						"code" : "table9",
-						"name" : "Contract Level Correction Time",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["URGENCY LEVEL","CONTRACT SERVICE LEVEL","CORRECTION TIME (Working hours)"],
-						"tableRows": ["","",""]
-					},
-					{
-						"code" : "table10",
-						"name" : "Estimation Time",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["DEFINITION","RELATED KPI"],
-						"tableRows": ["",""]
-					},
-					{
-						"code" : "",
-						"name" : "Contract Level Estimation Time",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["PRIORITY","CONTRACT SERVICE LEVEL","ESTIMATION TIME (Working hours)"],
-						"tableRows": ["","",""]
-					}
-				]
-			},
-			{
-				"name": "Key Performance Indicators",
-				"code": "KPI",
-				"tooltip": "",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"imageURL": "myspot-icons/line/activities-in-scope.png",
-				"questions": [
-				{
-					"code" : "table12",
-					"name" : "Availability",
-					"tooltip": "",
-					"nameI98n": "",
-					"tooltipI18n": "",
-					"icon": "airport_shuttle",
-					"type": "TABLE",
-					"flow": true,
-					"required": true,
-					"tableHeader": [],
-					"tableRows": ["",""]
-				},
-				{
-					"code" : "table13",
-					"name" : "Correction Time For Urgency Request",
-					"tooltip": "",
-					"nameI98n": "",
-					"tooltipI18n": "",
-					"icon": "airport_shuttle",
-					"type": "TABLE",
-					"flow": true,
-					"required": true,
-					"tableHeader": [],
-					"tableRows": ["","",""]
-				},
-				{
-					"code" : "table14",
-					"name" : "System Condition Index",
-					"tooltip": "",
-					"nameI98n": "",
-					"tooltipI18n": "",
-					"icon": "airport_shuttle",
-					"type": "TABLE",
-					"flow": true,
-					"required": true,
-					"tableHeader": ["Facility Condition Value","No. of estimated on demand activities","DEFINITION"],
-					"tableRows": []
-				},
-				{
-					"code" : "table15",
-					"name" : "Availability Index",
-					"tooltip": "",
-					"nameI98n": "",
-					"tooltipI18n": "",
-					"icon": "airport_shuttle",
-					"type": "TABLE",
-					"flow": true,
-					"required": true,
-					"tableHeader": ["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE"],
-					"tableRows": ["","","","",""]
-				},
-				{
-					"code" : "table16",
-					"name" : "Quality Provided",
-					"tooltip": "",
-					"nameI98n": "",
-					"tooltipI18n": "",
-					"icon": "airport_shuttle",
-					"type": "TABLE",
-					"flow": true,
-					"required": true,
-					"tableHeader": ["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE"],
-					"tableRows": ["","","","",""]
-				}
-			]
-			},
-			{
-				"name": "Penalties",
-				"code": "penalties",
-				"tooltip": "",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"imageURL": "myspot-icons/line/activities-in-scope.png",
-				"questions": [
-					{
-						"code" : "table17",
-						"name" : "Penalties Related Monitoring System",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["KPI (KEY PERFORMANCE INDICATORS)","SLA","PENALTY"],
-						"tableRows": ["","",""]
-					},
-					{
-						"code" : "table18",
-						"name" : "Penalties Related Non Conformities",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["SPECIFIC INDICATOR AREA","DESCRIPTION","PERIMETER","PENALTY"],
-						"tableRows": ["","",""]
-					}
-				]
-			},
-			{
-				"name": "Preventive Maintenance Procedures",
-				"code": "maintenanceProcedures",
-				"tooltip": "",
-				"nameI98n": "",
-				"tooltipI18n": "",
-				"imageURL": "myspot-icons/line/activities-in-scope.png",
-				"questions": [
-					{
-						"code" : "table19",
-						"name" : "Preventive Maintenance Procedures",
-						"tooltip": "",
-						"nameI98n": "",
-						"tooltipI18n": "",
-						"icon": "airport_shuttle",
-						"type": "TABLE",
-						"flow": true,
-						"required": true,
-						"tableHeader": ["SYSTEM","COMPONENT","ACTIVITY","FREQUENCIES"],
-						"tableRows": ["","","",""]
-					}
-				]
-			}
-		]
-	}
+  {
+    "id": 1231232,
+    "name": "Building info",
+    "code": "buildingInfo",
+    "nextStatus": "SLA",
+    "imageURL": "myspot-icons/line/building.png",
+    "sections": [
+      {
+        "name": "Building Information",
+        "code": "buildingInformation",
+        "tooltip": "",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "imageURL": "myspot-icons/line/building-info.png",
+        "questions": [
+          {
+            "id": 100001,
+            "code": "code",
+            "name": "Building",
+            "tooltip": "Select building location in the scope of work",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "type": "SELECT",
+            "icon": "business",
+            "required": true,
+            "flow": true,
+            "isParameter": true,
+            "tableInput": "MS_Building",
+            "valueInput": "name",
+            "options": [
+              {
+                "name": "51 Melcher St",
+                "defaultValue": "51 Melcher St"
+              },
+              {
+                "name": "625 Massachusetts Ave",
+                "defaultValue": "625 Massachusetts Ave"
+              }
+            ]
+          },
+          {
+            "id": 100003,
+            "code": "area",
+            "name": "Total Served Area (sqft)",
+            "tooltip": "Define the gross total area that must be served",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "tab_unselected",
+            "type": "NUMBER",
+            "flow": true,
+            "required": true
+          },
+          {
+            "id": 100004,
+            "code": "floors",
+            "name": "Number of Floors",
+            "tooltip": "Define the number of floors involved in the service",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "view_agenda",
+            "type": "NUMBER",
+            "flow": true,
+            "required": true
+          },
+          {
+            "id": 100005,
+            "code": "serviceHours",
+            "name": "Service Hours",
+            "tooltip": "Select the contract service hours",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "access_time",
+            "type": "SELECT",
+            "required": true,
+            "flow": true,
+            "isParameter": true,
+            "tableInput": "PB_ServiceHoursWindow",
+            "valueInput": "name",
+            "options": [
+              {
+                "name": "9 am to 7 pm - Monday to Friday",
+                "defaultValue": "9 am to 7 pm - Monday to Friday"
+              },
+              {
+                "name": "8 am to 8 pm - Monday to Sunday",
+                "defaultValue": "9 am to 7 pm - Monday to Sunday",
+                "disabled": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Contract Period",
+        "code": "contractPeriod",
+        "tooltip": "",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "imageURL": "myspot-icons/line/contract-time.png",
+        "questions": [
+          {
+            "id": 100009,
+            "code": "startDate",
+            "name": "Start date",
+            "tooltip": "Select the contract’s date start",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "today",
+            "type": "DATE",
+            "flow": true,
+            "required": true,
+            "defaultValue": " "
+          },
+          {
+            "id": 100007,
+            "code": "duration",
+            "name": "Duration",
+            "tooltip": "Insert the contract duration",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "today",
+            "type": "SELECT",
+            "flow": true,
+            "required": true,
+            "isParameter": true,
+            "tableInput": "PB_ServiceDuration",
+            "valueInput": "name",
+            "options": [
+              {
+                "name": "12 months",
+                "defaultValue": "12 month"
+              },
+              {
+                "name": "24 months",
+                "defaultValue": "24 month",
+                "disabled": true
+              },
+              {
+                "name": "36 months",
+                "defaultValue": "36 month",
+                "disabled": true
+              },
+              {
+                "name": "48 months",
+                "defaultValue": " month",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "id": 100008,
+            "code": "extension",
+            "name": "Contract extension rule",
+            "tooltip": "Define the contract extension rule",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "refresh",
+            "type": "SELECT",
+            "flow": false,
+            "required": false,
+            "defaultValue": "",
+            "isParameter": true,
+            "tableInput": "PB_ServiceExtensionRule",
+            "valueInput": "name",
+            "options": [
+              {
+                "name": "Upon request 30 days before the termination",
+                "defaultValue": "Upon request 30 days before the termination",
+                "icon": "fast"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Service in Scope",
+        "code": "serviceInScope",
+        "imageURL": "myspot-icons/line/service.png",
+        "tooltip": "Select the requested Service",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "questions": [
+          {
+            "id": 110009,
+            "code": "",
+            "name": "Service type",
+            "tooltip": "Select the Macro-Service in the scope of work",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "type": "SELECT",
+            "required": true,
+            "flow": true,
+            "isParameter": true,
+            "tableInput": "PB_ServiceClass",
+            "valueInput": "name"
+          },
+          {
+            "code": "",
+            "name": "Service type table",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "defaultValue": " "
+          },
+          {
+            "code": "",
+            "name": "service Type Details Table",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "defaultValue": " "
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1231233,
+    "name": "SLA",
+    "code": "sla",
+    "nextStatus": "REVIEW",
+    "imageURL": "myspot-icons/line/building.png",
+    "sections": [
+      {
+        "name": "Activities in Scope",
+        "code": "activitiesInScope",
+        "tooltip": "",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "imageURL": "myspot-icons/line/activities-in-scope.png",
+        "questions": [
+          {
+            "code": "contractSla",
+            "name": "Service Level",
+            "tooltip": "Select the Level of Service required",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "type": "SELECT",
+            "icon": "sentiment_satisfied_alt",
+            "flow": true,
+            "required": true,
+            "isParameter": true,
+            "tableInput": "PB_ServiceLevelAgreement",
+            "valueInput": "serviceLevelAgreementName",
+            "options": []
+          },
+          {
+            "code": "",
+            "name": "type of activities",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "defaultValue": " ",
+            "tableHeader": [
+              "Type of activities",
+              "Preventive Maintenance",
+              "Type of remuneration"
+            ],
+            "tableRows": [
+              [
+                "Preventive Maintenance",
+                {
+                  "code": "",
+                  "name": "Preventive Maintenance",
+                  "tooltip": "Define if the «Preventive Maintenance» (time-based scheduled activities) is required and the remuneration method",
+                  "nameI98n": "",
+                  "tooltipI18n": "",
+                  "type": "SELECT",
+                  "icon": "sentiment_satisfied_alt",
+                  "flow": true,
+                  "required": true,
+                  "isParameter": true,
+                  "tableInput": "PB_ServiceActivationMethod",
+                  "valueInput": "remunerationMethodTypeName",
+                  "options": []
+                },
+                {
+                  "code": "",
+                  "name": "Preventive Maintenance Remuneration",
+                  "tooltip": "",
+                  "nameI98n": "",
+                  "tooltipI18n": "",
+                  "type": "SELECT",
+                  "icon": "sentiment_satisfied_alt",
+                  "flow": true,
+                  "required": true,
+                  "isParameter": true,
+                  "tableInput": "PB_ServiceActivationMethod",
+                  "valueInput": "remunerationMethodTypeName",
+                  "options": []
+                }
+              ],
+              [
+                "Corrective Activities",
+                {
+                  "code": "",
+                  "name": "Corrective Activities",
+                  "tooltip": "Define if the «Corrective Activities» (on demand request for failures or malfunctions) are included and the remuneration method",
+                  "nameI98n": "",
+                  "tooltipI18n": "",
+                  "type": "SELECT",
+                  "flow": true,
+                  "required": true,
+                  "isParameter": true,
+                  "tableInput": "PB_ServiceActivationMethod",
+                  "valueInput": "remunerationMethodTypeName",
+                  "options": []
+                },
+                {
+                  "code": "",
+                  "name": "Corrective Activities Remuneration",
+                  "tooltip": "",
+                  "nameI98n": "",
+                  "tooltipI18n": "",
+                  "type": "SELECT",
+                  "flow": true,
+                  "required": true,
+                  "isParameter": true,
+                  "tableInput": "PB_ServiceActivationMethod",
+                  "valueInput": "remunerationMethodTypeName",
+                  "options": []
+                }
+              ],
+              [
+                "Service Request",
+                {
+                  "code": "",
+                  "name": "Service Request",
+                  "tooltip": "Define if the «Service Request» (on demand request of services) are included and the remuneration method",
+                  "nameI98n": "",
+                  "tooltipI18n": "",
+                  "type": "SELECT",
+                  "flow": true,
+                  "required": true,
+                  "isParameter": true,
+                  "tableInput": "PB_ServiceActivationMethod",
+                  "valueInput": "remunerationMethodTypeName",
+                  "options": []
+                },
+                {
+                  "code": "",
+                  "name": "Service Request Remuneration",
+                  "tooltip": "",
+                  "nameI98n": "",
+                  "tooltipI18n": "",
+                  "type": "SELECT",
+                  "flow": true,
+                  "required": true,
+                  "isParameter": true,
+                  "tableInput": "PB_ServiceActivationMethod",
+                  "valueInput": "remunerationMethodTypeName",
+                  "options": []
+                }
+              ],
+              [
+                "On site team",
+                {
+                  "code": "",
+                  "name": "On site team",
+                  "tooltip": "Define if the «On site presence» (dedicated team in the building) are included and the remuneration method",
+                  "nameI98n": "",
+                  "tooltipI18n": "",
+                  "type": "SELECT",
+                  "flow": true,
+                  "required": true,
+                  "isParameter": true,
+                  "tableInput": "PB_ServiceActivationMethod",
+                  "valueInput": "remunerationMethodTypeName",
+                  "options": []
+                },
+                {
+                  "code": "",
+                  "name": "On site team Remuneration",
+                  "tooltip": "",
+                  "nameI98n": "",
+                  "tooltipI18n": "",
+                  "type": "SELECT",
+                  "flow": true,
+                  "required": true,
+                  "isParameter": true,
+                  "tableInput": "PB_ServiceActivationMethod",
+                  "valueInput": "remunerationMethodTypeName",
+                  "options": []
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1231234,
+    "name": "Review",
+    "code": "review",
+    "nextStatus": "PB_READY",
+    "imageURL": "myspot-icons/line/building.png",
+    "sections": [
+      {
+        "name": "Review",
+        "code": "review",
+        "tooltip": "",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "imageURL": "myspot-icons/line/activities-in-scope.png",
+        "questions": []
+      },
+      {
+        "name": "Generic Technical Requirements",
+        "code": "technicalRequirement",
+        "tooltip": "",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "imageURL": "myspot-icons/line/activities-in-scope.png",
+        "questions": [
+          {
+            "code": "table4",
+            "name": "Generic Technical Requirements",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Priorities and response times definition",
+        "code": "priorities",
+        "tooltip": "",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "imageURL": "myspot-icons/line/activities-in-scope.png",
+        "questions": [
+          {
+            "code": "table5",
+            "name": "Priority definition",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "PRIORITY",
+              "DEFINITION"
+            ]
+          },
+          {
+            "code": "table6",
+            "name": "Response time",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "DEFINITION",
+              "RELATED KPI"
+            ]
+          },
+          {
+            "code": "table7",
+            "name": "Contract Level Response Time",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "PRIORITY",
+              "CONTRACT SERVICE LEVEL",
+              "RESPONSE TIME (Working hours)"
+            ]
+          },
+          {
+            "code": "table8",
+            "name": "Correction time",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "DEFINITION",
+              "RELATED KPI"
+            ],
+            "tableRows": [
+              "",
+              ""
+            ]
+          },
+          {
+            "code": "table9",
+            "name": "Contract Level Correction Time",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "URGENCY LEVEL",
+              "CONTRACT SERVICE LEVEL",
+              "CORRECTION TIME (Working hours)"
+            ]
+          },
+          {
+            "code": "table10",
+            "name": "Estimation Time",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "DEFINITION",
+              "RELATED KPI"
+            ]
+          },
+          {
+            "code": "",
+            "name": "Contract Level Estimation Time",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "PRIORITY",
+              "CONTRACT SERVICE LEVEL",
+              "ESTIMATION TIME (Working hours)"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Key Performance Indicators",
+        "code": "KPI",
+        "tooltip": "",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "imageURL": "myspot-icons/line/activities-in-scope.png",
+        "questions": [
+          {
+            "code": "table12",
+            "name": "Availability",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": []
+          },
+          {
+            "code": "table13",
+            "name": "Correction Time For Urgency Request",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": []
+          },
+          {
+            "code": "table14",
+            "name": "System Condition Index",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "Facility Condition Value",
+              "No. of estimated on demand activities",
+              "DEFINITION"
+            ]
+          },
+          {
+            "code": "table15",
+            "name": "Availability Index",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "KPI (KEY PERFORMANCE INDICATORS)",
+              "YES/NO",
+              "MEASURING PROCEDURE",
+              "MEASUREMENT METHOD",
+              "CALCULATION PROCEDURE"
+            ]
+          },
+          {
+            "code": "table16",
+            "name": "Quality Provided",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "KPI (KEY PERFORMANCE INDICATORS)",
+              "YES/NO",
+              "MEASURING PROCEDURE",
+              "MEASUREMENT METHOD",
+              "CALCULATION PROCEDURE"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Penalties",
+        "code": "penalties",
+        "tooltip": "",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "imageURL": "myspot-icons/line/activities-in-scope.png",
+        "questions": [
+          {
+            "code": "table17",
+            "name": "Penalties Related Monitoring System",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "KPI (KEY PERFORMANCE INDICATORS)",
+              "SLA",
+              "PENALTY"
+            ]
+          },
+          {
+            "code": "table18",
+            "name": "Penalties Related Non Conformities",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "SPECIFIC INDICATOR AREA",
+              "DESCRIPTION",
+              "PERIMETER",
+              "PENALTY"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Preventive Maintenance Procedures",
+        "code": "maintenanceProcedures",
+        "tooltip": "",
+        "nameI98n": "",
+        "tooltipI18n": "",
+        "imageURL": "myspot-icons/line/activities-in-scope.png",
+        "questions": [
+          {
+            "code": "table19",
+            "name": "Preventive Maintenance Procedures",
+            "tooltip": "",
+            "nameI98n": "",
+            "tooltipI18n": "",
+            "icon": "airport_shuttle",
+            "type": "TABLE",
+            "flow": true,
+            "required": true,
+            "tableHeader": [
+              "SYSTEM",
+              "COMPONENT",
+              "ACTIVITY",
+              "FREQUENCIES"
+            ]
+          }
+        ]
+      }
+    ]
+  }
 ]
