@@ -309,17 +309,11 @@ const getPlayBookFromId = async (contractId) => {
               if (temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader) {
                 temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader.split(",");
               }
-              //consoleLog(survey[sur].sections[sec].questions[que].tableRows);
-
               let cells=survey[sur].sections[sec].questions[que].tableRows.split(",");
               rows=[]
               for (r=0;r<4;r++) {
                 row=[];
                 for (c=0;c<3;c++) {
-                  /*
-                  console.log("RIGA " + r);
-                  console.log("COLONNA " + c);
-                  console.log(cells[c+(r*3)])*/
                   if (cells[c+(r*3)].indexOf("SELECT")==-1) {
                       row.push(cells[c+(r*3)]);
                   } else {
@@ -343,11 +337,15 @@ const getPlayBookFromId = async (contractId) => {
           // PROVVISORIO DA SISTEMARE
           if (survey[sur].sections[sec].questions[que].tableName="typeOfActivities") {
             nestedSelect.push(survey[sur].sections[sec].questions[que]);
-            //consoleLog(nestedSelect);
-          } else {
+          }
+          if (survey[sur].sections[sec].questions[que].tableName="serviceTypeTable") {
+            console.log("AGGIUNGO facilityIndex e serviceType")
             addToTable(temp_section,survey[sur].sections[sec].questions[que]);
           }
           // PROVVISORIO DA SISTEMARE
+
+
+
         }
       }
       temp_survey.sections.push(temp_section);
@@ -1331,7 +1329,7 @@ const updateContract = async (req, res) => {
               						  let answerAdded02=await models.SM_SurveyAnswer.create(answer2add02);
               						  //playbook.context.answers.push(answerAdded02);
               						  tableRow=[serviceAssetComponent[sAC].serviceName,serviceAssetComponent[sAC].assetComponentType,question2add01,question2add02]
-
+                            consoleLog(tableRow);
               						  tableRows.push(tableRow);
               						}
 
