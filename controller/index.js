@@ -303,28 +303,51 @@ const getPlayBookFromId = async (contractId) => {
                    temp_question.options.push(temp_option)
               }
           }
+          // PROVVISORIO DA SISTEMARE
           if (survey[sur].sections[sec].questions[que].type=="TABLE") {
             if (survey[sur].sections[sec].questions[que].code=="typeOfActivities") {
               if (temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader) {
                 temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader.split(",");
               }
-              let rows=survey[sur].sections[sec].questions[que].tableRows.split(",");
-              tableRows=[];
-              tableRows.push([]);
-              tableRows.push([]);
-              tableRows.push([]);
-              tableRows.push([]);
-                            
+              //consoleLog(survey[sur].sections[sec].questions[que].tableRows);
+
+              let cells=survey[sur].sections[sec].questions[que].tableRows.split(",");
+              rows=[]
+              for (r=0;r<4;r++) {
+                row=[];
+                for (c=0;c<3;c++) {
+                  /*
+                  console.log("RIGA " + r);
+                  console.log("COLONNA " + c);
+                  console.log(cells[c+(r*3)])*/
+                  if (cells[c+(r*3)].indexOf("SELECT")==-1) {
+                      row.push(cells[c+(r*3)]);
+                  } else {
+                      var pos=cells[c+(r*3)].indexOf("SELECT");
+                      var app=cells[c+(r*3)].substring(pos+7,cells[c+(r*3)].length);
+                      for (nest=0;nest<nestedSelect.length;nest++) {
+                        if (nestedSelect[nest].code==app) {
+                            row.push(nestedSelect[nest]);
+                        }
+                      }
+                  }
+                }
+                rows.push(row);
+              }
+              temp_question.tableRows=rows;
             }
           }
+          // PROVVISORIO DA SISTEMARE
           temp_section.questions.push(temp_question);
         } else {
+          // PROVVISORIO DA SISTEMARE
           if (survey[sur].sections[sec].questions[que].tableName="typeOfActivities") {
             nestedSelect.push(survey[sur].sections[sec].questions[que]);
-            consoleLog(nestedSelect);
+            //consoleLog(nestedSelect);
           } else {
             addToTable(temp_section,survey[sur].sections[sec].questions[que]);
           }
+          // PROVVISORIO DA SISTEMARE
         }
       }
       temp_survey.sections.push(temp_section);
