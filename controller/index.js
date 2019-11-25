@@ -339,7 +339,6 @@ const getPlayBookFromId = async (contractId) => {
             nestedSelect.push(survey[sur].sections[sec].questions[que]);
           }
           if (survey[sur].sections[sec].questions[que].tableName="serviceTypeTable") {
-            console.log("AGGIUNGO facilityIndex e serviceType")
             addToTable(temp_section,survey[sur].sections[sec].questions[que]);
           }
           // PROVVISORIO DA SISTEMARE
@@ -1295,6 +1294,7 @@ const updateContract = async (req, res) => {
               							"required": false,
               							"isParameter" : false,
               							"updated" : true,
+                            "tableName" : "serviceTypeDetailsTable"
               						  }
               						  let surquestion2add01=await models.SM_SurveySectionQuestion.create(question2add01);
               						  question2add01.id=surquestion2add01.id;
@@ -1318,6 +1318,7 @@ const updateContract = async (req, res) => {
               							"required": false,
               							"isParameter" : false,
               							"updated" : true,
+                            "tableName" : "serviceTypeDetailsTable"
               						  }
               						  let surquestion2add02=await models.SM_SurveySectionQuestion.create(question2add02);
               						  question2add02.id=surquestion2add02.id;
@@ -1329,10 +1330,10 @@ const updateContract = async (req, res) => {
               						  let answerAdded02=await models.SM_SurveyAnswer.create(answer2add02);
               						  //playbook.context.answers.push(answerAdded02);
               						  tableRow=[serviceAssetComponent[sAC].serviceName,serviceAssetComponent[sAC].assetComponentType,question2add01,question2add02]
-                            consoleLog(tableRow);
+
               						  tableRows.push(tableRow);
               						}
-
+                          consoleLog(tableRows);
               						playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
               						playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
               						//console.log('\x1b[33m');
@@ -1616,7 +1617,7 @@ const viewPlayBookById = async (playBookId) => {
 const createPlaybookWithSurvey = async (req, res) => {
   try {
     var  pb=req.body;
-
+    consoleLog(req.body);
 
     pb["coverImg"]="";
     pb["typeTask"]="PLAYBOOK";
