@@ -69,6 +69,7 @@ function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
             //consoleLog(playbook.surveys[sur].sections[sec]);
             for (q in playbook.surveys[sur].sections[sec].questions) {
               if (playbook.surveys[sur].sections[sec].questions[q].code===infos.tableName) {
+                playbook.surveys[sur].sections[sec].questions[q].updated=true;
                 //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
                 if (playbook.surveys[sur].sections[sec].questions[q].tableHeader) {
                   //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
@@ -243,17 +244,25 @@ const getPlayBookFromId = async (contractId) => {
               }
               temp_question.tableRows=rows;
             }
+            if (survey[sur].sections[sec].questions[que].code=="serviceTypeDetailsTable") {
+              let response=addTextFieldsToTables();
+              temp_question.tableHeader=response.tableHeader;
+              temp_question.tableRows=response.tableRows;
+              temp_question.updated=true;
+              console.log("");
+            }
           }
           // PROVVISORIO DA SISTEMARE
           temp_section.questions.push(temp_question);
         } else {
           // PROVVISORIO DA SISTEMARE
-          if (survey[sur].sections[sec].questions[que].tableName="typeOfActivities") {
+          if (survey[sur].sections[sec].questions[que].tableName=="typeOfActivities") {
             nestedSelect.push(survey[sur].sections[sec].questions[que]);
           }
-          if (survey[sur].sections[sec].questions[que].tableName="serviceTypeTable") {
+          if (survey[sur].sections[sec].questions[que].tableName=="serviceTypeTable") {
             addToTable(temp_section,survey[sur].sections[sec].questions[que]);
           }
+          
           // PROVVISORIO DA SISTEMARE
 
 
@@ -1347,6 +1356,82 @@ function updatePb(pb,questionId,updated) {
 
   return pb
 }
+
+function addTextFieldsToTables(section,obj2add) {
+      // service requirement
+    // dipende da PB_Services
+    // parametri --> serviceTypeDetails
+    // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+    // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+    /*
+    let p=getParameterValue(parameters,"serviceTypeDetails");
+    const results = await models.PB_ServiceRequirement.findAll({
+      attributes: ['serviceName','serviceRequirementDescription'],
+      where : {
+        serviceName : p
+      }
+    });*/
+    let row=[]
+    let rows=[]
+    let header=["System","Component","Indicate the number of assets/elements","Add any other useful information"]
+
+    let a={      
+        "id": -1,
+        "code": "technicalRooms",
+        "name": "# of elements",
+        "tooltip": "",
+        "type": "STRING",        
+        "updated": false,
+        "required": true,
+        "flow": true
+    
+    }
+    let b={      
+      "id": -1,
+      "code": "technicalRoomsNotes",
+      "name": "Information or comments",
+      "tooltip": "",
+      "type": "STRING",        
+      "updated": false,
+      "required": true,
+      "flow": true
+  
+  }
+    a.code=camelCode("Technical rooms");
+    b.code=camelCode("Technical rooms notes");
+    row=["HVAC","Technical rooms",a,b];
+    rows.push(row);
+    a.code=camelCode("Fuel Piping Systems");
+    b.code=camelCode("Fuel Piping Systems notes");
+    row=["HVAC","Fuel Piping Systems",a,b];
+    rows.push(row);
+    a.code=camelCode("Fuel Pumps");
+    b.code=camelCode("Fuel Pumps notes");
+    row=["HVAC","Fuel Pumps",a,b];
+    rows.push(row);
+    a.code=camelCode("Fuel Storage Tank");
+    b.code=camelCode("Fuel Storage Tank notes");
+    row=["HVAC","Fuel Storage Tank",a,b];
+    rows.push(row);
+    a.code=camelCode("Expansion Tanks");
+    b.code=camelCode("Expansion Tanks notes");
+    row=["HVAC","Expansion Tanks",a,b];
+    rows.push(row);
+    a.code=camelCode("Hydronic Piping System");
+    b.code=camelCode("Hydronic Piping System notes");
+    row=["HVAC","Hydronic Piping System",a,b];
+    rows.push(row);
+
+    
+
+
+    let response={      
+      tableHeader :header,
+      tableRows : rows
+    }
+    return response;
+}
+
 function addToTable(section,obj2add) {
   for (q in section.questions) {
     if (section.questions[q].code===obj2add.tableName) {
