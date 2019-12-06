@@ -245,11 +245,12 @@ const getPlayBookFromId = async (contractId) => {
               temp_question.tableRows=rows;
             }
             if (survey[sur].sections[sec].questions[que].code=="serviceTypeDetailsTable") {
+              /*
               let response=addTextFieldsToTables();
               temp_question.tableHeader=response.tableHeader;
               temp_question.tableRows=response.tableRows;
               temp_question.updated=true;
-              console.log("");
+              console.log("");*/
             }
           }
           // PROVVISORIO DA SISTEMARE
@@ -1421,10 +1422,6 @@ function addTextFieldsToTables(section,obj2add) {
     b.code=camelCode("Hydronic Piping System notes");
     row=["HVAC","Hydronic Piping System",a,b];
     rows.push(row);
-
-    
-
-
     let response={      
       tableHeader :header,
       tableRows : rows
