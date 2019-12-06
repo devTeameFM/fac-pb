@@ -245,12 +245,12 @@ const getPlayBookFromId = async (contractId) => {
               temp_question.tableRows=rows;
             }
             if (survey[sur].sections[sec].questions[que].code=="serviceTypeDetailsTable") {
-              /*
+              
               let response=addTextFieldsToTables();
               temp_question.tableHeader=response.tableHeader;
               temp_question.tableRows=response.tableRows;
               temp_question.updated=true;
-              console.log("");*/
+              console.log("");
             }
           }
           // PROVVISORIO DA SISTEMARE
@@ -1383,7 +1383,7 @@ function addTextFieldsToTables(section,obj2add) {
         "tooltip": "",
         "type": "STRING",        
         "updated": false,
-        "required": true,
+        "required": false,
         "flow": true
     
     }
@@ -1394,7 +1394,7 @@ function addTextFieldsToTables(section,obj2add) {
       "tooltip": "",
       "type": "STRING",        
       "updated": false,
-      "required": true,
+      "required": false,
       "flow": true
   
   }
