@@ -4,31 +4,31 @@ module.exports = {
     [
       {
         idScrum: "analysis",
-        idMember    : '76027g1930450d8bf7b10958',
+        idMember    : '5d494dc959860e001747eb4f',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         idScrum: "creation",
-        idMember    : '76027g1930450d8bf7b10958',
+        idMember    : '5d494dc959860e001747eb4f',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         idScrum: "performance",
-        idMember    : '76027g1930450d8bf7b10958',
+        idMember    : '5d494dc959860e001747eb4f',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         idScrum: "management",
-        idMember    : '76027g1930450d8bf7b10958',
+        idMember    : '5d494dc959860e001747eb4f',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         idScrum: "strategy",
-        idMember    : '76027g1930450d8bf7b10958',
+        idMember    : '5d494dc959860e001747eb4f',
         createdAt: new Date(),
         updatedAt: new Date()
       }

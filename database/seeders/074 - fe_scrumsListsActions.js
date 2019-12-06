@@ -8,6 +8,27 @@ module.exports = {
 			  name   : 'Insert info',
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        idList: "0002",
+        code  : 's-l-a',
+			  name   : 'Choose Sla',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        idList: "0003",
+        code  : 'review',
+			  name   : 'Review & confirm',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        idList: "0004",
+        code  : 'playbook',
+			  name   : 'Download & share',
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ]
   ),
