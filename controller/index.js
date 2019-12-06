@@ -1384,7 +1384,7 @@ function addTextFieldsToTables(section,obj2add) {
         "type": "STRING",        
         "updated": false,
         "required": false,
-        "flow": true
+        "flow": false
     
     }
     let b={      
@@ -1395,7 +1395,7 @@ function addTextFieldsToTables(section,obj2add) {
       "type": "STRING",        
       "updated": false,
       "required": false,
-      "flow": true
+      "flow": false
   
   }
     a.code=camelCode("Technical rooms");
