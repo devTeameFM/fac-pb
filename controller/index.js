@@ -612,7 +612,7 @@ const availability = async (parameters) => {
 
   row=["DAILY WORKING HOURS","11"];
   rows.push(row);
-  row=["WORKING DAYS","HIGH","260"];
+  row=["WORKING DAYS","260"];
   rows.push(row);
   row=["TOTAL YEARLY WORKING HOURS (H/YEAR)","2860"];
   rows.push(row);
