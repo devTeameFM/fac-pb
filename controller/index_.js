@@ -1,5 +1,118 @@
 const models = require("../database/models");
 
+const getServiceResponseType= async (req, res) => {
+  try {
+    const responseType = await models.PB_ServiceResponseType.findAll({
+      include: [
+        {
+          model: models.PB_ServiceSlaResponseType,
+        },
+        {
+          model: models.PB_ServiceKPI,
+        },
+      ]
+    });
+    return res.status(200).json( responseType );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+const getServiceLevelAgreement= async (req, res) => {
+  try {
+    const responseType = await models.PB_ServiceLevelAgreement.findAll({
+      include: [
+        {
+          model: models.PB_ServiceSlaPenalty,
+        },
+        {
+          model: models.PB_ServiceSlaResponseType,
+        },
+        {
+          model: models.PB_PMSlaProcedure,
+        },
+      ]
+    });
+    return res.status(200).json( responseType );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
+const getAllServices = async (req, res) => {
+  try {
+    const services = await models.PB_Service.findAll({
+      include: [
+        {
+          model: models.PB_ServiceSlaResponseType,
+        },
+        {
+          model: models.PB_ServiceRequirement,
+        },
+        {
+          model: models.PB_ServiceAssetComponent,
+        },
+        {
+          model: models.PB_ServiceSlaKPI,
+        },
+        {
+          model: models.PB_ServiceSlaPenalty,
+        }
+      ]
+    });
+    return res.status(200).json( services );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
+const getDynamicOptions = async (req, res) => {
+    const { tableName } = req.params;
+    //console.log(tableName);
+    var questions=await models['SM_SurveySectionQuestion'].findAll();
+
+    var table=[];
+    for (q in questions) {
+      //console.log("TEST:" + q);
+      if (questions[q].type==="SELECT") {
+        //console.log("TEST:" + questions[q].tableInput);
+        var datas=await models[questions[q].tableInput].findAll();
+        table.push(datas);
+      }
+    }
+
+
+    const output = await models[req.params.tableName].findAll({
+    });
+    /*
+    var surveys = await models['SM_Survey'].findAll({
+      include: [
+        {
+          model: models.SM_SurveySection,
+          as: "sections",
+          include: [
+            {
+              model: models.SM_SurveySectionQuestion,
+              as: "questions",
+              include: [
+                {
+                  model: models.SM_SurveySectionQuestionOption,
+                  as: "options"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+    /*
+    var response={
+      "output" : output,
+      "surveys" : s
+    }*/
+
+    return res.status(200).json({ output });
+};
+
 async function f(table) {
   let result = models[table].findAll();
   return result

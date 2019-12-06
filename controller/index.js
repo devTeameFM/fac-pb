@@ -1,160 +1,6 @@
 const models = require("../database/models");
-const getDynamicOptions = async (req, res) => {
-    const { tableName } = req.params;
-    //console.log(tableName);
-    var questions=await models['SM_SurveySectionQuestion'].findAll();
 
-    var table=[];
-    for (q in questions) {
-      //console.log("TEST:" + q);
-      if (questions[q].type==="SELECT") {
-        //console.log("TEST:" + questions[q].tableInput);
-        var datas=await models[questions[q].tableInput].findAll();
-        table.push(datas);
-      }
-    }
-
-
-    const output = await models[req.params.tableName].findAll({
-    });
-    /*
-    var surveys = await models['SM_Survey'].findAll({
-      include: [
-        {
-          model: models.SM_SurveySection,
-          as: "sections",
-          include: [
-            {
-              model: models.SM_SurveySectionQuestion,
-              as: "questions",
-              include: [
-                {
-                  model: models.SM_SurveySectionQuestionOption,
-                  as: "options"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    });
-    /*
-    var response={
-      "output" : output,
-      "surveys" : s
-    }*/
-
-    return res.status(200).json({ output });
-};
-const getAllServices = async (req, res) => {
-  try {
-    const services = await models.PB_Service.findAll({
-      include: [
-        {
-          model: models.PB_ServiceSlaResponseType,
-        },
-        {
-          model: models.PB_ServiceRequirement,
-        },
-        {
-          model: models.PB_ServiceAssetComponent,
-        },
-        {
-          model: models.PB_ServiceSlaKPI,
-        },
-        {
-          model: models.PB_ServiceSlaPenalty,
-        }
-      ]
-    });
-    return res.status(200).json( services );
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
-const getServiceResponseType= async (req, res) => {
-  try {
-    const responseType = await models.PB_ServiceResponseType.findAll({
-      include: [
-        {
-          model: models.PB_ServiceSlaResponseType,
-        },
-        {
-          model: models.PB_ServiceKPI,
-        },
-      ]
-    });
-    return res.status(200).json( responseType );
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
-const getServiceLevelAgreement= async (req, res) => {
-  try {
-    const responseType = await models.PB_ServiceLevelAgreement.findAll({
-      include: [
-        {
-          model: models.PB_ServiceSlaPenalty,
-        },
-        {
-          model: models.PB_ServiceSlaResponseType,
-        },
-        {
-          model: models.PB_PMSlaProcedure,
-        },
-      ]
-    });
-    return res.status(200).json( responseType );
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
-const getAllScrums = async (req, res) => {
-  try {
-    const scrums = await models.FE_Scrum.findAll({
-      order: [['order', 'ASC']],
-      include: [
-        {
-          model: models.FE_ScrumsSetting,
-          as: "settings"
-        },
-        {
-          model: models.FE_ScrumsList,
-          as: "lists",
-          include: [
-            {
-              model: models.FE_ScrumsListsAction,
-              as: "actions",
-            },
-            {
-              model: models.PB_Playbook,
-              as:"cards"
-            },
-
-          ],
-          order: [
-            [{model: models.FE_ScrumsList, as: 'lists'},'order', 'ASC']
-          ]
-        },
-        {
-          model: models.MS_Member,
-          as: "members"
-        }
-      ]
-    });
-    return res.status(200).json( scrums );
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
-
-function answerValueFromQuestionId(answers,questionId) {
-  value="";
-  for (a in answers) {
-    if (answers[a].questionId===questionId) value=answers[a].value
-  }
-  return value
-}
+//utils
 function consoleLog(message,color) {
   /*
   Reset = "\x1b[0m"
@@ -188,14 +34,81 @@ function consoleLog(message,color) {
   console.log(JSON.stringify(message,null,2));
   console.log(color);
 }
-
 function getType(p) {
     if (Array.isArray(p)) return 'array';
     else if (typeof p == 'string') return 'string';
     else if (p != null && typeof p == 'object') return 'object';
     else return 'other';
 }
+function sortByProperty(property){
+   return function(a,b){
+      if(a[property] > b[property])
+         return 1;
+      else if(a[property] < b[property])
+         return -1;
 
+      return 0;
+   }
+}
+//playbook
+function answerValueFromQuestionId(answers,questionId) {
+  value="";
+  for (a in answers) {
+    if (answers[a].questionId===questionId) value=answers[a].value
+  }
+  return value
+}
+
+function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
+  var obj={};
+  for (sur in playbook.surveys) {
+    if (playbook.surveys[sur].code===surveyCode) {
+      for (sec in playbook.surveys[sur].sections) {
+
+          if (playbook.surveys[sur].sections[sec].code===sectionCode) {
+            //consoleLog(playbook.surveys[sur].sections[sec]);
+            for (q in playbook.surveys[sur].sections[sec].questions) {
+              if (playbook.surveys[sur].sections[sec].questions[q].code===infos.tableName) {
+                //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
+                if (playbook.surveys[sur].sections[sec].questions[q].tableHeader) {
+                  //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
+                  playbook.surveys[sur].sections[sec].questions[q].tableHeader=infos.tableHeader;
+
+                } else {
+                  //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
+                  playbook.surveys[sur].sections[sec].questions[q]['tableHeader']=[]
+                  playbook.surveys[sur].sections[sec].questions[q]['tableHeader']=infos.tableHeader;
+
+                }
+                if (playbook.surveys[sur].sections[sec].questions[q].tableRows) {
+                  playbook.surveys[sur].sections[sec].questions[q]['tableRows']=infos.tableRows;
+                } else {
+                  playbook.surveys[sur].sections[sec].questions[q]['tableRows']=[];
+                  playbook.surveys[sur].sections[sec].questions[q]['tableRows']=infos.tableRows;
+                }
+
+              }
+
+            }
+          }
+        }
+      }
+    }
+ //consoleLog(playbook)
+
+  return playbook;
+}
+function getParameterValue(parameters,parameterName) {
+  let value="";
+  for (p in parameters) {
+    if (parameters[p].name===parameterName) value= parameters[p].value;
+  }
+  return value;
+}
+const checkParameters = async () => {
+  const playbooks = await models.PB_Playbook.findAll({
+  });
+}
 const getPlayBookFromId = async (contractId) => {
   //console.log("contractId --> " + JSON.stringify(req.params));
   const playbook = await models.PB_Playbook.findOne({
@@ -371,10 +284,6 @@ const getContractById = async (req, res) => {
     return res.status(500).send(error.message);
   }
 }
-const checkParameters = async () => {
-  const playbooks = await models.PB_Playbook.findAll({
-  });
-}
 
 const runtimeSummaryCreation = async (playBook) => {
   const parameters = await models.SM_SurveyParameter.findAll({
@@ -391,87 +300,38 @@ const runtimeSummaryCreation = async (playBook) => {
   let responseTimeInfo=await responseTime(parameters);
   let contractLevelResponseTimeInfo =await contractLevelResponseTime(parameters);
   let correctionTimeInfo =await correctionTime(parameters);
-  //let contractLevelCorrectionTimeInfo =await contractLevelCorrectionTime(parameters);
-  //let estimationTimeInfo =await estimationTime(parameters);
-  //let contractLevelEstimationTimeInfo =await contractLevelEstimationTime(parameters);
-  //let availabilityInfo =await availability(parameters);
-  //let correctionTimeForUrgencyRequestInfo =await correctionTimeForUrgencyRequest(parameters);
-  //let systemConditionIndexInfo =await systemConditionIndex(parameters);
-  //let availabilityIndexInfo =await availabilityIndex(parameters);
-  //let qualityProvidedInfo =await qualityProvided(parameters);
-  //let penaltiesRelatedMonitoringSystemInfo =await penaltiesRelatedMonitoringSystem(parameters);
-  //let penaltiesRelatedNonConformitiesInfo =await penaltiesRelatedNonConformities(parameters);
-  //let preventiveMaintenanceProceduresInfo =await preventiveMaintenanceProcedures(parameters);
+  let contractLevelCorrectionTimeInfo =await contractLevelCorrectionTime(parameters);
+  let estimationTimeInfo =await estimationTime(parameters);
+  let contractLevelEstimationTimeInfo =await contractLevelEstimationTime(parameters);
+  let availabilityInfo =await availability(parameters);
+  let correctionTimeForUrgencyRequestInfo =await correctionTimeForUrgencyRequest(parameters);
+  let systemConditionIndexInfo =await systemConditionIndex(parameters);
+  let availabilityIndexInfo =await availabilityIndex(parameters);
+  let qualityProvidedInfo =await qualityProvided(parameters);
+  let penaltiesRelatedMonitoringSystemInfo =await penaltiesRelatedMonitoringSystem(parameters);
+  let penaltiesRelatedNonConformitiesInfo =await penaltiesRelatedNonConformities(parameters);
+  let preventiveMaintenanceProceduresInfo =await preventiveMaintenanceProcedures(parameters);
 
   let updateplaybook=addInfoTableSummary(playBook,"review","genericTechnicalRequirements",techReq);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",priorityDefinitionInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",responseTimeInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelResponseTimeInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",correctionTimeInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelCorrectionTimeInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",estimationTimeInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelEstimationTimeInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",availabilityInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",correctionTimeForUrgencyRequestInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",systemConditionIndexInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",availabilityIndexInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",qualityProvidedInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","penalties",penaltiesRelatedMonitoringSystemInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","penalties",penaltiesRelatedNonConformities);
-  //updateplaybook=addInfoTableSummary(playBook,"review","preventiveMaintenanceProcedures",preventiveMaintenanceProceduresInfo);
-  //updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",priorityDefinitionInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelCorrectionTimeInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",estimationTimeInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelEstimationTimeInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",availabilityInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",correctionTimeForUrgencyRequestInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",systemConditionIndexInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",availabilityIndexInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",qualityProvidedInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","penalties",penaltiesRelatedMonitoringSystemInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","penalties",penaltiesRelatedNonConformitiesInfo);
+  updateplaybook=addInfoTableSummary(playBook,"review","preventiveMaintenanceProcedures",preventiveMaintenanceProceduresInfo);
+
 
   return updateplaybook;
 }
-
-function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
-  var obj={};
-  for (sur in playbook.surveys) {
-    if (playbook.surveys[sur].code===surveyCode) {
-      for (sec in playbook.surveys[sur].sections) {
-
-          if (playbook.surveys[sur].sections[sec].code===sectionCode) {
-            //consoleLog(playbook.surveys[sur].sections[sec]);
-            for (q in playbook.surveys[sur].sections[sec].questions) {
-              if (playbook.surveys[sur].sections[sec].questions[q].code===infos.tableName) {
-                //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
-                if (playbook.surveys[sur].sections[sec].questions[q].tableHeader) {
-                  //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
-                  playbook.surveys[sur].sections[sec].questions[q].tableHeader=infos.tableHeader;
-
-                } else {
-                  //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
-                  playbook.surveys[sur].sections[sec].questions[q]['tableHeader']=[]
-                  playbook.surveys[sur].sections[sec].questions[q]['tableHeader']=infos.tableHeader;
-
-                }
-                if (playbook.surveys[sur].sections[sec].questions[q].tableRows) {
-                  playbook.surveys[sur].sections[sec].questions[q]['tableRows']=infos.tableRows;
-                } else {
-                  playbook.surveys[sur].sections[sec].questions[q]['tableRows']=[];
-                  playbook.surveys[sur].sections[sec].questions[q]['tableRows']=infos.tableRows;
-                }
-
-              }
-
-            }
-          }
-        }
-      }
-    }
- //consoleLog(playbook)
-
-  return playbook;
-}
-
-function getParameterValue(parameters,parameterName) {
-  let value="";
-  for (p in parameters) {
-    if (parameters[p].name===parameterName) value= parameters[p].value;
-  }
-  return value;
-}
-
 const priorityDefinition = async (parameters) => {
    // service requirement
    // dipende da PB_Services
@@ -567,7 +427,7 @@ const contractLevelResponseTime = async (parameters) => {
    rows.push(row);
 
    let response={
-     tableName :" contractLevelResponseTime",
+     tableName :"contractLevelResponseTime",
      tableHeader :header,
      tableRows : rows
    }
@@ -603,7 +463,7 @@ const correctionTime = async (parameters) => {
    rows.push(row);
 
    let response={
-     tableName :" contractLevelResponseTime",
+     tableName :"correctionTime",
      tableHeader :header,
      tableRows : rows
    }
@@ -613,6 +473,447 @@ const correctionTime = async (parameters) => {
    }*/
    return response;
 }
+
+const contractLevelCorrectionTime = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["URGENCY LEVEL","CONTRACT SERVICE LEVEL","CORRECTION TIME (Working hours)"]
+
+  row=["Emergency","HIGH","< 8 hours"];
+  rows.push(row);
+  row=["Urgency","HIGH","< 16 hours"];
+  rows.push(row);
+  row=["Routine","HIGH","Proposed by the provider and approved by the client"];
+  rows.push(row);
+
+  let response={
+    tableName :"contractLevelCorrectionTime",
+    tableHeader :header,
+    tableRows : rows
+  }
+  /*
+  for (r in results) {
+    response.tableRows.push([results[r].serviceRequirementDescription])
+  }*/
+  return response;
+}
+
+const estimationTime = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["DEFINITION","RELATED KPI"]
+
+  row=["Depending on the urgency level of the specific request (only for extra fee activities) the service provider should respect a predetermined time frame to deliver the budget estimation, as described below","B.9 Compliance with Budget Estimate Time Limit"];
+  rows.push(row);
+
+
+  let response={
+    tableName :"estimationTime",
+    tableHeader :header,
+    tableRows : rows
+  }
+  /*
+  for (r in results) {
+    response.tableRows.push([results[r].serviceRequirementDescription])
+  }*/
+  return response;
+}
+
+const contractLevelEstimationTime = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["PRIORITY","CONTRACT SERVICE LEVEL","ESTIMATION TIME (Working hours)"]
+
+  row=["Emergency","HIGH","NA"];
+  rows.push(row);
+  row=["Urgency","HIGH","< 4 hours"];
+  rows.push(row);
+  row=["Routine","HIGH","< 8 hours"];
+  rows.push(row);
+
+  let response={
+    tableName :"contractLevelEstimationTime",
+    tableHeader :header,
+    tableRows : rows
+  }
+  /*
+  for (r in results) {
+    response.tableRows.push([results[r].serviceRequirementDescription])
+  }*/
+  return response;
+}
+
+const availability = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["",""]
+
+  row=["DAILY WORKING HOURS","11"];
+  rows.push(row);
+  row=["WORKING DAYS","HIGH","260"];
+  rows.push(row);
+  row=["TOTAL YEARLY WORKING HOURS (H/YEAR)","2860"];
+  rows.push(row);
+
+  let response={
+    tableName :"availability",
+    tableHeader :header,
+    tableRows : rows
+  }
+  /*
+  for (r in results) {
+    response.tableRows.push([results[r].serviceRequirementDescription])
+  }*/
+  return response;
+}
+
+const correctionTimeForUrgencyRequest = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["Urgency Level","Contract SLA","Correction Time (Hours)"]
+
+  row=["Emergency","HIGH","8"];
+  rows.push(row);
+  row=["Urgency","HIGH","16"];
+  rows.push(row);
+
+
+  let response={
+    tableName :"correctionTimeForUrgencyRequest",
+    tableHeader :header,
+    tableRows : rows
+  }
+  /*
+  for (r in results) {
+    response.tableRows.push([results[r].serviceRequirementDescription])
+  }*/
+  return response;
+}
+
+const systemConditionIndex = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["Facility Condition value","No. of estimated on demand activities","DEFINITION"]
+
+  row=["Activities/Month","5","estimation of the number of on demand/correction activities related to the system maintenance conditionthis number will be re-evaluate each months in order to increase the applicability and truthfulness of the related KPI (availability index)"];
+  rows.push(row);
+  row=["Activities/Year","60","*each time we have an on demand request or a corrective intervention (emergency and/or Urgency level) the system is considered non available"];
+  rows.push(row);
+
+
+  let response={
+    tableName :"systemConditionIndex",
+    tableHeader :header,
+    tableRows : rows
+  }
+  /*
+  for (r in results) {
+    response.tableRows.push([results[r].serviceRequirementDescription])
+  }*/
+  return response;
+}
+
+const availabilityIndex = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE","FREQUENCY","SLA"]
+
+  row=["A.1 AVAILABILITY INDEX","Yes","Information System","Analysis of the information uploaded to the System","Ratio between system up time and total working hours","Monthly","89%"];
+  rows.push(row);
+
+
+
+  let response={
+    tableName :"availabilityIndex",
+    tableHeader :header,
+    tableRows : rows
+  }
+  /*
+  for (r in results) {
+    response.tableRows.push([results[r].serviceRequirementDescription])
+  }*/
+  return response;
+}
+
+const qualityProvided = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE","FREQUENCY","SLA"]
+
+  row=["B.1 Cold satisfaction","Yes","Survey","Customer Survey campaign","Ratio between the sum of the scores related to the Service Level VS maximum possible score","Quarterly","90%"];
+  rows.push(row);
+  row=["B.2 Hot satisfaction","Yes","Information System","Feedback regarding each activity delivered by the Provider","Ratio between the score attributed to each activity carried out VS maximum possible score","Each time that a Corrective Activity is carried out","95%"];
+  rows.push(row);
+  row=["B.3 Compliance with the agreed Scheduled Activities Plan","Yes","Information System","Analysis of the information uploaded to the System","Number of activities completed according to Scheduled VS total activities scheduled","Quarterly","95"];
+  rows.push(row);
+  row=["B.4 Compliance with the agreed Response Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities started within SLA VS total number of corrective activities","Quarterly","95"];
+  rows.push(row);
+  row=["B.5 Compliance with the agreed Correction Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities completed within SLA VS total number of corrective activities","Quarterly","95"];
+  rows.push(row);
+  row=["B.5 Compliance with the agreed Correction Time","Yes","Information System","Analysis of the information uploaded to the System","Number of Budget Estimates delivered within SLA VS Total Number of Budget Estimate Delivered","Quarterly","95"];
+  rows.push(row);
+
+
+
+
+
+  let response={
+    tableName :"qualityProvided",
+    tableHeader :header,
+    tableRows : rows
+  }
+  /*
+  for (r in results) {
+    response.tableRows.push([results[r].serviceRequirementDescription])
+  }*/
+  return response;
+}
+
+const penaltiesRelatedMonitoringSystem = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["KPI (KEY PERFORMANCE INDICATORS)","SLA","PENALTY"]
+
+  row=["A.1 Compliance with availability index","89%","0,01% of the monthly fee for each percentage point under the SLA"];
+  rows.push(row);
+  row=["B.1 Cold satisfaction","90%","0,01% of the monthly fee for each percentage point under the SLA"];
+  rows.push(row);
+  row=["B.2 Hot satisfaction","90%","0,01% of the monthly fee for each percentage point under the SLA"];
+  rows.push(row);
+  row=["B.3 Compliance with the agreed Scheduled Activities Plan","90%","0,01% of the monthly fee for each percentage point under the SLA"];
+  rows.push(row);
+
+
+  let response={
+    tableName :"penaltiesRelatedMonitoringSystem",
+    tableHeader :header,
+    tableRows : rows
+  }
+  return response;
+}
+
+const penaltiesRelatedNonConformities = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["SPECIFIC INDICATOR AREA","DESCRIPTION","PERIMETER","PENALTY"]
+
+  row=["Documents to deliver","Failure to meet creation or delivery deadlines, for documents to be provided in the contract","Defined in the specific contract","50 $ for each non-compliant document"];
+  rows.push(row);
+  row=["Team Meetings","Non-participation of a Provider's representative on the regular meetings defined by the contract","Defined in the specific contract","50 $ for every 8h of delay"];
+  rows.push(row);
+  row=["Health and Safety","Non-compliance with the wearing of PPE","Defined in the specific contract","50 $ for every 8h of delay"];
+  rows.push(row);
+  row=["Activity to deliver traceability","Absence of traceability of a planned activity/request on the Information System","Defined in the specific contract","50 $ for every 8h of delay"];
+  rows.push(row);
+  row=["Master Data","Master Data development and updating delay","National laws and regulations","50 $ for every 8h of delay"];
+  rows.push(row);
+  row=["Repetition of non-conformity","Repetition of a failure/non-conformity on the same equipment/area/element already managed in the current month","Defined in the specific contract","50 $ for every 8h of delay"];
+  rows.push(row);
+  row=["Extemporaneous check","Non-conformity detected on filed (not during an inspection)","Defined in the specific contract","50 $ for every 8h of delay"];
+  rows.push(row);
+  row=["Non-compliance with agreed Response Time","Failure to meet the agreed Response time for Corrective activities","Number of failures > 2 over a period of 10 working days","50 $ for every 8h of delay"];
+  rows.push(row);
+  row=["Non-compliance with agreed Correction Time","Failure to meet the agreed Correction time for Corrective activities","Numbers of failure checked","50 $ for every 8h of delay"];
+  rows.push(row);
+  row=["Non-compliance with Budget Estimate Time","Failure to meet the agreed Budget Estimate time for Corrective activities","Defined in the specific contract","50 $ for every 8h of delay"];
+  rows.push(row);
+
+
+
+  let response={
+    tableName :"penaltiesRelatedNonConformities",
+    tableHeader :header,
+    tableRows : rows
+  }
+  return response;
+}
+
+const preventiveMaintenanceProcedures = async (parameters) => {
+  // service requirement
+  // dipende da PB_Services
+  // parametri --> serviceTypeDetails
+  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
+  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  /*
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  const results = await models.PB_ServiceRequirement.findAll({
+    attributes: ['serviceName','serviceRequirementDescription'],
+    where : {
+      serviceName : p
+    }
+  });*/
+  let row=[]
+  let rows=[]
+  let header=["SYSTEM","COMPONENT","ACTIVITY","FREQUENCES"]
+
+  row=["HVAC","Technical Rooms","Exposed ductwork will be checked for leaks and proper insulation","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Belts and pulleys will be inspected and adjusted as required - Belts replaced as required","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Thermostats will be checked and calibrated as required","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Motors and Bearings will be lubricated as required","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Controls and safeties will be tested","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Condensate drain will be checked and cleaned as required","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Relays and contactors will be inspected","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Unit wiring will be inspected","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Temperatures and pressures will be recorded","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Inspection report and prompt follow up of any abnormal conditions or necessary repairs","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","External cleaning of the equipment","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Internal cleaning of the equipment","Monthly"];
+  rows.push(row);
+  row=["HVAC","Technical Rooms","Tightening bolts","Monthly"];
+  rows.push(row);
+
+
+
+
+  let response={
+    tableName :"preventiveMaintenanceProcedures",
+    tableHeader :header,
+    tableRows : rows
+  }
+  return response
+}
+
 const genericTechnicalRequirements = async (parameters) => {
    // service requirement
    // dipende da PB_Services
@@ -637,6 +938,7 @@ const genericTechnicalRequirements = async (parameters) => {
    return response;
 }
 
+
 function initPlayBook(pb) {
   pb["typeTask"]="PLAYBOOK";
   pb["status"]="BUILDING_INFO";
@@ -649,16 +951,8 @@ function initPlayBook(pb) {
 
   return pb;
 }
-function sortByProperty(property){
-   return function(a,b){
-      if(a[property] > b[property])
-         return 1;
-      else if(a[property] < b[property])
-         return -1;
 
-      return 0;
-   }
-}
+
 const getAllContracts= async (req, res) => {
   try {
     //console.log("getAllPlaybooks");
@@ -872,73 +1166,6 @@ const getSurveyById = async (req, res) => {
       return res.status(200).json({ survey });
     }
     return res.status(404).send("survey with the specified ID does not exists");
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-};
-const getScrumById = async (req,res) => {
-  try {
-    const { scrumId } = req.params;
-    const scrums = await models.FE_Scrum.findOne({
-      where: { id: scrumId },
-      order: [['order', 'ASC']],
-      include: [
-        {
-          model: models.FE_ScrumsSetting,
-          as: "settings"
-        },
-        {
-          model: models.FE_ScrumsList,
-          as: "lists",
-          include: [
-            {
-              model: models.FE_ScrumsListsAction,
-              as: "actions",
-            },
-            {
-              model: models.PB_Playbook,
-              as:"cards"
-            }
-          ],
-          order: [
-            [{model: models.FE_ScrumsList, as: 'lists'},'order', 'ASC']
-          ]
-        },
-        {
-          model: models.MS_Member,
-          as: "members"
-        }
-      ]
-    });
-    return res.status(200).json( scrums );
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-}
-const getAllScrumsByMember = async (req, res) => {
-  try {
-    const { memberId } = req.params;
-    const scrum = await models.FE_Scrum.findOne({
-      include: [
-        {
-          model: models.FE_ScrumsSetting,
-          as: "settings"
-        },
-        {
-          model: models.FE_ScrumsList,
-          as: "lists"
-        }/*,
-        {
-          model: models.MS_Member,
-          as: "members",
-          where: { id: memberId }
-        }*/
-      ]
-    });
-    if (scrum) {
-      return res.status(200).json({ scrum });
-    }
-    return res.status(404).send("This member doesn't have scrums");
   } catch (error) {
     return res.status(500).send(error.message);
   }
@@ -1575,8 +1802,6 @@ const importQuestionsFromJSON = async (req,res) => {
     }
     return res.status(200).json({});
 }
-
-
 const viewPlayBookById = async (playBookId) => {
   survey = await models['SM_Survey'].findAll({
     where: {'idPlaybook': playBookId},
@@ -2211,8 +2436,7 @@ const updateServiceType= async (answer,playbook) => {
 // ************************************************
 
 module.exports = {
-  getDynamicOptions,
-  getAllScrums,
+
   getContractById,
   getAllContracts,
   getAllMembers,
@@ -2220,8 +2444,6 @@ module.exports = {
   getAllSurveyByType,
   getAllSurvey,
   getSurveyById,
-  getScrumById,
-  getAllScrumsByMember,
   createPlaybook,
   updateContract,
   getContractById,
@@ -2230,9 +2452,6 @@ module.exports = {
   importQuestionsFromJSON,
   deletePlaybooks,
 
-  getAllServices,
-  getServiceResponseType,
-  getServiceLevelAgreement,
   addSurvey,
   createPlaybookWithSurvey,
   viewPlayBookById,

@@ -1,14 +1,14 @@
 
 const { Router } = require('express');
 const controllers = require('../controller');
+const scrumControllers = require('../controller/scrumController.js')
 //const scrumController = require('../controller').scrum;
 
 const router = Router();
 
-router.get('/', (req, res) => res.send('Welcome'))
-//router.get('/scrums/:memberId',controllers.getAllScrumsByMember);
-router.get('/scrums/:scrumId',controllers.getScrumById);
-router.get('/scrums',controllers.getAllScrums);
+
+router.get('/scrums/:scrumId',scrumControllers.getScrumById);
+router.get('/scrums',scrumControllers.getAllScrums);
 router.get('/members',controllers.getAllMembers);
 
 
@@ -26,6 +26,8 @@ router.put('/playbook/:playBookId',controllers.updateContract);
 router.post('/surveys/import', controllers.importQuestionsFromJSON);
 //SOLO PER DEVELOP
 /*
+//router.get('/', (req, res) => res.send('Welcome'))
+//router.get('/scrums/:memberId',controllers.getAllScrumsByMember);
 router.get('/surveys', controllers.getAllSurveyDynamics);
 router.get('/surveys/:surveyType', controllers.getAllSurveyByType);
 router.get('/dynamic/:tableName',controllers.getDynamicOptions)
