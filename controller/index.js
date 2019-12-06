@@ -69,7 +69,7 @@ function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
             //consoleLog(playbook.surveys[sur].sections[sec]);
             for (q in playbook.surveys[sur].sections[sec].questions) {
               if (playbook.surveys[sur].sections[sec].questions[q].code===infos.tableName) {
-                playbook.surveys[sur].sections[sec].questions[q].updated=true;
+                playbook.surveys[sur].sections[sec].questions[q].updated=false;
                 //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
                 if (playbook.surveys[sur].sections[sec].questions[q].tableHeader) {
                   //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
