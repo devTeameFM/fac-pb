@@ -249,7 +249,7 @@ const getPlayBookFromId = async (contractId) => {
               let response=addTextFieldsToTables();
               temp_question.tableHeader=response.tableHeader;
               temp_question.tableRows=response.tableRows;
-              temp_question.updated=true;
+              temp_question.updated=false;
               console.log("");
             }
           }
