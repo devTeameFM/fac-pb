@@ -9,14 +9,6 @@ module.exports = {
         tenant: 'WE WORK',
         createdAt: new Date(),
         updatedAt: new Date()
-      },
-      {
-        id : '5d494dc959860e001747eb4f',
-        name : 'Test dev',
-        avatar : '',
-        tenant: 'WE WORK',
-        createdAt: new Date(),
-        updatedAt: new Date()        
       }
     ],
     {},
