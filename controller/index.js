@@ -246,7 +246,7 @@ const getPlayBookFromId = async (contractId) => {
             }
             if (survey[sur].sections[sec].questions[que].code=="serviceTypeDetailsTable") {
               
-              let response=addTextFieldsToTables();
+              let response=await addTextFieldsToTables(contractId);
               temp_question.tableHeader=response.tableHeader;
               temp_question.tableRows=response.tableRows;
               temp_question.updated=false;
@@ -1358,7 +1358,7 @@ function updatePb(pb,questionId,updated) {
   return pb
 }
 
-function addTextFieldsToTables(section,obj2add) {
+const addTextFieldsToTables= async(contractId) => {
       // service requirement
     // dipende da PB_Services
     // parametri --> serviceTypeDetails
@@ -1372,56 +1372,27 @@ function addTextFieldsToTables(section,obj2add) {
         serviceName : p
       }
     });*/
+    let p="serviceTypeDetailsTable";
+    const serviceTypeDetailsTable = await models.SM_SurveySectionQuestion.findAll({
+      where: { 
+        tableName: p,
+        idPlaybook: contractId
+      }      
+    });
+    consoleLog(serviceTypeDetailsTable);
     let row=[]
     let rows=[]
     let header=["System","Component","Indicate the number of assets/elements","Add any other useful information"]
 
-    let a={      
-        "id": -1,
-        "code": "technicalRooms",
-        "name": "# of elements",
-        "tooltip": "",
-        "type": "STRING",        
-        "updated": false,
-        "required": false,
-        "flow": false
     
-    }
-    let b={      
-      "id": -1,
-      "code": "technicalRoomsNotes",
-      "name": "Information or comments",
-      "tooltip": "",
-      "type": "STRING",        
-      "updated": false,
-      "required": false,
-      "flow": false
-  
-  }
-    a.code=camelCode("Technical rooms");
-    b.code=camelCode("Technical rooms notes");
-    row=["HVAC","Technical rooms",a,b];
-    rows.push(row);
-    a.code=camelCode("Fuel Piping Systems");
-    b.code=camelCode("Fuel Piping Systems notes");
-    row=["HVAC","Fuel Piping Systems",a,b];
-    rows.push(row);
-    a.code=camelCode("Fuel Pumps");
-    b.code=camelCode("Fuel Pumps notes");
-    row=["HVAC","Fuel Pumps",a,b];
-    rows.push(row);
-    a.code=camelCode("Fuel Storage Tank");
-    b.code=camelCode("Fuel Storage Tank notes");
-    row=["HVAC","Fuel Storage Tank",a,b];
-    rows.push(row);
-    a.code=camelCode("Expansion Tanks");
-    b.code=camelCode("Expansion Tanks notes");
-    row=["HVAC","Expansion Tanks",a,b];
-    rows.push(row);
-    a.code=camelCode("Hydronic Piping System");
-    b.code=camelCode("Hydronic Piping System notes");
-    row=["HVAC","Hydronic Piping System",a,b];
-    rows.push(row);
+    for (serviceType=0;serviceType<serviceTypeDetailsTable.length;serviceType++) {
+      if ((serviceType % 2)==0) {
+        a=serviceTypeDetailsTable[serviceType];
+        b=serviceTypeDetailsTable[serviceType+1];
+        row=["HVAC",a.tooltip,a,b];
+        rows.push(row);
+      }
+    }        
     let response={      
       tableHeader :header,
       tableRows : rows
@@ -1595,7 +1566,7 @@ const updateContract = async (req, res) => {
                             "idSection" : 3,
               							"code": camelCode(serviceAssetComponent[sAC].assetComponentType),
               							"name": "# of elements",
-              							"tooltip": "",
+              							"tooltip": serviceAssetComponent[sAC].assetComponentType,
               							"nameI98n": "",
               							"tooltipI18n": "",
               							"type": "STRING",
