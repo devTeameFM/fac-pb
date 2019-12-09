@@ -249,7 +249,7 @@ const getPlayBookFromId = async (contractId) => {
               let response=await addTextFieldsToTables(contractId);
               temp_question.tableHeader=response.tableHeader;
               temp_question.tableRows=response.tableRows;
-              temp_question.updated=false;
+              temp_question.updated=response.updated;
               console.log("");
             }
           }
@@ -1375,6 +1375,18 @@ const addTextFieldsToTables= async(contractId) => {
         serviceName : p
       }
     });*/
+    let parameters = await models['SM_SurveyParameter'].findAll({
+      where: {
+        playBookId: contractId
+      }
+    });
+
+    let update=false;
+    for (par in parameters) {
+      if (parameters[par].serviceTypeDetails.length>0) updated=true;
+      if (parameters[par].serviceLevel.length>0) updated=false;
+    }
+
     let p="serviceTypeDetailsTable";
     const serviceTypeDetailsTable = await models.SM_SurveySectionQuestion.findAll({
       where: { 
@@ -1402,7 +1414,8 @@ const addTextFieldsToTables= async(contractId) => {
     }        
     let response={      
       tableHeader :header,
-      tableRows : rows
+      tableRows : rows,
+      updated : updated
     }
     return response;
 }
