@@ -1183,7 +1183,10 @@ const getSurveyById = async (req, res) => {
 const createPlaybook = async (req, res) => {
   try {
     var  pb=req.body;
-
+    consoleLog(pb);
+    if (!pb.idMember) {
+      pd["idMember"] ="5d494dc959860e001747eb4f";
+    }
     pb["coverImg"]="";
     pb["typeTask"]="PLAYBOOK";
     pb["status"]="BUILDING_INFO";
@@ -1899,7 +1902,9 @@ const viewPlayBookById = async (playBookId) => {
 const createPlaybookWithSurvey = async (req, res) => {
   try {
     var  pb=req.body;
-    consoleLog(req.body);
+    if (!pb.idMember) {
+      pb["idMember"] ="5d494dc959860e001747eb4f";
+    }
 
     pb["coverImg"]="";
     pb["typeTask"]="PLAYBOOK";
