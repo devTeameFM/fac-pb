@@ -250,7 +250,7 @@ const getPlayBookFromId = async (contractId) => {
               temp_question.tableHeader=response.tableHeader;
               temp_question.tableRows=response.tableRows;
               temp_question.updated=response.updated;
-              console.log("");
+              //console.log("");
             }
           }
           // PROVVISORIO DA SISTEMARE
@@ -1081,11 +1081,11 @@ const getAllSurveyDynamics = async (req, res) => {
     for (survey in surveys) {
         for (section in surveys[survey].sections) {
           for (question in surveys[survey].sections[section].questions) {
-            console.log("questions:" + surveys[survey].sections[section].questions[question].name);
+            //console.log("questions:" + surveys[survey].sections[section].questions[question].name);
             if (surveys[survey].sections[section].questions[question].type === "SELECT") {
               surveys[survey].sections[section].questions[question].set("options",[]);
               //surveys[survey].sections[section].questions[question].push("test");
-              console.log("questions:" + JSON.stringify(surveys[survey].sections[section].questions[question]));
+              //console.log("questions:" + JSON.stringify(surveys[survey].sections[section].questions[question]));
             }
           }
 	       }
@@ -1498,9 +1498,9 @@ const updateContract = async (req, res) => {
 
     for (a in answers) {
       for (b in answers[a]) {
-        for (c in answers[a][b]) {
-          
-          await models.SM_SurveyAnswer.update(answers[a][b][c], {where: { questionId: answers[a][b][c].questionId }});
+        for (c in answers[a][b]) {          
+          const status=await models.SM_SurveyAnswer.update(answers[a][b][c], {where: { questionId: answers[a][b][c].questionId }});
+          console.log("Update answer questionId --> " + answers[a][b][c].questionId + " status : " + status)
         }
       }
     }
@@ -1531,23 +1531,23 @@ const updateContract = async (req, res) => {
         for (b in answers[a]) {
           for (c in answers[a][b]) {
             if (answers[a][b][c].questionId==parameters[p].questionId) {
-              if (answers[a][b][c].value) console.log("answer " + answers[a][b][c].value)
-              if (parameters[p].value) console.log("parameter " + parameters[p].value)
+              if (answers[a][b][c].value) //console.log("answer " + answers[a][b][c].value)
+              if (parameters[p].value) //console.log("parameter " + parameters[p].value)
               if (answers[a][b][c].value === parameters[p].value) {
       					     //console.log("no changes")
       				  } else {
-                    console.log("changes found")
+                    //console.log("changes found")
                     //cerco question code:
           					let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
-          					console.log("change on question code : " + question.code);
-          					console.log("change on question name : " + question.name);
+          					//console.log("change on question code : " + question.code);
+          					//console.log("change on question name : " + question.name);
           					let result;
           					let par2update={};
 
                     switch(question.code) {
                       case "building":
-                          console.log("answer " + answers[a][b][c].value)
-                          console.log("playbook.id " + playbook.id)
+                          //console.log("answer " + answers[a][b][c].value)
+                          //console.log("playbook.id " + playbook.id)
                           await updateBuilding(answers[a][b][c].value,playbook.id);
                           await updateParams(answers[a][b][c],question.code,playbook.id);
                       break;
@@ -1565,7 +1565,7 @@ const updateContract = async (req, res) => {
               					  await updateParams(answers[a][b][c],question.code,playbook.id);
           						break;
                       case "serviceTypeDetails":
-              						console.log("serviceTypeDetails")
+              						//console.log("serviceTypeDetails")
               						for (sur in playbook.surveys) {
               						  for (sec in playbook.surveys[sur].sections) {
               							for (q in playbook.surveys[sur].sections[sec].questions) {
@@ -2273,9 +2273,9 @@ const loadAnswersFromDB = async (playBookId) => {
 
 const updateParams = async (answer,questionCode,playbookId) => {
 
-  console.log('\x1b[33m');
-  console.log("answer " + JSON.stringify(answer,null,2));
-  console.log('\x1b[0m');
+  //console.log('\x1b[33m');
+  //console.log("answer " + JSON.stringify(answer,null,2));
+  //console.log('\x1b[0m');
   par2update={
     "value" : answer.value,
     "name" : questionCode
@@ -2342,7 +2342,7 @@ const updateServiceType= async (answer,playbook) => {
         idPlaybook: playbook.id
       }
     });
-    if (deleted)  console.log("serviceTypeDetails DELETED")
+    if (deleted)  {}//console.log("serviceTypeDetails DELETED")
   }
   for (sur in playbook.surveys) {
     for (sec in playbook.surveys[sur].sections) {
@@ -2457,7 +2457,7 @@ const updateServiceType= async (answer,playbook) => {
           idPlaybook: playbook.id
         }
       });
-    if (deleted)  console.log("serviceTypeDetails DELETED")
+    if (deleted) {} //console.log("serviceTypeDetails DELETED")
   }
   let facilityIndex= await models['PB_ConditionIndex'].findAll(
     {
