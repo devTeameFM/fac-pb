@@ -1183,7 +1183,7 @@ const getSurveyById = async (req, res) => {
 const createPlaybook = async (req, res) => {
   try {
     var  pb=req.body;
-    consoleLog(pb);
+    //consoleLog(pb);
     if (!pb.idMember) {
       pd["idMember"] ="5d494dc959860e001747eb4f";
     }
@@ -1382,7 +1382,7 @@ const addTextFieldsToTables= async(contractId) => {
     });
 
     let updated=false;
-    consoleLog(parameters);
+    //consoleLog(parameters);
     for (par in parameters) {
       if ((parameters[par].name=="serviceTypeDetails") && (parameters[par].value.length>0)) updated=true;                
     }
@@ -1400,7 +1400,7 @@ const addTextFieldsToTables= async(contractId) => {
         idPlaybook: contractId
       }      
     });
-    consoleLog(serviceTypeDetailsTable);
+    //consoleLog(serviceTypeDetailsTable);
     let row=[]
     let rows=[]
     let header=["System","Component","Indicate the number of assets/elements","Add any other useful information"]
@@ -1499,6 +1499,7 @@ const updateContract = async (req, res) => {
     for (a in answers) {
       for (b in answers[a]) {
         for (c in answers[a][b]) {
+          
           await models.SM_SurveyAnswer.update(answers[a][b][c], {where: { questionId: answers[a][b][c].questionId }});
         }
       }
@@ -1639,7 +1640,7 @@ const updateContract = async (req, res) => {
 
               						  tableRows.push(tableRow);
               						}
-                          consoleLog(tableRows);
+                          //consoleLog(tableRows);
               						playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
               						playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
               						//console.log('\x1b[33m');
@@ -2205,7 +2206,7 @@ const addSurvey = async (playBookId) => {
                       tableRow.push("SELECT_" +camelCode(riga[r1].name))
                 		}
               	  } else {
-                    consoleLog(riga[r1])
+                    //consoleLog(riga[r1])
                     tableRow.push(riga[r1])
                   }
               	}
@@ -2427,7 +2428,7 @@ const updateServiceType= async (answer,playbook) => {
     "value" : "",
     "name" : "serviceTypeDetails"
   }
-  consoleLog(newParam01);
+  //consoleLog(newParam01);
   await models.SM_SurveyParameter.create(newParam01);
   tableRows.push(tableRow);
   // ******************************************************** serviceTypeDetails ***********************************/
@@ -2498,7 +2499,7 @@ const updateServiceType= async (answer,playbook) => {
     "value" : "",
     "name" : "facilityServiceCondition"
   }
-  consoleLog(newParam02);
+  //consoleLog(newParam02);
   await models.SM_SurveyParameter.create(newParam02);
   tableRows.push(tableRow);
   let answerAdd1={
