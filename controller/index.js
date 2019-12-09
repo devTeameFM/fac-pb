@@ -1381,10 +1381,11 @@ const addTextFieldsToTables= async(contractId) => {
       }
     });
 
-    let update=false;
+    let updated=false;
+    consoleLog(parameters);
     for (par in parameters) {
-      if (parameters[par].serviceTypeDetails.length>0) updated=true;
-      if (parameters[par].serviceLevel.length>0) updated=false;
+      if ((parameters[par].name=="serviceTypeDetails") && (parameters[par].value.length>0)) updated=true;          
+      if ((parameters[par].name=="serviceLevel") && (parameters[par].value.length>0)) updated=false;
     }
 
     let p="serviceTypeDetailsTable";
