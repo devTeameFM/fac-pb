@@ -1389,7 +1389,11 @@ const addTextFieldsToTables= async(contractId) => {
       if ((serviceType % 2)==0) {
         a=serviceTypeDetailsTable[serviceType];
         b=serviceTypeDetailsTable[serviceType+1];
-        row=["HVAC",a.tooltip,a,b];
+        if (a.tooltip.length>0) {
+          row=["HVAC",a.tooltip,a,b];
+        } else {
+          row=["HVAC",a.code,a,b];
+        }
         rows.push(row);
       }
     }        
