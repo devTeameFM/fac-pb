@@ -1384,9 +1384,14 @@ const addTextFieldsToTables= async(contractId) => {
     let updated=false;
     consoleLog(parameters);
     for (par in parameters) {
-      if ((parameters[par].name=="serviceTypeDetails") && (parameters[par].value.length>0)) updated=true;          
+      if ((parameters[par].name=="serviceTypeDetails") && (parameters[par].value.length>0)) updated=true;                
+    }
+
+    for (par in parameters) {
       if ((parameters[par].name=="serviceLevel") && (parameters[par].value.length>0)) updated=false;
     }
+
+    //
 
     let p="serviceTypeDetailsTable";
     const serviceTypeDetailsTable = await models.SM_SurveySectionQuestion.findAll({
