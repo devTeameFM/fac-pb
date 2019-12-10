@@ -1620,7 +1620,7 @@ const updateContract = async (req, res) => {
               						for (sAC in serviceAssetComponent) {
               						  let question2add01={
                             "idPlaybook" : playbook.id,
-                            "idSection" : 3,
+                            "idSection" : sec,
               							"code": camelCode(serviceAssetComponent[sAC].assetComponentType),
               							"name": "# of elements",
               							"tooltip": serviceAssetComponent[sAC].assetComponentType,
@@ -1644,7 +1644,7 @@ const updateContract = async (req, res) => {
               						  //playbook.context.answers.push(answerAdded01);
               						  let question2add02={
                             "idPlaybook" : playbook.id,
-                            "idSection" : 3,
+                            "idSection" : sec,
               							"code": camelCode(serviceAssetComponent[sAC].assetComponentType) + "Notes",
               							"name": "Information or comments",
               							"tooltip": "",
