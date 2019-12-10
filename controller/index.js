@@ -1613,14 +1613,15 @@ const updateContract = async (req, res) => {
               						}
               						//consoleLog(result,"")
               						playbook.surveys[sur].sections[sec].questions[q].update=true;
-
+                          let surveySectionId= await models['SM_SurveySection'].findOne({where: { idPlaybook: playbook.id,code: "serviceInScope"}});
+                          console.log("surveySectionId : " + surveySectionId.id);
               						tableRows=[];
               						tableHeader: ["System","Component","# of components of served area sf","Add any other useful information"]
               						let serviceAssetComponent= await models['PB_ServiceAssetComponent'].findAll({where: { serviceName: answers[a][b][c].value }});
               						for (sAC in serviceAssetComponent) {
               						  let question2add01={
                             "idPlaybook" : playbook.id,
-                            "idSection" : sec,
+                            "idSection" : surveySectionId.id,
               							"code": camelCode(serviceAssetComponent[sAC].assetComponentType),
               							"name": "# of elements",
               							"tooltip": serviceAssetComponent[sAC].assetComponentType,
@@ -1644,7 +1645,7 @@ const updateContract = async (req, res) => {
               						  //playbook.context.answers.push(answerAdded01);
               						  let question2add02={
                             "idPlaybook" : playbook.id,
-                            "idSection" : sec,
+                            "idSection" : surveySectionId.id,
               							"code": camelCode(serviceAssetComponent[sAC].assetComponentType) + "Notes",
               							"name": "Information or comments",
               							"tooltip": "",
