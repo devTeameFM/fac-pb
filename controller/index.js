@@ -109,6 +109,56 @@ const checkParameters = async () => {
   const playbooks = await models.PB_Playbook.findAll({
   });
 }
+
+const runtimeAnswerModeler = async (contractId) => {
+  let surveys=await models['SM_Survey'].findAll(
+    { 
+      attributes : ["code"],
+      where : {
+        idPlaybook:contractId
+      },
+      include: [
+        {
+          attributes : ["code"],
+          model: models.SM_SurveySection,
+          as : "sections",
+          include: [
+            {
+              attributes : ["code"],
+              model: models.SM_SurveySectionQuestion,
+              as: "questions",
+              include: [
+                {
+                  model: models.SM_SurveyAnswer,
+                  as: "answers",
+                  attributes : ["questionId","value"],
+                }
+              ]
+            }
+          ]
+        },
+        
+      ]      
+    }
+  )
+  let answers={}
+  for (a in surveys) {
+    answers[surveys[a].code]={}
+    //consoleLog(surveys[a]);
+    for (s in surveys[a]["sections"]) {
+      answers[surveys[a].code][surveys[a]["sections"][s].code]={}
+      //consoleLog(surveys[a]["sections"][s]);
+      for (q in surveys[a]["sections"][s]["questions"]) {
+        answers[surveys[a].code][surveys[a]["sections"][s].code][surveys[a]["sections"][s]["questions"][q].code]=surveys[a]["sections"][s]["questions"][q].answers[0];
+        //consoleLog(surveys[a]["sections"][s]["questions"][q]);
+      }
+    }
+  }
+  return answers;
+}
+
+
+
 const getPlayBookFromId = async (contractId) => {
   //console.log("contractId --> " + JSON.stringify(req.params));
   const playbook = await models.PB_Playbook.findOne({
@@ -125,6 +175,8 @@ const getPlayBookFromId = async (contractId) => {
     obj["status"]="BUILDING_INFO";
   }
   obj["dueDate"]="";
+
+  
 
   let answersFromDB=await models['SM_SurveyAnswer'].findAll(
       {
@@ -161,7 +213,7 @@ const getPlayBookFromId = async (contractId) => {
     ]
   });
   obj["surveys"]=[];
-  obj["answers"]={}
+  obj["answers"]=await runtimeAnswerModeler(contractId);
   //obj["answers"][contractId]={}
 
   for (sur in survey) {
@@ -174,10 +226,10 @@ const getPlayBookFromId = async (contractId) => {
       imageURL : survey[sur].imageURL,
       sections : []
     }
-    obj["answers"][survey[sur].code]={}
+    //obj["answers"][survey[sur].code]={}
     // into section
     for (sec in survey[sur].sections) {
-        obj["answers"][survey[sur].code][survey[sur].sections[sec].code]={}
+        //obj["answers"][survey[sur].code][survey[sur].sections[sec].code]={}
         var temp_section={
           name : survey[sur].sections[sec].name,
           code : survey[sur].sections[sec].code,
@@ -190,10 +242,11 @@ const getPlayBookFromId = async (contractId) => {
         var nestedSelect=[];
         //temp_survey.sections.push(temp_section);
         for (que in survey[sur].sections[sec].questions) {
+          /*
           obj["answers"][survey[sur].code][survey[sur].sections[sec].code][survey[sur].sections[sec].questions[que].code]={
             "questionId" : survey[sur].sections[sec].questions[que].id,
             "value" : answerValueFromQuestionId(answersFromDB,survey[sur].sections[sec].questions[que].id)
-          }
+          }*/
           var temp_question={
             id : survey[sur].sections[sec].questions[que].id,
             code : survey[sur].sections[sec].questions[que].code,
@@ -277,7 +330,7 @@ const getPlayBookFromId = async (contractId) => {
 }
 const getContractById = async (req, res) => {
   try {
-    const contractId= req.params.contractId;    
+    const contractId= req.params.contractId;  
     let obj=await getPlayBookFromId(contractId);
     return res.status(200).json(obj)
 
@@ -1354,14 +1407,14 @@ const addTextFieldsToTables= async(contractId) => {
         name : "serviceTypeDetails"
       }
     });
-    console.log("VIEW - parameters")
-    consoleLog(parameters)
+    //console.log("VIEW - parameters")
+    //consoleLog(parameters)
     let updated=false;
     
     if (parameters) {
       if (parameters.updated==true) updated=true;
     }
-    console.log("VIEW - serviceTypeDetails UPDATED : " + updated);
+    //console.log("VIEW - serviceTypeDetails UPDATED : " + updated);
     
 
     
@@ -1472,9 +1525,10 @@ const updateContract = async (req, res) => {
       for (b in answers[a]) {
         for (c in answers[a][b]) {   
           const findAnswer=await models.SM_SurveyAnswer.findOne({where: { questionId: answers[a][b][c].questionId }});       
-          console.log("Find One answer questionId --> " + answers[a][b][c].questionId + " status : " + findAnswer)
+          //console.log("Find One answer questionId --> " + answers[a][b][c].questionId + " status : ")
+          //consoleLog(findAnswer)
           const status=await models.SM_SurveyAnswer.update(answers[a][b][c], {where: { questionId: answers[a][b][c].questionId }});
-          console.log("Update answer questionId --> " + answers[a][b][c].questionId + " status : " + status)
+          //console.log("Update answer questionId --> " + answers[a][b][c].questionId + " status : " + status)
         }
       }
     }
@@ -1515,8 +1569,8 @@ const updateContract = async (req, res) => {
                     //console.log("changes found")
                     //cerco question code:
           					let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
-          					console.log("change on question code : " + question.code);
-          					console.log("change on question name : " + question.name);
+          					//console.log("change on question code : " + question.code);
+          					//console.log("change on question name : " + question.name);
           					let result;
           					let par2update={};
 
@@ -2501,8 +2555,7 @@ module.exports = {
   getSurveyById,
   createPlaybook,
   updateContract,
-  getContractById,
-  cleandDB,
+   cleandDB,
   generateQuestions,
   importQuestionsFromJSON,
   deletePlaybooks,
