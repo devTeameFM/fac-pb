@@ -1727,6 +1727,9 @@ const updateContract = async (req, res) => {
 const cleandDB = async (req,res) => {
   try {
 
+    await models.SM_SurveyParameter.destroy({
+      where: {},
+      truncate: true })
     await models.SM_SurveySectionQuestion.destroy({
         where: {},
         truncate: true })

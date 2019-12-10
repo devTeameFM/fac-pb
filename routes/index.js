@@ -20,7 +20,7 @@ router.post('/playbook',controllers.createPlaybookWithSurvey);
 router.get('/playbook/:contractId',controllers.getContractById);
 router.put('/playbook/:playBookId',controllers.updateContract);
 
-
+router.delete('/clean',controllers.cleandDB)
 
 
 router.post('/surveys/import', controllers.importQuestionsFromJSON);
