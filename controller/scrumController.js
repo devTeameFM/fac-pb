@@ -70,7 +70,8 @@ const getAllScrumsByMember = async (req, res) => {
 const getAllScrums = async (req, res) => {
   try {
     const scrums = await models.FE_Scrum.findAll({
-      order: [['order', 'ASC']],
+      order: [['order', 'ASC'],[{model: models.FE_ScrumsList, as: 'lists'},'order', 'ASC']],
+      
       include: [
         {
           model: models.FE_ScrumsSetting,
@@ -90,9 +91,7 @@ const getAllScrums = async (req, res) => {
             },
 
           ],
-          order: [
-            [{model: models.FE_ScrumsList, as: 'lists'},'order', 'ASC']
-          ]
+          
         },
         {
           model: models.MS_Member,
