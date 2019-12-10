@@ -5,7 +5,9 @@ const getScrumById = async (req,res) => {
     const { scrumId } = req.params;
     const scrums = await models.FE_Scrum.findOne({
       where: { id: scrumId },
-      order: [['order', 'ASC']],
+      order: [
+        [{ model: models.FE_ScrumsList, as: 'lists' }, 'order', 'ASC'],        
+      ],
       include: [
         {
           model: models.FE_ScrumsSetting,
@@ -23,10 +25,7 @@ const getScrumById = async (req,res) => {
               model: models.PB_Playbook,
               as:"cards"
             }
-          ],
-          order: [
-            [{model: models.FE_ScrumsList, as: 'lists'},'order', 'ASC']
-          ]
+          ],          
         },
         {
           model: models.MS_Member,
@@ -70,8 +69,10 @@ const getAllScrumsByMember = async (req, res) => {
 const getAllScrums = async (req, res) => {
   try {
     const scrums = await models.FE_Scrum.findAll({
-      order: [[{model: models.FE_ScrumsList, as: 'lists'},'order', 'ASC']],
-      
+      order: [
+        ['order', 'ASC'], 
+        [{ model: models.FE_ScrumsList, as: 'lists' }, 'order', 'ASC'],        
+      ],
       include: [
         {
           model: models.FE_ScrumsSetting,
