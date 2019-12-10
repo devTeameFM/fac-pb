@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.INTEGER
     },
+    updated: {
+      type: DataTypes.BOOLEAN
+    },
     value :{
       type: DataTypes.STRING
     },

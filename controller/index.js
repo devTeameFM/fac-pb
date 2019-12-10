@@ -58,7 +58,6 @@ function answerValueFromQuestionId(answers,questionId) {
   }
   return value
 }
-
 function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
   var obj={};
   for (sur in playbook.surveys) {
@@ -166,6 +165,7 @@ const getPlayBookFromId = async (contractId) => {
   //obj["answers"][contractId]={}
 
   for (sur in survey) {
+    // into survey
     var temp_survey={
       id : survey[sur].id,
       name : survey[sur].name,
@@ -175,6 +175,7 @@ const getPlayBookFromId = async (contractId) => {
       sections : []
     }
     obj["answers"][survey[sur].code]={}
+    // into section
     for (sec in survey[sur].sections) {
         obj["answers"][survey[sur].code][survey[sur].sections[sec].code]={}
         var temp_section={
@@ -186,91 +187,87 @@ const getPlayBookFromId = async (contractId) => {
           imageURL : survey[sur].sections[sec].imageURL,
           questions : []
         }
-      var nestedSelect=[];
-      //temp_survey.sections.push(temp_section);
-      for (que in survey[sur].sections[sec].questions) {
-        obj["answers"][survey[sur].code][survey[sur].sections[sec].code][survey[sur].sections[sec].questions[que].code]={
-          "questionId" : survey[sur].sections[sec].questions[que].id,
-          "value" : answerValueFromQuestionId(answersFromDB,survey[sur].sections[sec].questions[que].id)
-        }
-        var temp_question={
-          id : survey[sur].sections[sec].questions[que].id,
-          code : survey[sur].sections[sec].questions[que].code,
-          name : survey[sur].sections[sec].questions[que].name,
-          tooltip : survey[sur].sections[sec].questions[que].tooltip,
-          nameI98n : survey[sur].sections[sec].questions[que].nameI98n,
-          tooltipI18n : survey[sur].sections[sec].questions[que].tooltipI18n,
-          type : survey[sur].sections[sec].questions[que].type,
-          icon : survey[sur].sections[sec].questions[que].icon,
-          updated : survey[sur].sections[sec].questions[que].updated,
-          required : survey[sur].sections[sec].questions[que].required,
-          flow : survey[sur].sections[sec].questions[que].flow,
-        }
-        if (survey[sur].sections[sec].questions[que].tableName==null) {
-          if (survey[sur].sections[sec].questions[que].type=="SELECT") {
-              temp_question.options=[];
-              for (opt in survey[sur].sections[sec].questions[que].options) {
-                   var temp_option={
-                     "name" : survey[sur].sections[sec].questions[que].options[opt].name,
-                     "defaultValue" : survey[sur].sections[sec].questions[que].options[opt].defaultValue
-                   }
-                   temp_question.options.push(temp_option)
-              }
+        var nestedSelect=[];
+        //temp_survey.sections.push(temp_section);
+        for (que in survey[sur].sections[sec].questions) {
+          obj["answers"][survey[sur].code][survey[sur].sections[sec].code][survey[sur].sections[sec].questions[que].code]={
+            "questionId" : survey[sur].sections[sec].questions[que].id,
+            "value" : answerValueFromQuestionId(answersFromDB,survey[sur].sections[sec].questions[que].id)
           }
-          // PROVVISORIO DA SISTEMARE
-          if (survey[sur].sections[sec].questions[que].type=="TABLE") {
-            if (survey[sur].sections[sec].questions[que].code=="typeOfActivities") {
-              if (temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader) {
-                temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader.split(",");
-              }
-              let cells=survey[sur].sections[sec].questions[que].tableRows.split(",");
-              rows=[]
-              for (r=0;r<4;r++) {
-                row=[];
-                for (c=0;c<3;c++) {
-                  if (cells[c+(r*3)].indexOf("SELECT")==-1) {
-                      row.push(cells[c+(r*3)]);
-                  } else {
-                      var pos=cells[c+(r*3)].indexOf("SELECT");
-                      var app=cells[c+(r*3)].substring(pos+7,cells[c+(r*3)].length);
-                      for (nest=0;nest<nestedSelect.length;nest++) {
-                        if (nestedSelect[nest].code==app) {
-                            row.push(nestedSelect[nest]);
-                        }
-                      }
-                  }
+          var temp_question={
+            id : survey[sur].sections[sec].questions[que].id,
+            code : survey[sur].sections[sec].questions[que].code,
+            name : survey[sur].sections[sec].questions[que].name,
+            tooltip : survey[sur].sections[sec].questions[que].tooltip,
+            nameI98n : survey[sur].sections[sec].questions[que].nameI98n,
+            tooltipI18n : survey[sur].sections[sec].questions[que].tooltipI18n,
+            type : survey[sur].sections[sec].questions[que].type,
+            icon : survey[sur].sections[sec].questions[que].icon,
+            updated : survey[sur].sections[sec].questions[que].updated,
+            required : survey[sur].sections[sec].questions[que].required,
+            flow : survey[sur].sections[sec].questions[que].flow,
+          }
+          if (survey[sur].sections[sec].questions[que].tableName==null) {
+            if (survey[sur].sections[sec].questions[que].type=="SELECT") {
+                temp_question.options=[];
+                for (opt in survey[sur].sections[sec].questions[que].options) {
+                    var temp_option={
+                      "name" : survey[sur].sections[sec].questions[que].options[opt].name,
+                      "defaultValue" : survey[sur].sections[sec].questions[que].options[opt].defaultValue
+                    }
+                    temp_question.options.push(temp_option)
                 }
-                rows.push(row);
+            }
+            // PROVVISORIO DA SISTEMARE
+            if (survey[sur].sections[sec].questions[que].type=="TABLE") {
+              if (survey[sur].sections[sec].questions[que].code=="typeOfActivities") {
+                if (temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader) {
+                  temp_question.tableHeader=survey[sur].sections[sec].questions[que].tableHeader.split(",");
+                }
+                let cells=survey[sur].sections[sec].questions[que].tableRows.split(",");
+                rows=[]
+                for (r=0;r<4;r++) {
+                  row=[];
+                  for (c=0;c<3;c++) {
+                    if (cells[c+(r*3)].indexOf("SELECT")==-1) {
+                        row.push(cells[c+(r*3)]);
+                    } else {
+                        var pos=cells[c+(r*3)].indexOf("SELECT");
+                        var app=cells[c+(r*3)].substring(pos+7,cells[c+(r*3)].length);
+                        for (nest=0;nest<nestedSelect.length;nest++) {
+                          if (nestedSelect[nest].code==app) {
+                              row.push(nestedSelect[nest]);
+                          }
+                        }
+                    }
+                  }
+                  rows.push(row);
+                }
+                temp_question.tableRows=rows;
               }
-              temp_question.tableRows=rows;
+              if (survey[sur].sections[sec].questions[que].code=="serviceTypeDetailsTable") {
+                
+                let response=await addTextFieldsToTables(contractId);
+                temp_question.tableHeader=response.tableHeader;
+                temp_question.tableRows=response.tableRows;
+                temp_question.updated=response.updated;
+                //console.log("");
+              }
             }
-            if (survey[sur].sections[sec].questions[que].code=="serviceTypeDetailsTable") {
-              
-              let response=await addTextFieldsToTables(contractId);
-              temp_question.tableHeader=response.tableHeader;
-              temp_question.tableRows=response.tableRows;
-              temp_question.updated=response.updated;
-              //console.log("");
+            // PROVVISORIO DA SISTEMARE
+            temp_section.questions.push(temp_question);
+          } else {
+            // PROVVISORIO DA SISTEMARE
+            if (survey[sur].sections[sec].questions[que].tableName=="typeOfActivities") {
+              nestedSelect.push(survey[sur].sections[sec].questions[que]);
             }
+            if (survey[sur].sections[sec].questions[que].tableName=="serviceTypeTable") {
+              addToTable(temp_section,survey[sur].sections[sec].questions[que]);
+            }          
+            // PROVVISORIO DA SISTEMARE
           }
-          // PROVVISORIO DA SISTEMARE
-          temp_section.questions.push(temp_question);
-        } else {
-          // PROVVISORIO DA SISTEMARE
-          if (survey[sur].sections[sec].questions[que].tableName=="typeOfActivities") {
-            nestedSelect.push(survey[sur].sections[sec].questions[que]);
-          }
-          if (survey[sur].sections[sec].questions[que].tableName=="serviceTypeTable") {
-            addToTable(temp_section,survey[sur].sections[sec].questions[que]);
-          }
-          
-          // PROVVISORIO DA SISTEMARE
-
-
-
         }
-      }
-      temp_survey.sections.push(temp_section);
+        temp_survey.sections.push(temp_section);
     }
     obj["surveys"].push(temp_survey);
   }
@@ -280,14 +277,8 @@ const getPlayBookFromId = async (contractId) => {
 }
 const getContractById = async (req, res) => {
   try {
-    const contractId= req.params.contractId;
-    let pb={};
+    const contractId= req.params.contractId;    
     let obj=await getPlayBookFromId(contractId);
-    // check parametri
-
-    // runtime summary creation
-
-
     return res.status(200).json(obj)
 
   } catch (error) {
@@ -483,7 +474,6 @@ const correctionTime = async (parameters) => {
    }*/
    return response;
 }
-
 const contractLevelCorrectionTime = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -520,7 +510,6 @@ const contractLevelCorrectionTime = async (parameters) => {
   }*/
   return response;
 }
-
 const estimationTime = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -554,7 +543,6 @@ const estimationTime = async (parameters) => {
   }*/
   return response;
 }
-
 const contractLevelEstimationTime = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -591,7 +579,6 @@ const contractLevelEstimationTime = async (parameters) => {
   }*/
   return response;
 }
-
 const availability = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -628,7 +615,6 @@ const availability = async (parameters) => {
   }*/
   return response;
 }
-
 const correctionTimeForUrgencyRequest = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -664,7 +650,6 @@ const correctionTimeForUrgencyRequest = async (parameters) => {
   }*/
   return response;
 }
-
 const systemConditionIndex = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -700,7 +685,6 @@ const systemConditionIndex = async (parameters) => {
   }*/
   return response;
 }
-
 const availabilityIndex = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -735,7 +719,6 @@ const availabilityIndex = async (parameters) => {
   }*/
   return response;
 }
-
 const qualityProvided = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -782,7 +765,6 @@ const qualityProvided = async (parameters) => {
   }*/
   return response;
 }
-
 const penaltiesRelatedMonitoringSystem = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -818,7 +800,6 @@ const penaltiesRelatedMonitoringSystem = async (parameters) => {
   }
   return response;
 }
-
 const penaltiesRelatedNonConformities = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -867,7 +848,6 @@ const penaltiesRelatedNonConformities = async (parameters) => {
   }
   return response;
 }
-
 const preventiveMaintenanceProcedures = async (parameters) => {
   // service requirement
   // dipende da PB_Services
@@ -923,7 +903,6 @@ const preventiveMaintenanceProcedures = async (parameters) => {
   }
   return response
 }
-
 const genericTechnicalRequirements = async (parameters) => {
    // service requirement
    // dipende da PB_Services
@@ -947,8 +926,6 @@ const genericTechnicalRequirements = async (parameters) => {
    }
    return response;
 }
-
-
 function initPlayBook(pb) {
   pb["typeTask"]="PLAYBOOK";
   pb["status"]="BUILDING_INFO";
@@ -961,8 +938,6 @@ function initPlayBook(pb) {
 
   return pb;
 }
-
-
 const getAllContracts= async (req, res) => {
   try {
     //console.log("getAllPlaybooks");
@@ -1357,10 +1332,8 @@ function updatePb(pb,questionId,updated) {
       }
     }
   }
-
   return pb
 }
-
 const addTextFieldsToTables= async(contractId) => {
       // service requirement
     // dipende da PB_Services
@@ -1375,23 +1348,23 @@ const addTextFieldsToTables= async(contractId) => {
         serviceName : p
       }
     });*/
-    let parameters = await models['SM_SurveyParameter'].findAll({
+    let parameters = await models['SM_SurveyParameter'].findOne({
       where: {
-        playBookId: contractId
+        playBookId: contractId,
+        name : "serviceTypeDetails"
       }
     });
-
+    console.log("VIEW - parameters")
+    consoleLog(parameters)
     let updated=false;
-    //consoleLog(parameters);
-    for (par in parameters) {
-      if ((parameters[par].name=="serviceTypeDetails") && (parameters[par].value.length>0)) updated=true;                
+    
+    if (parameters) {
+      if (parameters.updated==true) updated=true;
     }
+    console.log("VIEW - serviceTypeDetails UPDATED : " + updated);
+    
 
-    for (par in parameters) {
-      if ((parameters[par].name=="serviceLevel") && (parameters[par].value.length>0)) updated=false;
-    }
-
-    //
+    
 
     let p="serviceTypeDetailsTable";
     const serviceTypeDetailsTable = await models.SM_SurveySectionQuestion.findAll({
@@ -1425,7 +1398,6 @@ const addTextFieldsToTables= async(contractId) => {
     }
     return response;
 }
-
 function addToTable(section,obj2add) {
   for (q in section.questions) {
     if (section.questions[q].code===obj2add.tableName) {
@@ -1533,16 +1505,18 @@ const updateContract = async (req, res) => {
         for (b in answers[a]) {
           for (c in answers[a][b]) {
             if (answers[a][b][c].questionId==parameters[p].questionId) {
-              if (answers[a][b][c].value) //console.log("answer " + answers[a][b][c].value)
-              if (parameters[p].value) //console.log("parameter " + parameters[p].value)
+              if (answers[a][b][c].value) console.log("answer " + answers[a][b][c].value)
+              if (parameters[p].value) console.log("parameter " + parameters[p].value)
               if (answers[a][b][c].value === parameters[p].value) {
-      					     //console.log("no changes")
+                     //console.log("no changes")
+                     let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
+                     await updateParams(answers[a][b][c],question.code,playbook.id,false);
       				  } else {
                     //console.log("changes found")
                     //cerco question code:
           					let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
-          					//console.log("change on question code : " + question.code);
-          					//console.log("change on question name : " + question.name);
+          					console.log("change on question code : " + question.code);
+          					console.log("change on question name : " + question.name);
           					let result;
           					let par2update={};
 
@@ -1551,20 +1525,20 @@ const updateContract = async (req, res) => {
                           //console.log("answer " + answers[a][b][c].value)
                           //console.log("playbook.id " + playbook.id)
                           await updateBuilding(answers[a][b][c].value,playbook.id);
-                          await updateParams(answers[a][b][c],question.code,playbook.id);
+                          await updateParams(answers[a][b][c],question.code,playbook.id,true);
                       break;
                       case "serviceHours" :
-        						      await updateParams(answers[a][b][c],question.code,playbook.id);
+        						      await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
           					  case "duration" :
-        						      await updateParams(answers[a][b][c],question.code,playbook.id);
+        						      await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
                       case "contractExtensionRule" :
-        						      await updateParams(answers[a][b][c],question.code,playbook.id);
+        						      await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
           					  case "serviceType" :
               						await updateServiceType(answers[a][b][c],playbook);
-              					  await updateParams(answers[a][b][c],question.code,playbook.id);
+              					  await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
                       case "serviceTypeDetails":
               						//console.log("serviceTypeDetails")
@@ -1654,31 +1628,31 @@ const updateContract = async (req, res) => {
               						await models.SM_SurveyParameter.update(par2update, {
               						  where: { questionId:answers[a][b].questionId }
               						});
-                          await updateParams(answers[a][b][c],question.code,playbook.id);
+                          await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
           					  case "facilityServiceCondition" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
           					  case "serviceLevel" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
           					  case "preventiveMaintenance" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
                       case "preventiveMaintenanceRemuneration" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
           					  case "correctiveActivities" :
-          					      await updateParams(answers[a][b][c],question.code,playbook.id);
+          					      await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
                       case "correctiveActivitiesRemuneration" :
-          					      await updateParams(answers[a][b][c],question.code,playbook.id);
+          					      await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
           					  case "serviceRequestRemuneration" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
           					  case "onSiteTeamRemuneration" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
                     }
 
@@ -1919,8 +1893,6 @@ const viewPlayBookById = async (playBookId) => {
   });
   return survey[0];
 }
-
-
 const createPlaybookWithSurvey = async (req, res) => {
   try {
     var  pb=req.body;
@@ -2267,20 +2239,19 @@ const addSurvey = async (playBookId) => {
 
     return;
 }
-
 // ************************************************
 // funzioni update playBook
 const loadAnswersFromDB = async (playBookId) => {
 }
-
-const updateParams = async (answer,questionCode,playbookId) => {
+const updateParams = async (answer,questionCode,playbookId,updated) => {
 
   //console.log('\x1b[33m');
   //console.log("answer " + JSON.stringify(answer,null,2));
   //console.log('\x1b[0m');
   par2update={
     "value" : answer.value,
-    "name" : questionCode
+    "name" : questionCode,
+    "updated" : updated
   }
 
   let response=await models.SM_SurveyParameter.update(par2update, {
@@ -2535,7 +2506,6 @@ module.exports = {
   generateQuestions,
   importQuestionsFromJSON,
   deletePlaybooks,
-
   addSurvey,
   createPlaybookWithSurvey,
   viewPlayBookById,
