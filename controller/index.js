@@ -68,6 +68,7 @@ function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
             //consoleLog(playbook.surveys[sur].sections[sec]);
             for (q in playbook.surveys[sur].sections[sec].questions) {
               if (playbook.surveys[sur].sections[sec].questions[q].code===infos.tableName) {
+
                 playbook.surveys[sur].sections[sec].questions[q].updated=false;
                 //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
                 if (playbook.surveys[sur].sections[sec].questions[q].tableHeader) {
@@ -158,7 +159,6 @@ const runtimeAnswerModeler = async (contractId) => {
 }
 
 
-
 const getPlayBookFromId = async (contractId) => {
   //console.log("contractId --> " + JSON.stringify(req.params));
   const playbook = await models.PB_Playbook.findOne({
@@ -226,10 +226,8 @@ const getPlayBookFromId = async (contractId) => {
       imageURL : survey[sur].imageURL,
       sections : []
     }
-    //obj["answers"][survey[sur].code]={}
-    // into section
-    for (sec in survey[sur].sections) {
-        //obj["answers"][survey[sur].code][survey[sur].sections[sec].code]={}
+    
+    for (sec in survey[sur].sections) {        
         var temp_section={
           name : survey[sur].sections[sec].name,
           code : survey[sur].sections[sec].code,
@@ -240,13 +238,7 @@ const getPlayBookFromId = async (contractId) => {
           questions : []
         }
         var nestedSelect=[];
-        //temp_survey.sections.push(temp_section);
-        for (que in survey[sur].sections[sec].questions) {
-          /*
-          obj["answers"][survey[sur].code][survey[sur].sections[sec].code][survey[sur].sections[sec].questions[que].code]={
-            "questionId" : survey[sur].sections[sec].questions[que].id,
-            "value" : answerValueFromQuestionId(answersFromDB,survey[sur].sections[sec].questions[que].id)
-          }*/
+        for (que in survey[sur].sections[sec].questions) {          
           var temp_question={
             id : survey[sur].sections[sec].questions[que].id,
             code : survey[sur].sections[sec].questions[que].code,
@@ -260,6 +252,12 @@ const getPlayBookFromId = async (contractId) => {
             required : survey[sur].sections[sec].questions[que].required,
             flow : survey[sur].sections[sec].questions[que].flow,
           }
+          let isParameter=false;
+          if (temp_question.code === "serviceType") {
+            isParameter=true;          
+            temp_question.isParameter=isParameter
+          }
+          
           if (survey[sur].sections[sec].questions[que].tableName==null) {
             if (survey[sur].sections[sec].questions[que].type=="SELECT") {
                 temp_question.options=[];
@@ -268,6 +266,24 @@ const getPlayBookFromId = async (contractId) => {
                       "name" : survey[sur].sections[sec].questions[que].options[opt].name,
                       "defaultValue" : survey[sur].sections[sec].questions[que].options[opt].defaultValue
                     }
+                    //
+                    if  (temp_option.name === "51 Melcher St") {
+                      temp_option["hasExtendedInfo"] = {
+                        "address" : "51 Melcher St",
+                        "city" : "Boston",
+                        "state" : "MA",
+                        "zip" : "02116"
+                      }
+                    }
+                    if  (temp_option.name === "625 Massachusetts Ave") {
+                      temp_option["hasExtendedInfo"] = {
+                        "address" : "625 Massachusetts Ave",
+                        "city" : "Cambridge",
+                        "state" : "MA",
+                        "zip" : "02139"
+                      }
+                    }
+                    //
                     temp_question.options.push(temp_option)
                 }
             }
