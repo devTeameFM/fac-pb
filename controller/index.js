@@ -665,7 +665,7 @@ const availability = async (parameters) => {
   });*/
   let row=[]
   let rows=[]
-  let header=["",""]
+  let header=["","Time"]
 
   row=["DAILY WORKING HOURS","11"];
   rows.push(row);
