@@ -320,6 +320,7 @@ const getPlayBookFromId = async (contractId) => {
                 temp_question.tableHeader=response.tableHeader;
                 temp_question.tableRows=response.tableRows;
                 temp_question.updated=response.updated;
+                temp_question.isParameter=true
                 //console.log("");
               }
             }
@@ -1469,6 +1470,7 @@ const addTextFieldsToTables= async(contractId) => {
 }
 function addToTable(section,obj2add) {
   for (q in section.questions) {
+    section.questions[q].isParameter=true;
     if (section.questions[q].code===obj2add.tableName) {
       if (section.questions[q].tableRows) {
         section.questions[q].tableHeader.push(obj2add.tableHeader)
