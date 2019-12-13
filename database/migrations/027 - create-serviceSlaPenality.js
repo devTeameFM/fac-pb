@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       value:{
-        type: Sequelize.FLOAT
+        type: Sequelize.TEXT
       },
       idUnitMeasure: {
         type: Sequelize.INTEGER

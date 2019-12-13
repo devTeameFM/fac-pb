@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER
     },
     value:{
-      type: DataTypes.INTEGER
+      type: DataTypes.TEXT
     },
     idUnitMeasure: {
       type: DataTypes.INTEGER
