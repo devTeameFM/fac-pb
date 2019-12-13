@@ -1441,7 +1441,11 @@ const addTextFieldsToTables= async(contractId) => {
       where: { 
         tableName: p,
         idPlaybook: contractId
-      }      
+      },
+      order: [
+        ['code', 'ASC'],
+        
+    ],
     });
     //consoleLog(serviceTypeDetailsTable);
     let row=[]
