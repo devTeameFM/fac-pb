@@ -8,14 +8,20 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      idservice: {
+        type: Sequelize.INTEGER
+      },
       idPMServiceAsset: {
         type: Sequelize.INTEGER
+      },
+      activitydescription: {
+          type: Sequelize.TEXT
       },
       idSLA: {
         type: Sequelize.INTEGER
       },
       idFrequency: {
-        type: Sequelize.TEXT
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: true,

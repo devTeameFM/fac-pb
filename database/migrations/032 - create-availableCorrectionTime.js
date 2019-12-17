@@ -11,13 +11,16 @@ module.exports = {
       idServiceName: {
         type: Sequelize.INTEGER
       },
-      idPriorityName: {
+      idFci: {
         type: Sequelize.INTEGER
       },
       idSLA: {
         type: Sequelize.INTEGER
       },
-      correctionTimeVale: {
+      value: {
+        type: Sequelize.TEXT
+      },
+      typeName: {
         type: Sequelize.TEXT
       },
       createdAt: {

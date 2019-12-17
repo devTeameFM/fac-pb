@@ -102,7 +102,7 @@ function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
 function getParameterValue(parameters,parameterName) {
   let value="";
   for (p in parameters) {
-    if (parameters[p].name===parameterName) value= parameters[p].value;
+    if (parameters[p].name===parameterName) value= parameters[p];
   }
   return value;
 }
@@ -356,9 +356,26 @@ const getContractById = async (req, res) => {
   }
 }
 
+function generateDynamicQuestionTemplate(code,value) {
+  var result= {    
+      code: code,
+      name: '',
+      tooltip: '',
+      nameI98n: '',
+      tooltipI18n: '',
+      type: 'STRING',
+      icon: '',
+      flow: false,
+      required: false,
+      disabled: true,
+      defaultValue:value
+  }
+  return result;
+}
+
 const runtimeSummaryCreation = async (playBook) => {
   const parameters = await models.SM_SurveyParameter.findAll({
-    attributes: ['value','name'],
+    attributes: ['value','name','updated'],
     where : {
       playBookId : playBook.id
     }
@@ -366,16 +383,16 @@ const runtimeSummaryCreation = async (playBook) => {
   // funzioni da per generare i dati nel summary
   // genericTechnicalRequirements
 
-  let techReq=await genericTechnicalRequirements(parameters);
-  let priorityDefinitionInfo=await priorityDefinition(parameters);
-  let responseTimeInfo=await responseTime(parameters);
-  let contractLevelResponseTimeInfo =await contractLevelResponseTime(parameters);
-  let correctionTimeInfo =await correctionTime(parameters);
-  let contractLevelCorrectionTimeInfo =await contractLevelCorrectionTime(parameters);
-  let estimationTimeInfo =await estimationTime(parameters);
-  let contractLevelEstimationTimeInfo =await contractLevelEstimationTime(parameters);
-  let availabilityInfo =await availability(parameters);
-  let correctionTimeForUrgencyRequestInfo =await correctionTimeForUrgencyRequest(parameters);
+  let techReq=await genericTechnicalRequirements(parameters); //OK
+  let priorityDefinitionInfo=await priorityDefinition(parameters); //OK
+  let responseTimeInfo=await responseTime(parameters); //OK
+  let contractLevelResponseTimeInfo =await contractLevelResponseTime(parameters); //OK
+  let correctionTimeInfo =await correctionTime(parameters); // OK
+  let contractLevelCorrectionTimeInfo =await contractLevelCorrectionTime(parameters); // OK
+  let estimationTimeInfo =await estimationTime(parameters); // OK
+  let contractLevelEstimationTimeInfo =await contractLevelEstimationTime(parameters); // OK
+  let availabilityInfo =await availability(parameters); // OK
+  let correctionTimeForUrgencyRequestInfo =await correctionTimeForUrgencyRequest(parameters); // OK
   let systemConditionIndexInfo =await systemConditionIndex(parameters);
   let availabilityIndexInfo =await availabilityIndex(parameters);
   let qualityProvidedInfo =await qualityProvided(parameters);
@@ -404,19 +421,8 @@ const runtimeSummaryCreation = async (playBook) => {
   return updateplaybook;
 }
 const priorityDefinition = async (parameters) => {
-   // service requirement
-   // dipende da PB_Services
-   // parametri --> serviceTypeDetails
-   // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-   // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-   /*
-   let p=getParameterValue(parameters,"serviceTypeDetails");
-   const results = await models.PB_ServiceRequirement.findAll({
-     attributes: ['serviceName','serviceRequirementDescription'],
-     where : {
-       serviceName : p
-     }
-   });*/
+  // TABELLA STATICA
+
    let row=[]
    let rows=[]
    let header=["PRIORITY","DEFINITION"]
@@ -440,24 +446,12 @@ const priorityDefinition = async (parameters) => {
    return response;
 }
 const responseTime = async (parameters) => {
-   // service requirement
-   // dipende da PB_Services
-   // parametri --> serviceTypeDetails
-   // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-   // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-   /*
-   let p=getParameterValue(parameters,"serviceTypeDetails");
-   const results = await models.PB_ServiceRequirement.findAll({
-     attributes: ['serviceName','serviceRequirementDescription'],
-     where : {
-       serviceName : p
-     }
-   });*/
+  // TABELLA STATICA
    let row=[]
    let rows=[]
-   let header=["DEFINITION","RELATED KPI"]
+   let header=["Response Time","RELATED KPI"]
 
-   row=["Feedback regarding each activity delivered by the Provider","B.4 Compliance with the agreed Response Time "];
+   row=["The time used by the Service Provider to take charge of the activity (from client request creation to on site intervention)","B.3 Compliance with the agreed response service time"];
    rows.push(row);
 
 
@@ -473,101 +467,148 @@ const responseTime = async (parameters) => {
    return response;
 }
 const contractLevelResponseTime = async (parameters) => {
-   // service requirement
-   // dipende da PB_Services
-   // parametri --> serviceTypeDetails
-   // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-   // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-   /*
-   let p=getParameterValue(parameters,"serviceTypeDetails");
-   const results = await models.PB_ServiceRequirement.findAll({
-     attributes: ['serviceName','serviceRequirementDescription'],
+      
+   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
+   let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+   
+   
+   let serviceTypeDetailsId = await models.PB_Service.findAll({
+     attributes: ['idServiceClass'],
      where : {
-       serviceName : p
+       serviceName : serviceTypeDetails.value
      }
-   });*/
-   let row=[]
-   let rows=[]
-   let header=["PRIOTIRY","CONTRACT LEVEL","RESPONSE TIME (Working Hours)"]
+   });
+   if (serviceTypeDetailsId.length) {
+     serviceTypeDetailsId=serviceTypeDetailsId[0].dataValues.idServiceClass;
+   } else {
+    serviceTypeDetailsId=-1;
+   }
+   let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+    attributes: ['id'],
+    where : {
+      serviceLevelAgreementName : serviceLevelAgreement.value
+    }
+  });
+  if (serviceLevelAgreementId.length) {
+    serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+  } else {
+    serviceLevelAgreementId=-1;
+  }
 
-   row=["Emergency","HIGH","<2 hours"];
-   rows.push(row);
-   row=["Urgency","HIGH","<6 hours"];
-   rows.push(row);
-   row=["Routine","HIGH","<12 hours"];
-   rows.push(row);
+  let row=[]
+  let rows=[]
+  let header=["PRIORITY","CONTRACT LEVEL","RESPONSE TIME (Working Hours)"]
+
+  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
+    let results = await models.PB_ServiceSlaResponseType.findAll({
+      attributes: ['idServicePriority','target'],
+      where : {
+        idServiceResponseType : 1, // response
+        idServiceLevelAgreement: serviceLevelAgreementId,
+        idService: serviceTypeDetailsId,
+      }
+    });
+    for (r in results) {
+      switch (results[r].idServicePriority) {
+        case 1:
+          row=[generateDynamicQuestionTemplate("rtPri" +r,"Emergency"),generateDynamicQuestionTemplate("rtSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("rtTar" +r,results[r].target)];
+          rows.push(row);
+        break;
+        case 2:
+          row=[generateDynamicQuestionTemplate("rtPri" +r,"Urgency"),generateDynamicQuestionTemplate("rtSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("rtTar" +r,results[r].target)];          
+          rows.push(row);
+        break;
+        case 3:
+          row=[generateDynamicQuestionTemplate("rtPri" +r,"Routine"),generateDynamicQuestionTemplate("rtSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("rtTar" +r,results[r].target)];          
+          rows.push(row);
+        break;        
+      }
+    }
+  }
 
    let response={
      tableName :"contractLevelResponseTime",
      tableHeader :header,
      tableRows : rows
    }
-   /*
-   for (r in results) {
-     response.tableRows.push([results[r].serviceRequirementDescription])
-   }*/
+
    return response;
 }
 const correctionTime = async (parameters) => {
-   // service requirement
-   // dipende da PB_Services
-   // parametri --> serviceTypeDetails
-   // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-   // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-   /*
-   let p=getParameterValue(parameters,"serviceTypeDetails");
-   const results = await models.PB_ServiceRequirement.findAll({
-     attributes: ['serviceName','serviceRequirementDescription'],
-     where : {
-       serviceName : p
-     }
-   });*/
-   let row=[]
-   let rows=[]
-   let header=["PRIOTIRY","CONTRACT LEVEL","RESPONSE TIME (Working Hours)"]
+  // TABELLA STATICA
+  let row=[]
+  let rows=[]
+  let header=["Correction Time","RELATED KPI"]
 
-   row=["Emergency","HIGH","<2 hours"];
-   rows.push(row);
-   row=["Urgency","HIGH","<6 hours"];
-   rows.push(row);
-   row=["Routine","HIGH","<12 hours"];
-   rows.push(row);
+  row=["The time used by the Service Provider to close the client request (from the beginning of the on-site intervention to the functional recovery)","B.4 Compliance with the agreed correction service time"];
+  rows.push(row);
 
-   let response={
-     tableName :"correctionTime",
-     tableHeader :header,
-     tableRows : rows
-   }
-   /*
-   for (r in results) {
-     response.tableRows.push([results[r].serviceRequirementDescription])
-   }*/
+
+  let response={
+    tableName :"correctionTime",
+    tableHeader :header,
+    tableRows : rows
+  }
    return response;
 }
 const contractLevelCorrectionTime = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
+  let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
+  let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+  
+  
+  let serviceTypeDetailsId = await models.PB_Service.findAll({
+    attributes: ['idServiceClass'],
     where : {
-      serviceName : p
+      serviceName : serviceTypeDetails.value
     }
-  });*/
-  let row=[]
-  let rows=[]
-  let header=["URGENCY LEVEL","CONTRACT SERVICE LEVEL","CORRECTION TIME (Working hours)"]
+  });
+  if (serviceTypeDetailsId.length) {
+    serviceTypeDetailsId=serviceTypeDetailsId[0].dataValues.idServiceClass;
+  } else {
+   serviceTypeDetailsId=-1;
+  }
+  let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+   attributes: ['id'],
+   where : {
+     serviceLevelAgreementName : serviceLevelAgreement.value
+   }
+ });
+ if (serviceLevelAgreementId.length) {
+   serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+ } else {
+   serviceLevelAgreementId=-1;
+ }
 
-  row=["Emergency","HIGH","< 8 hours"];
-  rows.push(row);
-  row=["Urgency","HIGH","< 16 hours"];
-  rows.push(row);
-  row=["Routine","HIGH","Proposed by the provider and approved by the client"];
-  rows.push(row);
+ let row=[]
+ let rows=[]
+ let header=["PRIORITY","CONTRACT LEVEL","CORRECTION TIME (Working Hours)"]
+
+ if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
+   let results = await models.PB_ServiceSlaResponseType.findAll({
+     attributes: ['idServicePriority','target'],
+     where : {
+       idServiceResponseType : 2, //correction time
+       idServiceLevelAgreement: serviceLevelAgreementId,
+       idService: serviceTypeDetailsId,
+     }
+   });
+   for (r in results) {
+     switch (results[r].idServicePriority) {
+       case 1:
+         row=[generateDynamicQuestionTemplate("ctPri" +r,"Emergency"),generateDynamicQuestionTemplate("ctSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("ctTar" +r,results[r].target)];
+         rows.push(row);
+       break;
+       case 2:
+         row=[generateDynamicQuestionTemplate("ctPri" +r,"Urgency"),generateDynamicQuestionTemplate("ctSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("ctTar" +r,results[r].target)];          
+         rows.push(row);
+       break;
+       case 3:
+         row=[generateDynamicQuestionTemplate("ctPri" +r,"Routine"),generateDynamicQuestionTemplate("ctSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("ctTar" +r,results[r].target)];          
+         rows.push(row);
+       break;        
+     }
+   }
+ }
 
   let response={
     tableName :"contractLevelCorrectionTime",
@@ -581,24 +622,12 @@ const contractLevelCorrectionTime = async (parameters) => {
   return response;
 }
 const estimationTime = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
-    where : {
-      serviceName : p
-    }
-  });*/
+ 
   let row=[]
   let rows=[]
-  let header=["DEFINITION","RELATED KPI"]
+  let header=["Delivery of the Budget Estimate","RELATED KPI"]
 
-  row=["Depending on the urgency level of the specific request (only for extra fee activities) the service provider should respect a predetermined time frame to deliver the budget estimation, as described below","B.9 Compliance with Budget Estimate Time Limit"];
+  row=["Depending on the urgency level of the specific request (only for extra fee activities) the service provider should respect a predetermined time frame to deliver the budget estimation, as described below","B.9 Compliance with Budget Estimate Time Limit "];
   rows.push(row);
 
 
@@ -614,29 +643,63 @@ const estimationTime = async (parameters) => {
   return response;
 }
 const contractLevelEstimationTime = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
+  let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
+  let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+  
+  
+  let serviceTypeDetailsId = await models.PB_Service.findAll({
+    attributes: ['idServiceClass'],
     where : {
-      serviceName : p
+      serviceName : serviceTypeDetails.value
     }
-  });*/
-  let row=[]
-  let rows=[]
-  let header=["PRIORITY","CONTRACT SERVICE LEVEL","ESTIMATION TIME (Working hours)"]
+  });
+  if (serviceTypeDetailsId.length) {
+    serviceTypeDetailsId=serviceTypeDetailsId[0].dataValues.idServiceClass;
+  } else {
+   serviceTypeDetailsId=-1;
+  }
+  let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+   attributes: ['id'],
+   where : {
+     serviceLevelAgreementName : serviceLevelAgreement.value
+   }
+ });
+ if (serviceLevelAgreementId.length) {
+   serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+ } else {
+   serviceLevelAgreementId=-1;
+ }
 
-  row=["Emergency","HIGH","NA"];
-  rows.push(row);
-  row=["Urgency","HIGH","< 4 hours"];
-  rows.push(row);
-  row=["Routine","HIGH","< 8 hours"];
-  rows.push(row);
+ let row=[]
+ let rows=[]
+ let header=["PRIORITY","CONTRACT LEVEL","CORRECTION TIME (Working Hours)"]
+
+ if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
+   let results = await models.PB_ServiceSlaResponseType.findAll({
+     attributes: ['idServicePriority','target'],
+     where : {
+       idServiceResponseType : 3, //estimation time
+       idServiceLevelAgreement: serviceLevelAgreementId,
+       idService: serviceTypeDetailsId,
+     }
+   });
+   for (r in results) {
+     switch (results[r].idServicePriority) {
+       case 1:
+         row=[generateDynamicQuestionTemplate("etPri" +r,"Emergency"),generateDynamicQuestionTemplate("etSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("etTar" +r,results[r].target)];
+         rows.push(row);
+       break;
+       case 2:
+         row=[generateDynamicQuestionTemplate("etPri" +r,"Urgency"),generateDynamicQuestionTemplate("etSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("etTar" +r,results[r].target)];          
+         rows.push(row);
+       break;
+       case 3:
+         row=[generateDynamicQuestionTemplate("etPri" +r,"Routine"),generateDynamicQuestionTemplate("etSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("etTar" +r,results[r].target)];          
+         rows.push(row);
+       break;        
+     }
+   }
+ }
 
   let response={
     tableName :"contractLevelEstimationTime",
@@ -650,29 +713,66 @@ const contractLevelEstimationTime = async (parameters) => {
   return response;
 }
 const availability = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
-    where : {
-      serviceName : p
-    }
-  });*/
-  let row=[]
-  let rows=[]
-  let header=["","Time"]
+  let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
+  let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+  let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
 
-  row=["DAILY WORKING HOURS","11"];
-  rows.push(row);
-  row=["WORKING DAYS","260"];
-  rows.push(row);
-  row=["TOTAL YEARLY WORKING HOURS (H/YEAR)","2860"];
-  rows.push(row);
+  let serviceTypeDetailsId = await models.PB_Service.findAll({
+    attributes: ['idServiceClass'],
+    where : {
+      serviceName : serviceTypeDetails.value
+    }
+  });
+  if (serviceTypeDetailsId.length) {
+    serviceTypeDetailsId=serviceTypeDetailsId[0].dataValues.idServiceClass;
+  } else {
+   serviceTypeDetailsId=-1;
+  }
+
+  let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+   attributes: ['id'],
+   where : {
+     serviceLevelAgreementName : serviceLevelAgreement.value
+   }
+  });
+  if (serviceLevelAgreementId.length) {
+    serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+  } else {
+    serviceLevelAgreementId=-1;
+  }
+
+  let facilityServiceConditionId = await models.PB_ConditionIndex.findAll({
+    attributes: ['id'],
+    where : {
+      levelTypeName : facilityServiceCondition.value
+    }
+   });
+   if (facilityServiceConditionId.length) {
+    facilityServiceConditionId=facilityServiceConditionId[0].dataValues.id;
+   } else {
+    facilityServiceConditionId=-1;
+   }
+
+   let row=[]
+   let rows=[]
+   let header=["","Time"]
+  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1) && (facilityServiceConditionId !=-1)) {
+    let results = await models.PB_AvailableCorrectionTime.findAll({
+      attributes: ['typeName','value'],
+      where : {
+        idFci : facilityServiceConditionId,
+        idSLA: serviceLevelAgreementId,
+        idServiceName: serviceTypeDetailsId,
+      }
+    });
+    for (r in results) {
+      row=[generateDynamicQuestionTemplate("avTn" +r,results[r].typeName),generateDynamicQuestionTemplate("avVa" +r,results[r].value)];
+      rows.push(row);
+    }
+  }
+  
+
+  
 
   let response={
     tableName :"availability",
@@ -686,27 +786,59 @@ const availability = async (parameters) => {
   return response;
 }
 const correctionTimeForUrgencyRequest = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
-    where : {
-      serviceName : p
+    let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
+    let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+    
+    
+    let serviceTypeDetailsId = await models.PB_Service.findAll({
+      attributes: ['idServiceClass'],
+      where : {
+        serviceName : serviceTypeDetails.value
+      }
+    });
+    if (serviceTypeDetailsId.length) {
+      serviceTypeDetailsId=serviceTypeDetailsId[0].dataValues.idServiceClass;
+    } else {
+    serviceTypeDetailsId=-1;
     }
-  });*/
+    let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+    attributes: ['id'],
+    where : {
+      serviceLevelAgreementName : serviceLevelAgreement.value
+    }
+  });
+  if (serviceLevelAgreementId.length) {
+    serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+  } else {
+    serviceLevelAgreementId=-1;
+  }
+
   let row=[]
   let rows=[]
   let header=["Urgency Level","Contract SLA","Correction Time (Hours)"]
 
-  row=["Emergency","HIGH","8"];
-  rows.push(row);
-  row=["Urgency","HIGH","16"];
-  rows.push(row);
+  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
+    let results = await models.PB_CorrectionTime.findAll({
+      attributes: ['idPriorityName','idSLA','definition'],
+      where : {
+        idSLA: serviceLevelAgreementId,
+        idServiceName: serviceTypeDetailsId,
+      }
+    });
+    for (r in results) {
+      switch (results[r].idPriorityName) {
+        case 1:
+          row=[generateDynamicQuestionTemplate("tfPri" +r,"Emergency"),generateDynamicQuestionTemplate("tfSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("tfDef" +r,results[r].definition)];
+          rows.push(row);
+        break;
+        case 2:
+          row=[generateDynamicQuestionTemplate("tfPri" +r,"Urgency"),generateDynamicQuestionTemplate("tfSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("tfDef" +r,results[r].definition)];          
+          rows.push(row);
+        break;     
+      }
+    }
+  }
+  
 
 
   let response={
@@ -721,27 +853,57 @@ const correctionTimeForUrgencyRequest = async (parameters) => {
   return response;
 }
 const systemConditionIndex = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
+  let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
+  let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+  let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
+
+  let serviceTypeDetailsId = await models.PB_Service.findAll({
+    attributes: ['idServiceClass'],
     where : {
-      serviceName : p
+      serviceName : serviceTypeDetails.value
     }
-  });*/
+  });
+  if (serviceTypeDetailsId.length) {
+    serviceTypeDetailsId=serviceTypeDetailsId[0].dataValues.idServiceClass;
+  } else {
+   serviceTypeDetailsId=-1;
+  }
+
+  let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+   attributes: ['id'],
+   where : {
+     serviceLevelAgreementName : serviceLevelAgreement.value
+   }
+  });
+  if (serviceLevelAgreementId.length) {
+    serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+  } else {
+    serviceLevelAgreementId=-1;
+  }
+
+  let facilityServiceConditionId = await models.PB_ConditionIndex.findAll({
+    attributes: ['id'],
+    where : {
+      levelTypeName : facilityServiceCondition.value
+    }
+   });
+   if (facilityServiceConditionId.length) {
+    facilityServiceConditionId=facilityServiceConditionId[0].dataValues.id;
+   } else {
+    facilityServiceConditionId=-1;
+   }
+  
   let row=[]
   let rows=[]
   let header=["Facility Condition value","No. of estimated on demand activities","DEFINITION"]
+  if (facilityServiceConditionId !=-1) {
+    row=["Activities/Month","8","estimation of the number of on demand/correction activities related to the system maintenance conditionthis number will be re-evaluate each months in order to increase the applicability and truthfulness of the related KPI (availability index)"];
+    rows.push(row);
+    row=["Activities/Year","96","*each time we have an on demand request or a corrective intervention (emergency and/or Urgency level) the system is considered non available"];
+    rows.push(row);
+  }
 
-  row=["Activities/Month","5","estimation of the number of on demand/correction activities related to the system maintenance conditionthis number will be re-evaluate each months in order to increase the applicability and truthfulness of the related KPI (availability index)"];
-  rows.push(row);
-  row=["Activities/Year","60","*each time we have an on demand request or a corrective intervention (emergency and/or Urgency level) the system is considered non available"];
-  rows.push(row);
+  
 
 
   let response={
@@ -983,12 +1145,13 @@ const genericTechnicalRequirements = async (parameters) => {
    const results = await models.PB_ServiceRequirement.findAll({
      attributes: ['serviceName','serviceRequirementDescription'],
      where : {
-       serviceName : p
+       serviceName : p.name,
+
      }
    });
    let response={
      tableName :"genericTechnicalRequirements",
-     tableHeader :[p],
+     tableHeader :[p.name],
      tableRows : []
    }
    for (r in results) {
@@ -1443,8 +1606,7 @@ const addTextFieldsToTables= async(contractId) => {
         idPlaybook: contractId
       },
       order: [
-        ['code', 'ASC'],
-        
+        ['code', 'ASC'],        
     ],
     });
     //consoleLog(serviceTypeDetailsTable);

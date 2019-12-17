@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('PB_AvailabilityCorrectionTimes', {
+    return queryInterface.createTable('PB_CorrectionTimes', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -14,7 +14,7 @@ module.exports = {
       idSLA: {
         type: Sequelize.INTEGER
       },
-      idFci: {
+      idPriorityName: {
         type: Sequelize.INTEGER
       },
       typeName: {
@@ -34,6 +34,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('PB_AvailabilityCorrectionTimes');
+    return queryInterface.dropTable('PB_CorrectionTimes');
   }
 };
