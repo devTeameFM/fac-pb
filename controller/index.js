@@ -1154,7 +1154,7 @@ const genericTechnicalRequirements = async (parameters) => {
     const results = await models.PB_ServiceRequirement.findAll({
       attributes: ['serviceName','serviceRequirementDescription'],
       where : {
-        serviceName : p.name,
+        serviceName : p.value,
       }
     });
     
