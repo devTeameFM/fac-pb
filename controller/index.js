@@ -1105,52 +1105,34 @@ const penaltiesRelatedNonConformities = async (parameters) => {
   return response;
 }
 const preventiveMaintenanceProcedures = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
-    where : {
-      serviceName : p
-    }
-  });*/
+  let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+  let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+   attributes: ['id'],
+   where : {
+     serviceLevelAgreementName : serviceLevelAgreement.value
+   }
+  });
+  if (serviceLevelAgreementId.length) {
+    serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+  } else {
+    serviceLevelAgreementId=-1;
+  }
+
+  let query="SELECT \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\", \"PB_PMSlaProcedures\".\"activitydescription\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"idSLA\" FROM \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_PMSlaProcedures\".\"idservice\" and \"PB_ServiceAssetComponents\".\"id\" = \"PB_PMSlaProcedures\".\"idPMServiceAsset\" and \"PB_Frequencies\".\"id\" = \"PB_PMSlaProcedures\".\"idFrequency\"";    
+  let results = await models.sequelize.query(query);
+  let info=results[0];
+
+
   let row=[]
   let rows=[]
   let header=["SYSTEM","COMPONENT","ACTIVITY","FREQUENCES"]
 
-  row=["HVAC","Technical Rooms","Exposed ductwork will be checked for leaks and proper insulation","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Belts and pulleys will be inspected and adjusted as required - Belts replaced as required","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Thermostats will be checked and calibrated as required","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Motors and Bearings will be lubricated as required","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Controls and safeties will be tested","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Condensate drain will be checked and cleaned as required","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Relays and contactors will be inspected","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Unit wiring will be inspected","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Temperatures and pressures will be recorded","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Inspection report and prompt follow up of any abnormal conditions or necessary repairs","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","External cleaning of the equipment","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Internal cleaning of the equipment","Monthly"];
-  rows.push(row);
-  row=["HVAC","Technical Rooms","Tightening bolts","Monthly"];
-  rows.push(row);
-
-
-
+  for (r in info) {
+    if (info[r].idSLA===serviceLevelAgreementId) {
+      row=[info[r].serviceName,info[r].assetComponentType,info[r].activitydescription,generateDynamicQuestionTemplate("acFr" +r,info[r].frequency)]
+      rows.push(row);
+    }    
+  }
 
   let response={
     tableName :"preventiveMaintenanceProcedures",
