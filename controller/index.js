@@ -1790,7 +1790,8 @@ const updateContract = async (req, res) => {
               					  await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
                       case "serviceTypeDetails":
-              						//console.log("serviceTypeDetails")
+                          //console.log("serviceTypeDetails")
+                          /*
               						for (sur in playbook.surveys) {
               						  for (sec in playbook.surveys[sur].sections) {
               							for (q in playbook.surveys[sur].sections[sec].questions) {
@@ -1805,9 +1806,11 @@ const updateContract = async (req, res) => {
               							  }
               							}
               						  }
-              						}
+                          }
+                          */
               						//consoleLog(result,"")
-              						playbook.surveys[sur].sections[sec].questions[q].update=true;
+                          
+                          //playbook.surveys[sur].sections[sec].questions[q].update=true;
                           let surveySectionId= await models['SM_SurveySection'].findOne({where: { idPlaybook: playbook.id,code: "serviceInScope"}});
                           console.log("surveySectionId : " + surveySectionId.id);
               						tableRows=[];
@@ -1867,8 +1870,8 @@ const updateContract = async (req, res) => {
               						  tableRows.push(tableRow);
               						}
                           //consoleLog(tableRows);
-              						playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
-              						playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
+              						//playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
+              						//playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
               						//console.log('\x1b[33m');
               						//console.log("tableRows:" + JSON.stringify(tableRows,null,2));
               						//console.log('\x1b[0m');
@@ -2570,6 +2573,7 @@ const updateServiceType= async (answer,playbook) => {
     });
     if (deleted)  {}//console.log("serviceTypeDetails DELETED")
   }
+  /*
   for (sur in playbook.surveys) {
     for (sec in playbook.surveys[sur].sections) {
       for (q in playbook.surveys[sur].sections[sec].questions) {
@@ -2583,6 +2587,7 @@ const updateServiceType= async (answer,playbook) => {
       }
     }
   }
+  */
   tableRows=[];
   let serviceType = await models['PB_ServiceClass'].findOne(
     {
@@ -2736,9 +2741,9 @@ const updateServiceType= async (answer,playbook) => {
   let answ1=await models.SM_SurveyAnswer.create(answerAdd1);
   // ******************************************************** facilityServiceCondition ***********************************/
   //aggiungo le question al play book
-  playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableName="serviceTypeDetails";
-  playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=[,"Select the average facility condition of your physical assets"];
-  playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
+  //[result.surveyId].sections[result.sectionId].questions[result.questionId].tableName="serviceTypeDetails";
+  //playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=[,"Select the average facility condition of your physical assets"];
+  //playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
 }
 // funzioni update playBook
 // ************************************************
