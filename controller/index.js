@@ -1179,7 +1179,7 @@ const preventiveMaintenanceProcedures = async (parameters) => {
     serviceLevelAgreementId=-1;
   }
 
-  let query="SELECT \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\", \"PB_PMSlaProcedures\".\"activitydescription\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"idSLA\" FROM \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_PMSlaProcedures\".\"idservice\" and \"PB_ServiceAssetComponents\".\"id\" = \"PB_PMSlaProcedures\".\"idPMServiceAsset\" and \"PB_Frequencies\".\"id\" = \"PB_PMSlaProcedures\".\"idFrequency\"";    
+  let query="SELECT \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\", \"PB_PMSlaProcedures\".\"activitydescription\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"idSLA\" FROM \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_PMSlaProcedures\".\"idservice\" and \"PB_ServiceAssetComponents\".\"id\" = \"PB_PMSlaProcedures\".\"idPMServiceAsset\" and \"PB_Frequencies\".\"id\" = \"PB_PMSlaProcedures\".\"idFrequency\" order by \"PB_ServiceAssetComponents\".\"assetComponentType\"";    
   let results = await models.sequelize.query(query);
   let info=results[0];
 
