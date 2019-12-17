@@ -1038,21 +1038,6 @@ const qualityProvided = async (parameters) => {
     }
   }
   
-
-  
-  row=["B.3 Compliance with the agreed Scheduled Activities Plan","Yes","Information System","Analysis of the information uploaded to the System",,"Quarterly","95"];
-  rows.push(row);
-  row=["B.4 Compliance with the agreed Response Time","Yes","Information System",,,"Quarterly","95"];
-  rows.push(row);
-  row=["B.5 Compliance with the agreed Correction Time","Yes","Information System",,,"Quarterly","95"];
-  rows.push(row);
-  row=["B.5 Compliance with the agreed Correction Time","Yes","Information System",,,"Quarterly","95"];
-  rows.push(row);
-
-
-
-
-
   let response={
     tableName :"qualityProvided",
     tableHeader :header,
