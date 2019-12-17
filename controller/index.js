@@ -100,7 +100,10 @@ function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
   return playbook;
 }
 function getParameterValue(parameters,parameterName) {
-  let value="";
+  let value={
+    name:"",
+    value:"",
+  };
   for (p in parameters) {
     if (parameters[p].name===parameterName) value= parameters[p];
   }
@@ -383,7 +386,8 @@ const runtimeSummaryCreation = async (playBook) => {
   // funzioni da per generare i dati nel summary
   // genericTechnicalRequirements
 
-  let techReq=await genericTechnicalRequirements(parameters); //OK
+  
+  let techReq=await genericTechnicalRequirements(parameters); //OK  
   let priorityDefinitionInfo=await priorityDefinition(parameters); //OK
   let responseTimeInfo=await responseTime(parameters); //OK
   let contractLevelResponseTimeInfo =await contractLevelResponseTime(parameters); //OK
@@ -401,6 +405,7 @@ const runtimeSummaryCreation = async (playBook) => {
   let preventiveMaintenanceProceduresInfo =await preventiveMaintenanceProcedures(parameters);
 
   let updateplaybook=addInfoTableSummary(playBook,"review","genericTechnicalRequirements",techReq);
+  
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",priorityDefinitionInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",responseTimeInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelResponseTimeInfo);
@@ -1141,22 +1146,28 @@ const genericTechnicalRequirements = async (parameters) => {
    // parametri --> serviceTypeDetails
    // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
    // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  let row=[]
+  let rows=[]
+  let header=["SYSTEM","COMPONENT","ACTIVITY","FREQUENCES"]
    let p=getParameterValue(parameters,"serviceTypeDetails");
-   const results = await models.PB_ServiceRequirement.findAll({
-     attributes: ['serviceName','serviceRequirementDescription'],
-     where : {
-       serviceName : p.name,
+   if (p.name) {
+    const results = await models.PB_ServiceRequirement.findAll({
+      attributes: ['serviceName','serviceRequirementDescription'],
+      where : {
+        serviceName : p.name,
 
-     }
-   });
-   let response={
-     tableName :"genericTechnicalRequirements",
-     tableHeader :[p.name],
-     tableRows : []
-   }
-   for (r in results) {
-     response.tableRows.push([results[r].serviceRequirementDescription])
-   }
+      }
+    });
+    
+    for (r in results) {
+      response.tableRows.push([results[r].serviceRequirementDescription])
+    }
+  }
+  let response={
+    tableName :"genericTechnicalRequirements",
+    tableHeader :[],
+    tableRows : []
+  }
    return response;
 }
 function initPlayBook(pb) {
