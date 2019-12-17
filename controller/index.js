@@ -1048,18 +1048,79 @@ const qualityProvided = async (parameters) => {
 }
 const penaltiesRelatedMonitoringSystem = async (parameters) => {
 
+  let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
+  let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+  let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
+
+  let serviceTypeDetailsId = await models.PB_Service.findAll({
+    attributes: ['idServiceClass'],
+    where : {
+      serviceName : serviceTypeDetails.value
+    }
+  });
+  if (serviceTypeDetailsId.length) {
+    serviceTypeDetailsId=serviceTypeDetailsId[0].dataValues.idServiceClass;
+  } else {
+   serviceTypeDetailsId=-1;
+  }
+
+  let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+   attributes: ['id'],
+   where : {
+     serviceLevelAgreementName : serviceLevelAgreement.value
+   }
+  });
+  if (serviceLevelAgreementId.length) {
+    serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+  } else {
+    serviceLevelAgreementId=-1;
+  }
+
+  let facilityServiceConditionId = await models.PB_ConditionIndex.findAll({
+    attributes: ['id'],
+    where : {
+      levelTypeName : facilityServiceCondition.value
+    }
+   });
+   if (facilityServiceConditionId.length) {
+    facilityServiceConditionId=facilityServiceConditionId[0].dataValues.id;
+   } else {
+    facilityServiceConditionId=-1;
+   }
+
+  
   let row=[]
   let rows=[]
   let header=["KPI (KEY PERFORMANCE INDICATORS)","SLA","PENALTY"]
+  
+  if (serviceLevelAgreementId !=-1) {
+    let query="SELECT \"PB_Services\".\"serviceName\", \"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and \"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\"";    
 
-  row=["A.1 Compliance with availability index","89%","0,01% of the monthly fee for each percentage point under the SLA"];
-  rows.push(row);
-  row=["B.1 Cold satisfaction","90%","0,01% of the monthly fee for each percentage point under the SLA"];
-  rows.push(row);
-  row=["B.2 Hot satisfaction","90%","0,01% of the monthly fee for each percentage point under the SLA"];
-  rows.push(row);
-  row=["B.3 Compliance with the agreed Scheduled Activities Plan","90%","0,01% of the monthly fee for each percentage point under the SLA"];
-  rows.push(row);
+    let results = await models.sequelize.query(query);
+    
+    let info=results[0];
+    for (r in info) {      
+      if ((info[r].kpiName==="A.1 AVAILABILITY INDEX") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["A.1 AVAILABILITY INDEX",generateDynamicQuestionTemplate("prSLA" +r,info[r].value),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        rows.push(row);
+      }
+      if ((info[r].kpiName==="B.1 Cold satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["B.1 Cold satisfaction",generateDynamicQuestionTemplate("prSLA" +r,info[r].value),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        rows.push(row);
+      }
+      if ((info[r].kpiName==="B.2 Hot satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["B.2 Hot satisfaction",generateDynamicQuestionTemplate("prSLA" +r,info[r].value),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        rows.push(row);
+      }
+      if ((info[r].kpiName==="B.3 Compliance with the agreed Scheduled Activities Plan") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["B.3 Compliance with the agreed Scheduled Activities Plan",generateDynamicQuestionTemplate("prSLA" +r,info[r].value),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        rows.push(row);
+      }                  
+         
+    }
+  }
+
+  
 
 
   let response={
