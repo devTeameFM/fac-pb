@@ -401,7 +401,7 @@ const runtimeSummaryCreation = async (playBook) => {
   let availabilityIndexInfo =await availabilityIndex(parameters);
   let qualityProvidedInfo =await qualityProvided(parameters);
   let penaltiesRelatedMonitoringSystemInfo =await penaltiesRelatedMonitoringSystem(parameters);
-  let penaltiesRelatedNonConformitiesInfo =await penaltiesRelatedNonConformities(parameters);
+  let penaltiesRelatedNonConformitiesInfo =await penaltiesRelatedNonConformities(parameters); // OK
   let preventiveMaintenanceProceduresInfo =await preventiveMaintenanceProcedures(parameters);
 
   let updateplaybook=addInfoTableSummary(playBook,"review","genericTechnicalRequirements",techReq);
@@ -775,9 +775,6 @@ const availability = async (parameters) => {
       rows.push(row);
     }
   }
-  
-
-  
 
   let response={
     tableName :"availability",
@@ -858,6 +855,42 @@ const correctionTimeForUrgencyRequest = async (parameters) => {
   return response;
 }
 const systemConditionIndex = async (parameters) => {
+  
+  let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
+  let facilityServiceConditionId = await models.PB_ConditionIndex.findAll({
+    attributes: ['id'],
+    where : {
+      levelTypeName : facilityServiceCondition.value
+    }
+   });
+   if (facilityServiceConditionId.length) {
+    facilityServiceConditionId=facilityServiceConditionId[0].dataValues.id;
+   } else {
+    facilityServiceConditionId=-1;
+   }
+  
+  let row=[]
+  let rows=[]
+  let header=["Facility Condition value","No. of estimated on demand activities","DEFINITION"]
+  if (facilityServiceConditionId !=-1) {
+    row=["Activities/Month","8","estimation of the number of on demand/correction activities related to the system maintenance conditionthis number will be re-evaluate each months in order to increase the applicability and truthfulness of the related KPI (availability index)"];
+    rows.push(row);
+    row=["Activities/Year","96","*each time we have an on demand request or a corrective intervention (emergency and/or Urgency level) the system is considered non available"];
+    rows.push(row);
+  }
+
+  
+
+
+  let response={
+    tableName :"systemConditionIndex",
+    tableHeader :header,
+    tableRows : rows
+  }
+ 
+  return response;
+}
+const availabilityIndex = async (parameters) => {
   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
   let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
   let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
@@ -897,94 +930,123 @@ const systemConditionIndex = async (parameters) => {
    } else {
     facilityServiceConditionId=-1;
    }
-  
-  let row=[]
-  let rows=[]
-  let header=["Facility Condition value","No. of estimated on demand activities","DEFINITION"]
-  if (facilityServiceConditionId !=-1) {
-    row=["Activities/Month","8","estimation of the number of on demand/correction activities related to the system maintenance conditionthis number will be re-evaluate each months in order to increase the applicability and truthfulness of the related KPI (availability index)"];
-    rows.push(row);
-    row=["Activities/Year","96","*each time we have an on demand request or a corrective intervention (emergency and/or Urgency level) the system is considered non available"];
-    rows.push(row);
-  }
 
   
-
-
-  let response={
-    tableName :"systemConditionIndex",
-    tableHeader :header,
-    tableRows : rows
-  }
-  /*
-  for (r in results) {
-    response.tableRows.push([results[r].serviceRequirementDescription])
-  }*/
-  return response;
-}
-const availabilityIndex = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
-    where : {
-      serviceName : p
-    }
-  });*/
   let row=[]
   let rows=[]
   let header=["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE","FREQUENCY","SLA"]
+  
+  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1) && (facilityServiceConditionId !=-1)) {
+    let query="SELECT \"PB_Services\".\"serviceName\", \"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and \"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\"";    
 
-  row=["A.1 AVAILABILITY INDEX","Yes","Information System","Analysis of the information uploaded to the System","Ratio between system up time and total working hours","Monthly","89%"];
-  rows.push(row);
-
-
+    let results = await models.sequelize.query(query);
+    
+    let info=results[0];
+    for (r in info) {      
+      if ((info[r].kpiName==="A.1 AVAILABILITY INDEX") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["A.1 AVAILABILITY INDEX","Yes","Information System","Analysis of the information uploaded to the System","Ratio between system up time and total working hours",generateDynamicQuestionTemplate("aiFr" +r,info[r].frequency),generateDynamicQuestionTemplate("aiSLA" +r,info[r].value)];  
+        rows.push(row);
+      }      
+    }
+  }
 
   let response={
     tableName :"availabilityIndex",
     tableHeader :header,
     tableRows : rows
   }
-  /*
-  for (r in results) {
-    response.tableRows.push([results[r].serviceRequirementDescription])
-  }*/
+  
   return response;
 }
 const qualityProvided = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
-    where : {
-      serviceName : p
-    }
-  });*/
-  let row=[]
-  let rows=[]
-  let header=["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE","FREQUENCY","SLA"]
+  let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
+  let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+  let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
 
-  row=["B.1 Cold satisfaction","Yes","Survey","Customer Survey campaign","Ratio between the sum of the scores related to the Service Level VS maximum possible score","Quarterly","90%"];
+  let serviceTypeDetailsId = await models.PB_Service.findAll({
+    attributes: ['idServiceClass'],
+    where : {
+      serviceName : serviceTypeDetails.value
+    }
+  });
+  if (serviceTypeDetailsId.length) {
+    serviceTypeDetailsId=serviceTypeDetailsId[0].dataValues.idServiceClass;
+  } else {
+   serviceTypeDetailsId=-1;
+  }
+
+  let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+   attributes: ['id'],
+   where : {
+     serviceLevelAgreementName : serviceLevelAgreement.value
+   }
+  });
+  if (serviceLevelAgreementId.length) {
+    serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+  } else {
+    serviceLevelAgreementId=-1;
+  }
+
+  let facilityServiceConditionId = await models.PB_ConditionIndex.findAll({
+    attributes: ['id'],
+    where : {
+      levelTypeName : facilityServiceCondition.value
+    }
+   });
+   if (facilityServiceConditionId.length) {
+    facilityServiceConditionId=facilityServiceConditionId[0].dataValues.id;
+   } else {
+    facilityServiceConditionId=-1;
+   }
+
+  
+   let row=[]
+   let rows=[]
+   let header=["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE","FREQUENCY","SLA"]
+  
+  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1) && (facilityServiceConditionId !=-1)) {
+    let query="SELECT \"PB_Services\".\"serviceName\", \"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and \"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\"";    
+
+    let results = await models.sequelize.query(query);
+    
+    let info=results[0];
+    for (r in info) {      
+      if ((info[r].kpiName==="B.1 Cold satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["B.1 Cold satisfaction","Yes","Survey","Customer Survey campaign","Ratio between the sum of the scores related to the Service Level VS maximum possible score",generateDynamicQuestionTemplate("aiFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        rows.push(row);
+      }
+      if ((info[r].kpiName==="B.2 Hot satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["B.2 Hot satisfaction","Yes","Information System","Feedback regarding each activity delivered by the Provider","Ratio between the score attributed to each activity carried out VS maximum possible score",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        rows.push(row);
+      }
+      if ((info[r].kpiName==="B.3 Compliance with the agreed Scheduled Activities Plan") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["B.3 Compliance with the agreed Scheduled Activities Plan","Yes","Information System","Analysis of the information uploaded to the System","Number of activities completed according to Scheduled VS total activities scheduled",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        rows.push(row);
+      }
+      if ((info[r].kpiName==="B.4 Compliance with the agreed Response Time") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["B.4 Compliance with the agreed Response Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities started within SLA VS total number of corrective activities",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        rows.push(row);
+      }
+      if ((info[r].kpiName==="B.5 Compliance with the agreed Correction Time") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["B.5 Compliance with the agreed Correction Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities completed within SLA VS total number of corrective activities",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        rows.push(row);
+      }
+      if ((info[r].kpiName==="B.6 Compliance with quality provided") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
+        row=["B.6 Compliance with quality provided","Yes","Information System","Analysis of the information uploaded to the System","Number of Budget Estimates delivered within SLA VS Total Number of Budget Estimate Delivered",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        rows.push(row);
+      }      
+    }
+  }
+  
+
+  
+  row=["B.3 Compliance with the agreed Scheduled Activities Plan","Yes","Information System","Analysis of the information uploaded to the System",,"Quarterly","95"];
   rows.push(row);
-  row=["B.2 Hot satisfaction","Yes","Information System","Feedback regarding each activity delivered by the Provider","Ratio between the score attributed to each activity carried out VS maximum possible score","Each time that a Corrective Activity is carried out","95%"];
+  row=["B.4 Compliance with the agreed Response Time","Yes","Information System",,,"Quarterly","95"];
   rows.push(row);
-  row=["B.3 Compliance with the agreed Scheduled Activities Plan","Yes","Information System","Analysis of the information uploaded to the System","Number of activities completed according to Scheduled VS total activities scheduled","Quarterly","95"];
+  row=["B.5 Compliance with the agreed Correction Time","Yes","Information System",,,"Quarterly","95"];
   rows.push(row);
-  row=["B.4 Compliance with the agreed Response Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities started within SLA VS total number of corrective activities","Quarterly","95"];
-  rows.push(row);
-  row=["B.5 Compliance with the agreed Correction Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities completed within SLA VS total number of corrective activities","Quarterly","95"];
-  rows.push(row);
-  row=["B.5 Compliance with the agreed Correction Time","Yes","Information System","Analysis of the information uploaded to the System","Number of Budget Estimates delivered within SLA VS Total Number of Budget Estimate Delivered","Quarterly","95"];
+  row=["B.5 Compliance with the agreed Correction Time","Yes","Information System",,,"Quarterly","95"];
   rows.push(row);
 
 
@@ -996,26 +1058,11 @@ const qualityProvided = async (parameters) => {
     tableHeader :header,
     tableRows : rows
   }
-  /*
-  for (r in results) {
-    response.tableRows.push([results[r].serviceRequirementDescription])
-  }*/
+
   return response;
 }
 const penaltiesRelatedMonitoringSystem = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
-    where : {
-      serviceName : p
-    }
-  });*/
+
   let row=[]
   let rows=[]
   let header=["KPI (KEY PERFORMANCE INDICATORS)","SLA","PENALTY"]
@@ -1038,19 +1085,6 @@ const penaltiesRelatedMonitoringSystem = async (parameters) => {
   return response;
 }
 const penaltiesRelatedNonConformities = async (parameters) => {
-  // service requirement
-  // dipende da PB_Services
-  // parametri --> serviceTypeDetails
-  // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
-  // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
-  /*
-  let p=getParameterValue(parameters,"serviceTypeDetails");
-  const results = await models.PB_ServiceRequirement.findAll({
-    attributes: ['serviceName','serviceRequirementDescription'],
-    where : {
-      serviceName : p
-    }
-  });*/
   let row=[]
   let rows=[]
   let header=["SPECIFIC INDICATOR AREA","DESCRIPTION","PERIMETER","PENALTY"]
