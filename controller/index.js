@@ -677,7 +677,7 @@ const contractLevelEstimationTime = async (parameters) => {
 
  let row=[]
  let rows=[]
- let header=["PRIORITY","CONTRACT LEVEL","CORRECTION TIME (Working Hours)"]
+ let header=["PRIORITY","CONTRACT LEVEL","ESTIMATE TIME (Working Hours)"]
 
  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
    let results = await models.PB_ServiceSlaResponseType.findAll({
@@ -1148,25 +1148,24 @@ const genericTechnicalRequirements = async (parameters) => {
    // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
   let row=[]
   let rows=[]
-  let header=["SYSTEM","COMPONENT","ACTIVITY","FREQUENCES"]
-   let p=getParameterValue(parameters,"serviceTypeDetails");
-   if (p.name) {
+  let header=["HVAC System"]
+  let p=getParameterValue(parameters,"serviceTypeDetails");
+  if (p.name) {
     const results = await models.PB_ServiceRequirement.findAll({
       attributes: ['serviceName','serviceRequirementDescription'],
       where : {
         serviceName : p.name,
-
       }
     });
     
     for (r in results) {
-      response.tableRows.push([results[r].serviceRequirementDescription])
+      rows.push([results[r].serviceRequirementDescription])
     }
   }
   let response={
     tableName :"genericTechnicalRequirements",
-    tableHeader :[],
-    tableRows : []
+    tableHeader : header,
+    tableRows : rows
   }
    return response;
 }
