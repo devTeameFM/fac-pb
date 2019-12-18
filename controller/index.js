@@ -148,19 +148,18 @@ const runtimeAnswerModeler = async (contractId) => {
   let answers={}
   for (a in surveys) {
     answers[surveys[a].code]={}
-    //consoleLog(surveys[a]);
+    
     for (s in surveys[a]["sections"]) {
       answers[surveys[a].code][surveys[a]["sections"][s].code]={}
-      //consoleLog(surveys[a]["sections"][s]);
+      
       for (q in surveys[a]["sections"][s]["questions"]) {
         answers[surveys[a].code][surveys[a]["sections"][s].code][surveys[a]["sections"][s]["questions"][q].code]=surveys[a]["sections"][s]["questions"][q].answers[0];
-        //consoleLog(surveys[a]["sections"][s]["questions"][q]);
+
       }
     }
   }
   return answers;
 }
-
 
 const getPlayBookFromId = async (contractId) => {
   //console.log("contractId --> " + JSON.stringify(req.params));
@@ -359,9 +358,47 @@ const getContractById = async (req, res) => {
   }
 }
 
-function generateDynamicQuestionTemplate(code,value) {
-  var result= {   
-      id: 10000000, 
+const generateDynamicQuestionTemplate = async(code,value,playbookId,sectionCode) => {
+  const sectionId = await models.SM_SurveySection.findOne({   
+    attributes : ["id"],
+    where : {
+      idPlaybook : playbookId,
+      code: sectionCode
+    }
+  });  
+  const checkQuestion = await models.SM_SurveySectionQuestion.findOne({    
+    where : {
+      idPlaybook : playbookId,
+      idSection : sectionId.dataValues.id,
+      code : code
+    }
+  });
+
+  if (!checkQuestion) {
+    let newQuestion={
+      "idPlaybook" : playbookId,
+      "idSection" : sectionId.dataValues.id,
+      "code": code,
+      "name": "",
+      "tooltip": "",
+      "nameI98n": "",
+      "tooltipI18n": "",
+      "type": "STRING",
+      "flow": false,
+      "required": false,
+      "isParameter" : false,
+      "updated" : false,
+      "tableName" : "",      
+      }
+    let runtimeQuestion= await models.SM_SurveySectionQuestion.create(newQuestion);
+    let newAnswer={
+      "playBookId" : playbookId,
+      "questionId" : runtimeQuestion.id,
+      "value" : value
+    }
+    let runtimeAnswer= await models.SM_SurveyAnswer.create(newAnswer);
+    var result= {   
+      id: runtimeQuestion.id, 
       code: code,
       name: '',
       tooltip: '',
@@ -373,7 +410,29 @@ function generateDynamicQuestionTemplate(code,value) {
       required: false,
       disabled: true,
       defaultValue:value
+    }
+  } else {    
+    let updateAnswer={      
+      "value" : value
+    }
+    const status=await models.SM_SurveyAnswer.update(updateAnswer,{where: { questionId: checkQuestion.id }})
+    var result= {   
+      id: checkQuestion.id, 
+      code: code,
+      name: '',
+      tooltip: '',
+      nameI98n: '',
+      tooltipI18n: '',
+      type: 'STRING',
+      icon: '',
+      flow: false,
+      required: false,
+      disabled: true,
+      defaultValue:value
+    }
   }
+
+  
   return result;
 }
 
@@ -388,25 +447,24 @@ const runtimeSummaryCreation = async (playBook) => {
   // genericTechnicalRequirements
 
   
-  let techReq=await genericTechnicalRequirements(parameters); //OK  
-  let priorityDefinitionInfo=await priorityDefinition(parameters); //OK
-  let responseTimeInfo=await responseTime(parameters); //OK
-  let contractLevelResponseTimeInfo =await contractLevelResponseTime(parameters); //OK
-  let correctionTimeInfo =await correctionTime(parameters); // OK
-  let contractLevelCorrectionTimeInfo =await contractLevelCorrectionTime(parameters); // OK
-  let estimationTimeInfo =await estimationTime(parameters); // OK
-  let contractLevelEstimationTimeInfo =await contractLevelEstimationTime(parameters); // OK
-  let availabilityInfo =await availability(parameters); // OK
-  let correctionTimeForUrgencyRequestInfo =await correctionTimeForUrgencyRequest(parameters); // OK
-  let systemConditionIndexInfo =await systemConditionIndex(parameters);
-  let availabilityIndexInfo =await availabilityIndex(parameters);
-  let qualityProvidedInfo =await qualityProvided(parameters);
-  let penaltiesRelatedMonitoringSystemInfo =await penaltiesRelatedMonitoringSystem(parameters);
-  let penaltiesRelatedNonConformitiesInfo =await penaltiesRelatedNonConformities(parameters); // OK
-  let preventiveMaintenanceProceduresInfo =await preventiveMaintenanceProcedures(parameters);
+  let techReq=await genericTechnicalRequirements(parameters,playBook.id,"review","genericTechnicalRequirements"); //OK  
+  let priorityDefinitionInfo=await priorityDefinition(parameters,playBook.id,"review","prioritiesAndResponseTimesDefinition"); //OK
+  let responseTimeInfo=await responseTime(parameters,playBook.id,"review","prioritiesAndResponseTimesDefinition"); //OK
+  let contractLevelResponseTimeInfo =await contractLevelResponseTime(parameters,playBook.id,"review","prioritiesAndResponseTimesDefinition"); //OK
+  let correctionTimeInfo =await correctionTime(parameters,playBook.id,"review","prioritiesAndResponseTimesDefinition"); // OK
+  let contractLevelCorrectionTimeInfo =await contractLevelCorrectionTime(parameters,playBook.id,"review","prioritiesAndResponseTimesDefinition"); // OK
+  let estimationTimeInfo =await estimationTime(parameters,playBook.id,"review","prioritiesAndResponseTimesDefinition"); // OK
+  let contractLevelEstimationTimeInfo =await contractLevelEstimationTime(parameters,playBook.id,"review","prioritiesAndResponseTimesDefinition"); // OK
+  let availabilityInfo =await availability(parameters,playBook.id,"review","keyPerformanceIndicators"); // OK
+  let correctionTimeForUrgencyRequestInfo =await correctionTimeForUrgencyRequest(parameters,playBook.id,"review","keyPerformanceIndicators"); // OK
+  let systemConditionIndexInfo =await systemConditionIndex(parameters,playBook.id,"review","keyPerformanceIndicators");
+  let availabilityIndexInfo =await availabilityIndex(parameters,playBook.id,"review","keyPerformanceIndicators");
+  let qualityProvidedInfo =await qualityProvided(parameters,playBook.id,"review","keyPerformanceIndicators");
+  let penaltiesRelatedMonitoringSystemInfo =await penaltiesRelatedMonitoringSystem(parameters,playBook.id,"review","penalties");
+  let penaltiesRelatedNonConformitiesInfo =await penaltiesRelatedNonConformities(parameters,playBook.id,"review","penalties"); // OK
+  let preventiveMaintenanceProceduresInfo =await preventiveMaintenanceProcedures(parameters,playBook.id,"review","preventiveMaintenanceProcedures");
 
   let updateplaybook=addInfoTableSummary(playBook,"review","genericTechnicalRequirements",techReq);
-  
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",priorityDefinitionInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",responseTimeInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","prioritiesAndResponseTimesDefinition",contractLevelResponseTimeInfo);
@@ -426,7 +484,7 @@ const runtimeSummaryCreation = async (playBook) => {
 
   return updateplaybook;
 }
-const priorityDefinition = async (parameters) => {
+const priorityDefinition = async (parameters,playBookId,surveyCode,sectionCode) => {
   // TABELLA STATICA
 
    let row=[]
@@ -445,13 +503,9 @@ const priorityDefinition = async (parameters) => {
      tableHeader :header,
      tableRows : rows
    }
-   /*
-   for (r in results) {
-     response.tableRows.push([results[r].serviceRequirementDescription])
-   }*/
    return response;
 }
-const responseTime = async (parameters) => {
+const responseTime = async (parameters,playBookId,surveyCode,sectionCode) => {
   // TABELLA STATICA
    let row=[]
    let rows=[]
@@ -466,13 +520,9 @@ const responseTime = async (parameters) => {
      tableHeader :header,
      tableRows : rows
    }
-   /*
-   for (r in results) {
-     response.tableRows.push([results[r].serviceRequirementDescription])
-   }*/
    return response;
 }
-const contractLevelResponseTime = async (parameters) => {
+const contractLevelResponseTime = async (parameters,playBookId,surveyCode,sectionCode) => {
       
    let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
    let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
@@ -517,15 +567,15 @@ const contractLevelResponseTime = async (parameters) => {
     for (r in results) {
       switch (results[r].idServicePriority) {
         case 1:
-          row=[generateDynamicQuestionTemplate("rtPri" +r,"Emergency"),generateDynamicQuestionTemplate("rtSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("rtTar" +r,results[r].target)];
+          row=[await generateDynamicQuestionTemplate("rtPri" +r,"Emergency",playBookId,sectionCode),await generateDynamicQuestionTemplate("rtSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("rtTar" +r,results[r].target,playBookId,sectionCode)];
           rows.push(row);
         break;
         case 2:
-          row=[generateDynamicQuestionTemplate("rtPri" +r,"Urgency"),generateDynamicQuestionTemplate("rtSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("rtTar" +r,results[r].target)];          
+          row=[await generateDynamicQuestionTemplate("rtPri" +r,"Urgency",playBookId,sectionCode),await generateDynamicQuestionTemplate("rtSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("rtTar" +r,results[r].target,playBookId,sectionCode)];          
           rows.push(row);
         break;
         case 3:
-          row=[generateDynamicQuestionTemplate("rtPri" +r,"Routine"),generateDynamicQuestionTemplate("rtSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("rtTar" +r,results[r].target)];          
+          row=[await generateDynamicQuestionTemplate("rtPri" +r,"Routine",playBookId,sectionCode),await generateDynamicQuestionTemplate("rtSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("rtTar" +r,results[r].target,playBookId,sectionCode)];          
           rows.push(row);
         break;        
       }
@@ -540,7 +590,7 @@ const contractLevelResponseTime = async (parameters) => {
 
    return response;
 }
-const correctionTime = async (parameters) => {
+const correctionTime = async (parameters,playBookId,surveyCode,sectionCode) => {
   // TABELLA STATICA
   let row=[]
   let rows=[]
@@ -557,7 +607,7 @@ const correctionTime = async (parameters) => {
   }
    return response;
 }
-const contractLevelCorrectionTime = async (parameters) => {
+const contractLevelCorrectionTime = async (parameters,playBookId,surveyCode,sectionCode) => {
   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
   let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
   
@@ -601,15 +651,15 @@ const contractLevelCorrectionTime = async (parameters) => {
    for (r in results) {
      switch (results[r].idServicePriority) {
        case 1:
-         row=[generateDynamicQuestionTemplate("ctPri" +r,"Emergency"),generateDynamicQuestionTemplate("ctSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("ctTar" +r,results[r].target)];
+         row=[await generateDynamicQuestionTemplate("ctPri" +r,"Emergency",playBookId,sectionCode),await generateDynamicQuestionTemplate("ctSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("ctTar" +r,results[r].target,playBookId,sectionCode)];
          rows.push(row);
        break;
        case 2:
-         row=[generateDynamicQuestionTemplate("ctPri" +r,"Urgency"),generateDynamicQuestionTemplate("ctSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("ctTar" +r,results[r].target)];          
+         row=[await generateDynamicQuestionTemplate("ctPri" +r,"Urgency",playBookId,sectionCode),await generateDynamicQuestionTemplate("ctSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("ctTar" +r,results[r].target,playBookId,sectionCode)];          
          rows.push(row);
        break;
        case 3:
-         row=[generateDynamicQuestionTemplate("ctPri" +r,"Routine"),generateDynamicQuestionTemplate("ctSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("ctTar" +r,results[r].target)];          
+         row=[await generateDynamicQuestionTemplate("ctPri" +r,"Routine",playBookId,sectionCode),await generateDynamicQuestionTemplate("ctSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("ctTar" +r,results[r].target,playBookId,sectionCode)];          
          rows.push(row);
        break;        
      }
@@ -627,7 +677,7 @@ const contractLevelCorrectionTime = async (parameters) => {
   }*/
   return response;
 }
-const estimationTime = async (parameters) => {
+const estimationTime = async (parameters,playBookId,surveyCode,sectionCode) => {
  
   let row=[]
   let rows=[]
@@ -642,13 +692,10 @@ const estimationTime = async (parameters) => {
     tableHeader :header,
     tableRows : rows
   }
-  /*
-  for (r in results) {
-    response.tableRows.push([results[r].serviceRequirementDescription])
-  }*/
+
   return response;
 }
-const contractLevelEstimationTime = async (parameters) => {
+const contractLevelEstimationTime = async (parameters,playBookId,surveyCode,sectionCode) => {
   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
   let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
   
@@ -692,15 +739,15 @@ const contractLevelEstimationTime = async (parameters) => {
    for (r in results) {
      switch (results[r].idServicePriority) {
        case 1:
-         row=[generateDynamicQuestionTemplate("etPri" +r,"Emergency"),generateDynamicQuestionTemplate("etSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("etTar" +r,results[r].target)];
+         row=[await generateDynamicQuestionTemplate("etPri" +r,"Emergency",playBookId,sectionCode),await generateDynamicQuestionTemplate("etSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("etTar" +r,results[r].target,playBookId,sectionCode)];
          rows.push(row);
        break;
        case 2:
-         row=[generateDynamicQuestionTemplate("etPri" +r,"Urgency"),generateDynamicQuestionTemplate("etSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("etTar" +r,results[r].target)];          
+         row=[await generateDynamicQuestionTemplate("etPri" +r,"Urgency",playBookId,sectionCode),await generateDynamicQuestionTemplate("etSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("etTar" +r,results[r].target,playBookId,sectionCode)];          
          rows.push(row);
        break;
        case 3:
-         row=[generateDynamicQuestionTemplate("etPri" +r,"Routine"),generateDynamicQuestionTemplate("etSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("etTar" +r,results[r].target)];          
+         row=[await generateDynamicQuestionTemplate("etPri" +r,"Routine",playBookId,sectionCode),await generateDynamicQuestionTemplate("etSla" +r,serviceLevelAgreement.value,playBookId,sectionCode), await generateDynamicQuestionTemplate("etTar" +r,results[r].target,playBookId,sectionCode)];          
          rows.push(row);
        break;        
      }
@@ -718,7 +765,7 @@ const contractLevelEstimationTime = async (parameters) => {
   }*/
   return response;
 }
-const availability = async (parameters) => {
+const availability = async (parameters,playBookId,surveyCode,sectionCode) => {
   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
   let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
   let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
@@ -772,7 +819,7 @@ const availability = async (parameters) => {
       }
     });
     for (r in results) {
-      row=[generateDynamicQuestionTemplate("avTn" +r,results[r].typeName),generateDynamicQuestionTemplate("avVa" +r,results[r].value)];
+      row=[await generateDynamicQuestionTemplate("avTn" +r,results[r].typeName,playBookId,sectionCode),await generateDynamicQuestionTemplate("avVa" +r,results[r].value,playBookId,sectionCode)];
       rows.push(row);
     }
   }
@@ -788,7 +835,7 @@ const availability = async (parameters) => {
   }*/
   return response;
 }
-const correctionTimeForUrgencyRequest = async (parameters) => {
+const correctionTimeForUrgencyRequest = async (parameters,playBookId,surveyCode,sectionCode) => {
     let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
     let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
     
@@ -831,11 +878,11 @@ const correctionTimeForUrgencyRequest = async (parameters) => {
     for (r in results) {
       switch (results[r].idPriorityName) {
         case 1:
-          row=[generateDynamicQuestionTemplate("tfPri" +r,"Emergency"),generateDynamicQuestionTemplate("tfSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("tfDef" +r,results[r].definition)];
+          row=[await generateDynamicQuestionTemplate("tfPri" +r,"Emergency",playBookId,sectionCode),await generateDynamicQuestionTemplate("tfSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("tfDef" +r,results[r].definition,playBookId,sectionCode)];
           rows.push(row);
         break;
         case 2:
-          row=[generateDynamicQuestionTemplate("tfPri" +r,"Urgency"),generateDynamicQuestionTemplate("tfSla" +r,serviceLevelAgreement.value),generateDynamicQuestionTemplate("tfDef" +r,results[r].definition)];          
+          row=[await generateDynamicQuestionTemplate("tfPri" +r,"Urgency",playBookId,sectionCode),await generateDynamicQuestionTemplate("tfSla" +r,serviceLevelAgreement.value,playBookId,sectionCode),await generateDynamicQuestionTemplate("tfDef" +r,results[r].definition,playBookId,sectionCode)];          
           rows.push(row);
         break;     
       }
@@ -855,7 +902,7 @@ const correctionTimeForUrgencyRequest = async (parameters) => {
   }*/
   return response;
 }
-const systemConditionIndex = async (parameters) => {
+const systemConditionIndex = async (parameters,playBookId,surveyCode,sectionCode) => {
   
   let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
   let facilityServiceConditionId = await models.PB_ConditionIndex.findAll({
@@ -891,7 +938,7 @@ const systemConditionIndex = async (parameters) => {
  
   return response;
 }
-const availabilityIndex = async (parameters) => {
+const availabilityIndex = async (parameters,playBookId,surveyCode,sectionCode) => {
   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
   let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
   let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
@@ -945,7 +992,7 @@ const availabilityIndex = async (parameters) => {
     let info=results[0];
     for (r in info) {      
       if ((info[r].kpiName==="A.1 AVAILABILITY INDEX") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["A.1 AVAILABILITY INDEX","Yes","Information System","Analysis of the information uploaded to the System","Ratio between system up time and total working hours",generateDynamicQuestionTemplate("aiFr" +r,info[r].frequency),generateDynamicQuestionTemplate("aiSLA" +r,info[r].value)];  
+        row=["A.1 AVAILABILITY INDEX","Yes","Information System","Analysis of the information uploaded to the System","Ratio between system up time and total working hours",await generateDynamicQuestionTemplate("aiFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("aiSLA" +r,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
       }      
     }
@@ -959,7 +1006,7 @@ const availabilityIndex = async (parameters) => {
   
   return response;
 }
-const qualityProvided = async (parameters) => {
+const qualityProvided = async (parameters,playBookId,surveyCode,sectionCode) => {
   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
   let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
   let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
@@ -1013,27 +1060,27 @@ const qualityProvided = async (parameters) => {
     let info=results[0];
     for (r in info) {      
       if ((info[r].kpiName==="B.1 Cold satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.1 Cold satisfaction","Yes","Survey","Customer Survey campaign","Ratio between the sum of the scores related to the Service Level VS maximum possible score",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        row=["B.1 Cold satisfaction","Yes","Survey","Customer Survey campaign","Ratio between the sum of the scores related to the Service Level VS maximum possible score",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
       }
       if ((info[r].kpiName==="B.2 Hot satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.2 Hot satisfaction","Yes","Information System","Feedback regarding each activity delivered by the Provider","Ratio between the score attributed to each activity carried out VS maximum possible score",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        row=["B.2 Hot satisfaction","Yes","Information System","Feedback regarding each activity delivered by the Provider","Ratio between the score attributed to each activity carried out VS maximum possible score",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
       }
       if ((info[r].kpiName==="B.3 Compliance with the agreed Scheduled Activities Plan") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.3 Compliance with the agreed Scheduled Activities Plan","Yes","Information System","Analysis of the information uploaded to the System","Number of activities completed according to Scheduled VS total activities scheduled",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        row=["B.3 Compliance with the agreed Scheduled Activities Plan","Yes","Information System","Analysis of the information uploaded to the System","Number of activities completed according to Scheduled VS total activities scheduled",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
       }
       if ((info[r].kpiName==="B.4 Compliance with the agreed Response Time") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.4 Compliance with the agreed Response Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities started within SLA VS total number of corrective activities",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        row=["B.4 Compliance with the agreed Response Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities started within SLA VS total number of corrective activities",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
       }
       if ((info[r].kpiName==="B.5 Compliance with the agreed Correction Time") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.5 Compliance with the agreed Correction Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities completed within SLA VS total number of corrective activities",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        row=["B.5 Compliance with the agreed Correction Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities completed within SLA VS total number of corrective activities",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
       }
       if ((info[r].kpiName==="B.6 Compliance with quality provided") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.6 Compliance with quality provided","Yes","Information System","Analysis of the information uploaded to the System","Number of Budget Estimates delivered within SLA VS Total Number of Budget Estimate Delivered",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        row=["B.6 Compliance with quality provided","Yes","Information System","Analysis of the information uploaded to the System","Number of Budget Estimates delivered within SLA VS Total Number of Budget Estimate Delivered",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
       }      
     }
@@ -1047,7 +1094,7 @@ const qualityProvided = async (parameters) => {
 
   return response;
 }
-const penaltiesRelatedMonitoringSystem = async (parameters) => {
+const penaltiesRelatedMonitoringSystem = async (parameters,playBookId,surveyCode,sectionCode) => {
 
   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");
   let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
@@ -1102,19 +1149,19 @@ const penaltiesRelatedMonitoringSystem = async (parameters) => {
     let info=results[0];
     for (r in info) {      
       if ((info[r].kpiName==="A.1 AVAILABILITY INDEX") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["A.1 AVAILABILITY INDEX",generateDynamicQuestionTemplate("prSLA" +r,info[r].value),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        row=["A.1 AVAILABILITY INDEX",await generateDynamicQuestionTemplate("prSLA" +r,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
         rows.push(row);
       }
       if ((info[r].kpiName==="B.1 Cold satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.1 Cold satisfaction",generateDynamicQuestionTemplate("prSLA" +r,info[r].value),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        row=["B.1 Cold satisfaction",await generateDynamicQuestionTemplate("prSLA" +r,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
         rows.push(row);
       }
       if ((info[r].kpiName==="B.2 Hot satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.2 Hot satisfaction",generateDynamicQuestionTemplate("prSLA" +r,info[r].value),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        row=["B.2 Hot satisfaction",await generateDynamicQuestionTemplate("prSLA" +r,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
         rows.push(row);
       }
       if ((info[r].kpiName==="B.3 Compliance with the agreed Scheduled Activities Plan") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.3 Compliance with the agreed Scheduled Activities Plan",generateDynamicQuestionTemplate("prSLA" +r,info[r].value),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        row=["B.3 Compliance with the agreed Scheduled Activities Plan",await generateDynamicQuestionTemplate("prSLA" +r,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
         rows.push(row);
       }                  
          
@@ -1131,7 +1178,7 @@ const penaltiesRelatedMonitoringSystem = async (parameters) => {
   }
   return response;
 }
-const penaltiesRelatedNonConformities = async (parameters) => {
+const penaltiesRelatedNonConformities = async (parameters,playBookId,surveyCode,sectionCode) => {
   let row=[]
   let rows=[]
   let header=["SPECIFIC INDICATOR AREA","DESCRIPTION","PERIMETER","PENALTY"]
@@ -1166,7 +1213,7 @@ const penaltiesRelatedNonConformities = async (parameters) => {
   }
   return response;
 }
-const preventiveMaintenanceProcedures = async (parameters) => {
+const preventiveMaintenanceProcedures = async (parameters,playBookId,surveyCode,sectionCode) => {
   let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
   let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
    attributes: ['id'],
@@ -1189,10 +1236,12 @@ const preventiveMaintenanceProcedures = async (parameters) => {
   let rows=[]
   let header=["SYSTEM","COMPONENT","ACTIVITY","FREQUENCES"]
 
+  let cont=0;
   for (r in info) {
     if (info[r].idSLA===serviceLevelAgreementId) {
-      row=[info[r].serviceName,info[r].assetComponentType,info[r].activitydescription,generateDynamicQuestionTemplate("acFr" +r,info[r].frequency)]
+      row=[info[r].serviceName,info[r].assetComponentType,info[r].activitydescription,await generateDynamicQuestionTemplate("acFr" +cont,info[r].frequency,playBookId,sectionCode)]
       rows.push(row);
+      cont++;
     }    
   }
 
@@ -1203,7 +1252,7 @@ const preventiveMaintenanceProcedures = async (parameters) => {
   }
   return response
 }
-const genericTechnicalRequirements = async (parameters) => {
+const genericTechnicalRequirements = async (parameters,playBookId,surveyCode,sectionCode) => {
    // service requirement
    // dipende da PB_Services
    // parametri --> serviceTypeDetails
@@ -1766,15 +1815,6 @@ const updateContract = async (req, res) => {
       where: { idPlaybook: pb.id }
     });
 
-    /*
-    var quest={
-      "updated" : false
-    }
-    await models.SM_SurveySectionQuestion.update(quest, {
-      where: { createdAt: null }
-    });*/
-    //UPDATE status
-
     //UPDATE answers
     var answers=playbook.answers;
 
@@ -1931,12 +1971,6 @@ const updateContract = async (req, res) => {
 
               						  tableRows.push(tableRow);
               						}
-                          //consoleLog(tableRows);
-              						//playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableHeader=tableHeader;
-              						//playbook.surveys[result.surveyId].sections[result.sectionId].questions[result.questionId].tableRows=tableRows;
-              						//console.log('\x1b[33m');
-              						//console.log("tableRows:" + JSON.stringify(tableRows,null,2));
-              						//console.log('\x1b[0m');
               						par2update={
               						  "value" : answers[a][b].value,
               						}
