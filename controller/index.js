@@ -360,7 +360,8 @@ const getContractById = async (req, res) => {
 }
 
 function generateDynamicQuestionTemplate(code,value) {
-  var result= {    
+  var result= {   
+      id: 10000000, 
       code: code,
       name: '',
       tooltip: '',
@@ -1012,7 +1013,7 @@ const qualityProvided = async (parameters) => {
     let info=results[0];
     for (r in info) {      
       if ((info[r].kpiName==="B.1 Cold satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.1 Cold satisfaction","Yes","Survey","Customer Survey campaign","Ratio between the sum of the scores related to the Service Level VS maximum possible score",generateDynamicQuestionTemplate("aiFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
+        row=["B.1 Cold satisfaction","Yes","Survey","Customer Survey campaign","Ratio between the sum of the scores related to the Service Level VS maximum possible score",generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency),generateDynamicQuestionTemplate("qpSLA" +r,info[r].value)];  
         rows.push(row);
       }
       if ((info[r].kpiName==="B.2 Hot satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
