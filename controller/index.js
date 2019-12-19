@@ -1057,31 +1057,38 @@ const qualityProvided = async (parameters,playBookId,surveyCode,sectionCode) => 
 
     let results = await models.sequelize.query(query);
     
+    let cont=0;
     let info=results[0];
     for (r in info) {      
       if ((info[r].kpiName==="B.1 Cold satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.1 Cold satisfaction","Yes","Survey","Customer Survey campaign","Ratio between the sum of the scores related to the Service Level VS maximum possible score",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
+        row=["B.1 Cold satisfaction","Yes","Survey","Customer Survey campaign","Ratio between the sum of the scores related to the Service Level VS maximum possible score",await generateDynamicQuestionTemplate("qpFr" +cont,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +cont,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
+        cont++;
       }
       if ((info[r].kpiName==="B.2 Hot satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.2 Hot satisfaction","Yes","Information System","Feedback regarding each activity delivered by the Provider","Ratio between the score attributed to each activity carried out VS maximum possible score",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
+        row=["B.2 Hot satisfaction","Yes","Information System","Feedback regarding each activity delivered by the Provider","Ratio between the score attributed to each activity carried out VS maximum possible score",await generateDynamicQuestionTemplate("qpFr" +cont,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +cont,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
+        cont++;
       }
       if ((info[r].kpiName==="B.3 Compliance with the agreed Scheduled Activities Plan") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.3 Compliance with the agreed Scheduled Activities Plan","Yes","Information System","Analysis of the information uploaded to the System","Number of activities completed according to Scheduled VS total activities scheduled",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
+        row=["B.3 Compliance with the agreed Scheduled Activities Plan","Yes","Information System","Analysis of the information uploaded to the System","Number of activities completed according to Scheduled VS total activities scheduled",await generateDynamicQuestionTemplate("qpFr" +cont,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +cont,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
+        cont++;
       }
       if ((info[r].kpiName==="B.4 Compliance with the agreed Response Time") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.4 Compliance with the agreed Response Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities started within SLA VS total number of corrective activities",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
+        row=["B.4 Compliance with the agreed Response Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities started within SLA VS total number of corrective activities",await generateDynamicQuestionTemplate("qpFr" +cont,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +cont,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
+        cont++;
       }
       if ((info[r].kpiName==="B.5 Compliance with the agreed Correction Time") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.5 Compliance with the agreed Correction Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities completed within SLA VS total number of corrective activities",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
+        row=["B.5 Compliance with the agreed Correction Time","Yes","Information System","Analysis of the information uploaded to the System","Number of corrective activities completed within SLA VS total number of corrective activities",await generateDynamicQuestionTemplate("qpFr" +cont,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +cont,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
+        cont++;
       }
       if ((info[r].kpiName==="B.6 Compliance with quality provided") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.6 Compliance with quality provided","Yes","Information System","Analysis of the information uploaded to the System","Number of Budget Estimates delivered within SLA VS Total Number of Budget Estimate Delivered",await generateDynamicQuestionTemplate("qpFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +r,info[r].value,playBookId,sectionCode)];  
+        row=["B.6 Compliance with quality provided","Yes","Information System","Analysis of the information uploaded to the System","Number of Budget Estimates delivered within SLA VS Total Number of Budget Estimate Delivered",await generateDynamicQuestionTemplate("qpFr" +cont,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("qpSLA" +cont,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
+        cont++;
       }      
     }
   }
@@ -1146,23 +1153,28 @@ const penaltiesRelatedMonitoringSystem = async (parameters,playBookId,surveyCode
 
     let results = await models.sequelize.query(query);
     
+    let cont=0;
     let info=results[0];
     for (r in info) {      
       if ((info[r].kpiName==="A.1 AVAILABILITY INDEX") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["A.1 AVAILABILITY INDEX",await generateDynamicQuestionTemplate("prSLA" +r,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        row=["A.1 AVAILABILITY INDEX",await generateDynamicQuestionTemplate("prSLA" +cont,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
         rows.push(row);
+        cont++
       }
       if ((info[r].kpiName==="B.1 Cold satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.1 Cold satisfaction",await generateDynamicQuestionTemplate("prSLA" +r,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        row=["B.1 Cold satisfaction",await generateDynamicQuestionTemplate("prSLA" +cont,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
         rows.push(row);
+        cont++
       }
       if ((info[r].kpiName==="B.2 Hot satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.2 Hot satisfaction",await generateDynamicQuestionTemplate("prSLA" +r,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        row=["B.2 Hot satisfaction",await generateDynamicQuestionTemplate("prSLA" +cont,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
         rows.push(row);
+        cont++
       }
       if ((info[r].kpiName==="B.3 Compliance with the agreed Scheduled Activities Plan") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.3 Compliance with the agreed Scheduled Activities Plan",await generateDynamicQuestionTemplate("prSLA" +r,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
+        row=["B.3 Compliance with the agreed Scheduled Activities Plan",await generateDynamicQuestionTemplate("prSLA" +cont,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
         rows.push(row);
+        cont++
       }                  
          
     }
