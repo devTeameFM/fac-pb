@@ -990,10 +990,12 @@ const availabilityIndex = async (parameters,playBookId,surveyCode,sectionCode) =
     let results = await models.sequelize.query(query);
     
     let info=results[0];
+    let cont=0;
     for (r in info) {      
       if ((info[r].kpiName==="A.1 AVAILABILITY INDEX") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["A.1 AVAILABILITY INDEX","Yes","Information System","Analysis of the information uploaded to the System","Ratio between system up time and total working hours",await generateDynamicQuestionTemplate("aiFr" +r,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("aiSLA" +r,info[r].value,playBookId,sectionCode)];  
+        row=["A.1 AVAILABILITY INDEX","Yes","Information System","Analysis of the information uploaded to the System","Ratio between system up time and total working hours",await generateDynamicQuestionTemplate("aiFr" +cont,info[r].frequency,playBookId,sectionCode),await generateDynamicQuestionTemplate("aiSLA" +cont,info[r].value,playBookId,sectionCode)];  
         rows.push(row);
+        cont++;
       }      
     }
   }
