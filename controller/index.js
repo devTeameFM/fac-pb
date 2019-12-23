@@ -1841,9 +1841,9 @@ const addTextFieldsToTables= async(contractId) => {
         a=serviceTypeDetailsTable[serviceType];
         b=serviceTypeDetailsTable[serviceType+1];
         if (a.name==="# of elements") {
-          row=["HVAC",a.tooltip,a,b];
+          row=[parameters.value,a.tooltip,a,b];
         } else {
-          row=["HVAC",a.code,a,b];
+          row=[parameters.value,a.code,a,b];
         }
         rows.push(row);
       }
