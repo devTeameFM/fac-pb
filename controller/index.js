@@ -416,10 +416,15 @@ const generateDynamicQuestionTemplate = async(code,value,playbookId,sectionCode)
       defaultValue:value
     }
   } else {    
-    let updateAnswer={      
-      "value" : value
+    const answer = await models.SM_SurveyAnswer.findOne({    
+      where: { questionId: checkQuestion.id }
+    });
+    if (answer.value != value) {
+      let updateAnswer={      
+        "value" : value
+      }
+      const status=await models.SM_SurveyAnswer.update(updateAnswer,{where: { questionId: checkQuestion.id }})
     }
-    const status=await models.SM_SurveyAnswer.update(updateAnswer,{where: { questionId: checkQuestion.id }})
     var result= {   
       id: checkQuestion.id, 
       code: code,
