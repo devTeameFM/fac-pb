@@ -1332,7 +1332,7 @@ const preventiveMaintenanceProcedures = async (parameters,playBookId,surveyCode,
       let query="select \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"activitydescription\" from \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" where \"PB_PMSlaProcedures\".\"idservice\" =  \"PB_Services\".\"id\" and \"PB_PMSlaProcedures\".\"idPMServiceAsset\" = \"PB_ServiceAssetComponents\".\"id\" and \"PB_PMSlaProcedures\".\"idSLA\" = " + serviceLevelAgreementId +" and \"PB_PMSlaProcedures\".\"idservice\" = " + serviceTypeDetailsId + ";";
       let results = await models.sequelize.query(query);
       console.log("preventiveMaintenanceProcedures");
-      consoleLog(results);
+      consoleLog(query);
 
       let info=results[0];
       let cont=0;
