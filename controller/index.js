@@ -1338,8 +1338,8 @@ const preventiveMaintenanceProcedures = async (parameters,playBookId,surveyCode,
       let cont=0;
       let row=[];
       for (r in info) {        
-          row=[info[r].serviceName,info[r].assetComponentType,info[r].activitydescription,await generateDynamicQuestionTemplate("acFr" +r,info[r].frequency,playBookId,sectionCode)]
-          rows.push(row);                     
+          //row=[info[r].serviceName,info[r].assetComponentType,info[r].activitydescription,await generateDynamicQuestionTemplate("acFr" +r,info[r].frequency,playBookId,sectionCode)]
+          //rows.push(row);                     
       }
   }
  
