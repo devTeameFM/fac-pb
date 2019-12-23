@@ -985,8 +985,8 @@ const availabilityIndex = async (parameters,playBookId,surveyCode,sectionCode) =
   let header=["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE","FREQUENCY","SLA"]
   
   if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1) && (facilityServiceConditionId !=-1)) {
-    let query="SELECT \"PB_Services\".\"serviceName\", \"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and \"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\"";    
-
+    //let query="SELECT \"PB_Services\".\"serviceName\", \"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and \"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\"";    
+    let query="SELECT \"PB_Services\".\"serviceName\",\"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_ServiceKPIs\".\"calculateProcedure\",\"PB_Frequencies\".\"frequency\",\"PB_ServiceSlaKPIs\".\"value\",\"PB_ConditionIndices\".\"levelTypeName\",\"PB_ServiceKPIMeasureProcedures\".\"measureProcedureDescription\",\"PB_ServiceKPIMeasureMethods\".\"measureMethodDescription\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\",\"PB_ConditionIndices\",\"PB_ServiceKPIMeasureProcedures\",\"PB_ServiceKPIMeasureMethods\" WHERE	\"PB_ServiceSlaKPIs\".\"idService\" = \"PB_Services\".\"id\" and	\"PB_ServiceSlaKPIs\".\"idSLA\" = \"PB_ServiceLevelAgreements\".\"id\" and \"PB_ServiceSlaKPIs\".\"idCondition\" = \"PB_ConditionIndices\".\"id\" and	\"PB_ServiceSlaKPIs\".\"idKPI\" = \"PB_ServiceKPIs\".\"id\" and 	\"PB_ServiceSlaKPIs\".\"idFrequency\"= \"PB_Frequencies\".\"id\" and 	\"PB_ServiceKPIs\".\"idMeasuringProcedures\" = \"PB_ServiceKPIMeasureProcedures\".\"id\" and	\"PB_ServiceKPIs\".\"idMeasuringMethod\" = \"PB_ServiceKPIMeasureMethods\".\"id\" and	\"PB_ConditionIndices\".\"id\" = 5 and 	\"PB_Services\".\"id\" = 2 and 	\"PB_ServiceLevelAgreements\".\"id\" = 2;"
     let results = await models.sequelize.query(query);
     
     let info=results[0];
@@ -1193,33 +1193,69 @@ const penaltiesRelatedMonitoringSystem = async (parameters,playBookId,surveyCode
   return response;
 }
 const penaltiesRelatedNonConformities = async (parameters,playBookId,surveyCode,sectionCode) => {
+  let serviceLevelAgreement=getParameterValue(parameters,"serviceLevel");
+  let serviceLevelAgreementId = await models.PB_ServiceLevelAgreement.findAll({
+   attributes: ['id'],
+   where : {
+     serviceLevelAgreementName : serviceLevelAgreement.value
+   }
+  });
+  if (serviceLevelAgreementId.length) {
+    serviceLevelAgreementId=serviceLevelAgreementId[0].dataValues.id;
+  } else {
+    serviceLevelAgreementId=-1;
+  }
+
   let row=[]
   let rows=[]
   let header=["SPECIFIC INDICATOR AREA","DESCRIPTION","PERIMETER","PENALTY"]
+  let serviceTypeDetailsId=-1;
+  let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");  
+  if (serviceTypeDetails.value.length>0) {    
+      let serviceTypeDetailsName = await models.PB_Service.findAll({
+        attributes: ['idServiceClass'],
+        where : {
+          serviceName : serviceTypeDetails.value
+        }
+      });
+      if (serviceTypeDetailsName.length>0) {
+        serviceTypeDetailsId=serviceTypeDetailsName[0].dataValues.idServiceClass;
+      }     
+  }
 
-  row=["Documents to deliver","Failure to meet creation or delivery deadlines, for documents to be provided in the contract","Defined in the specific contract","50 $ for each non-compliant document"];
-  rows.push(row);
-  row=["Team Meetings","Non-participation of a Provider's representative on the regular meetings defined by the contract","Defined in the specific contract","50 $ for every 8h of delay"];
-  rows.push(row);
-  row=["Health and Safety","Non-compliance with the wearing of PPE","Defined in the specific contract","50 $ for every 8h of delay"];
-  rows.push(row);
-  row=["Activity to deliver traceability","Absence of traceability of a planned activity/request on the Information System","Defined in the specific contract","50 $ for every 8h of delay"];
-  rows.push(row);
-  row=["Master Data","Master Data development and updating delay","National laws and regulations","50 $ for every 8h of delay"];
-  rows.push(row);
-  row=["Repetition of non-conformity","Repetition of a failure/non-conformity on the same equipment/area/element already managed in the current month","Defined in the specific contract","50 $ for every 8h of delay"];
-  rows.push(row);
-  row=["Extemporaneous check","Non-conformity detected on filed (not during an inspection)","Defined in the specific contract","50 $ for every 8h of delay"];
-  rows.push(row);
-  row=["Non-compliance with agreed Response Time","Failure to meet the agreed Response time for Corrective activities","Number of failures > 2 over a period of 10 working days","50 $ for every 8h of delay"];
-  rows.push(row);
-  row=["Non-compliance with agreed Correction Time","Failure to meet the agreed Correction time for Corrective activities","Numbers of failure checked","50 $ for every 8h of delay"];
-  rows.push(row);
-  row=["Non-compliance with Budget Estimate Time","Failure to meet the agreed Budget Estimate time for Corrective activities","Defined in the specific contract","50 $ for every 8h of delay"];
-  rows.push(row);
-
-
-
+  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
+    /*
+    select 
+      "PB_ServicePenalties"."penaltyName",
+      "PB_ServicePenalties"."penaltyDescription",
+      "PB_ServicePenaltyPerimeters",
+      "PB_ServiceSlaPenalties"."value",
+      "PB_ServiceSlaPenalties"."idPenalty",
+      "PB_ServicePenaltyPerimeters"."penaltyPerimeterDescription"
+    from 
+      "PB_Services",
+      "PB_ServiceSlaPenalties",
+      "PB_ServiceLevelAgreements",
+      "PB_ServicePenalties",
+      "PB_ServicePenaltyPerimeters"
+    where 
+      "PB_ServiceSlaPenalties"."idService" = "PB_Services"."id" and
+      "PB_ServiceSlaPenalties"."idSLA" = "PB_ServiceLevelAgreements"."id" and
+      "PB_ServiceSlaPenalties"."idPenalty" = "PB_ServicePenalties"."id" and
+      "PB_ServiceSlaPenalties"."idPenalty" = "PB_ServicePenalties"."id" and
+      "PB_ServicePenalties"."idPenaltyPerimeter" = "PB_ServicePenaltyPerimeters"."id" and
+      "PB_ServiceSlaPenalties"."idSLA" =2 and 
+      "PB_ServiceSlaPenalties"."idService" = 2;
+    */
+      let query="select \"PB_ServicePenalties\".\"penaltyName\",\"PB_ServicePenalties\".\"penaltyDescription\",\"PB_ServicePenaltyPerimeters\",\"PB_ServiceSlaPenalties\".\"value\",\"PB_ServiceSlaPenalties\".\"idPenalty\",\"PB_ServicePenaltyPerimeters\".\"penaltyPerimeterDescription\" from \"PB_Services\",\"PB_ServiceSlaPenalties\",\"PB_ServiceLevelAgreements\",\"PB_ServicePenalties\",\"PB_ServicePenaltyPerimeters\" where \"PB_ServiceSlaPenalties\".\"idService\" = \"PB_Services\".\"id\" and	\"PB_ServiceSlaPenalties\".\"idSLA\" = \"PB_ServiceLevelAgreements\".\"id\" and	\"PB_ServiceSlaPenalties\".\"idPenalty\" = \"PB_ServicePenalties\".\"id\" and	\"PB_ServiceSlaPenalties\".\"idPenalty\" = \"PB_ServicePenalties\".\"id\" and	\"PB_ServicePenalties\".\"idPenaltyPerimeter\" = \"PB_ServicePenaltyPerimeters\".\"id\" and \"PB_ServiceSlaPenalties\".\"idSLA\" = "+ serviceLevelAgreementId + " and 	\"PB_ServiceSlaPenalties\".\"idService\" = " + serviceTypeDetailsId + ";"
+      let results = await models.sequelize.query(query);
+      let info=results[0];
+      let row=[];
+      for (r in info) {        
+          row=[await generateDynamicQuestionTemplate("ncNa" +r,info[r].penaltyName,playBookId,sectionCode),await generateDynamicQuestionTemplate("ncDe" +r,info[r].penaltyDescription,playBookId,sectionCode),await generateDynamicQuestionTemplate("ncPP" +r,info[r].penaltyPerimeterDescription,playBookId,sectionCode),await generateDynamicQuestionTemplate("ncVa" +r,info[r].value,playBookId,sectionCode)]
+          rows.push(row);                     
+      }
+    }
   let response={
     tableName :"penaltiesRelatedNonConformities",
     tableHeader :header,
@@ -1241,24 +1277,53 @@ const preventiveMaintenanceProcedures = async (parameters,playBookId,surveyCode,
     serviceLevelAgreementId=-1;
   }
 
-  let query="SELECT \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\", \"PB_PMSlaProcedures\".\"activitydescription\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"idSLA\" FROM \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_PMSlaProcedures\".\"idservice\" and \"PB_ServiceAssetComponents\".\"id\" = \"PB_PMSlaProcedures\".\"idPMServiceAsset\" and \"PB_Frequencies\".\"id\" = \"PB_PMSlaProcedures\".\"idFrequency\" order by \"PB_ServiceAssetComponents\".\"assetComponentType\"";    
-  let results = await models.sequelize.query(query);
-  let info=results[0];
-
-
-  let row=[]
-  let rows=[]
-  let header=["SYSTEM","COMPONENT","ACTIVITY","FREQUENCES"]
-
-  let cont=0;
-  for (r in info) {
-    if (info[r].idSLA===serviceLevelAgreementId) {
-      row=[info[r].serviceName,info[r].assetComponentType,info[r].activitydescription,await generateDynamicQuestionTemplate("acFr" +cont,info[r].frequency,playBookId,sectionCode)]
-      rows.push(row);
-      cont++;
-    }    
+  
+  let rows=[];
+  let header=["SYSTEM","COMPONENT","ACTIVITY","FREQUENCES"];
+  let serviceTypeDetailsId=-1;
+  let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");  
+  if (serviceTypeDetails.value.length>0) {    
+      let serviceTypeDetailsName = await models.PB_Service.findAll({
+        attributes: ['idServiceClass'],
+        where : {
+          serviceName : serviceTypeDetails.value
+        }
+      });
+      if (serviceTypeDetailsName.length>0) {
+        serviceTypeDetailsId=serviceTypeDetailsName[0].dataValues.idServiceClass;
+      }     
   }
 
+  //let query="SELECT \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\", \"PB_PMSlaProcedures\".\"activitydescription\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"idSLA\" FROM \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_PMSlaProcedures\".\"idservice\" and \"PB_ServiceAssetComponents\".\"id\" = \"PB_PMSlaProcedures\".\"idPMServiceAsset\" and \"PB_Frequencies\".\"id\" = \"PB_PMSlaProcedures\".\"idFrequency\" order by \"PB_ServiceAssetComponents\".\"assetComponentType\"";    
+  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
+      /*
+      select 
+      "PB_Services"."serviceName",
+      "PB_ServiceAssetComponents"."assetComponentType",
+      "PB_Frequencies"."frequency",
+      "PB_PMSlaProcedures"."activitydescription"
+      from 
+        "PB_PMSlaProcedures",
+        "PB_Services",
+        "PB_ServiceAssetComponents",
+        "PB_Frequencies"
+      where
+        "PB_PMSlaProcedures"."idservice" =  "PB_Services"."id" and			
+        "PB_PMSlaProcedures"."idPMServiceAsset" = "PB_ServiceAssetComponents"."id" and	
+        "PB_PMSlaProcedures"."idSLA" = 1 and 
+        "PB_PMSlaProcedures"."idservice" = 1;
+      */
+      let query="select \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"activitydescription\" from \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" where \"PB_PMSlaProcedures\".\"idservice\" =  \"PB_Services\".\"id\" and \"PB_PMSlaProcedures\".\"idPMServiceAsset\" = \"PB_ServiceAssetComponents\".\"id\" and \"PB_PMSlaProcedures\".\"idSLA\" = " + serviceLevelAgreementId +" and \"PB_PMSlaProcedures\".\"idservice\" = " + serviceTypeDetailsId + ";";
+      let results = await models.sequelize.query(query);
+      let info=results[0];
+      let cont=0;
+      let row=[];
+      for (r in info) {        
+          row=[info[r].serviceName,info[r].assetComponentType,info[r].activitydescription,await generateDynamicQuestionTemplate("acFr" +r,info[r].frequency,playBookId,sectionCode)]
+          rows.push(row);                     
+      }
+  }
+ 
   let response={
     tableName :"preventiveMaintenanceProcedures",
     tableHeader :header,
@@ -1279,6 +1344,7 @@ const genericTechnicalRequirements = async (parameters,playBookId,surveyCode,sec
   if (p.name) {
     const results = await models.PB_ServiceRequirement.findAll({
       attributes: ['serviceName','serviceRequirementDescription'],
+      order : ['serviceRequirementDescription'],
       where : {
         serviceName : p.value,
       }
