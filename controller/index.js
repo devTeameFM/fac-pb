@@ -2079,22 +2079,22 @@ const updateContract = async (req, res) => {
           						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
           						break;
           					  case "preventiveMaintenance" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,false);
           						break;
                       case "preventiveMaintenanceRemuneration" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,false);
           						break;
           					  case "correctiveActivities" :
-          					      await updateParams(answers[a][b][c],question.code,playbook.id,true);
+          					      await updateParams(answers[a][b][c],question.code,playbook.id,false);
           						break;
                       case "correctiveActivitiesRemuneration" :
-          					      await updateParams(answers[a][b][c],question.code,playbook.id,true);
+          					      await updateParams(answers[a][b][c],question.code,playbook.id,false);
           						break;
           					  case "serviceRequestRemuneration" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,false);
           						break;
           					  case "onSiteTeamRemuneration" :
-          						    await updateParams(answers[a][b][c],question.code,playbook.id,true);
+          						    await updateParams(answers[a][b][c],question.code,playbook.id,false);
           						break;
                     }
 
