@@ -258,6 +258,8 @@ const getPlayBookFromId = async (contractId) => {
           if (temp_question.code === "serviceType") {
             isParameter=true;          
             temp_question.isParameter=isParameter
+          } else {
+            temp_question.isParameter=false;
           }
           
           if (survey[sur].sections[sec].questions[que].tableName==null) {
