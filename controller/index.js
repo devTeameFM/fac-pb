@@ -1166,7 +1166,9 @@ const penaltiesRelatedMonitoringSystem = async (parameters,playBookId,surveyCode
   
   if (serviceLevelAgreementId !=-1) {
     let query="SELECT \"PB_Services\".\"serviceName\", \"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and \"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\"";    
-
+    console.log("KPI (KEY PERFORMANCE INDICATORS)" + " SLA " + "PENALTY ");
+    consoleLog(query);
+    console.log("KPI (KEY PERFORMANCE INDICATORS)" + " SLA " + "PENALTY ");
     let results = await models.sequelize.query(query);
     
     let cont=0;
