@@ -348,11 +348,10 @@ const getPlayBookFromId = async (contractId) => {
     obj["surveys"].push(temp_survey);
   }
 
+  let updatePlaybook=obj;
   if (obj["status"] === "REVIEW") {
-    let updatePlaybook = await runtimeSummaryCreation(obj);
-  } else {
-    let updatePlaybook=obj;
-  }
+    updatePlaybook = await runtimeSummaryCreation(obj);
+  } 
   return updatePlaybook;
 
 }
