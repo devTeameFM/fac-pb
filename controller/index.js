@@ -350,6 +350,7 @@ const getPlayBookFromId = async (contractId) => {
 
   //let updatePlaybook=obj;
   //if (obj["status"] === "REVIEW") {
+  consoleLog(obj["status"]);
   let updatePlaybook = await runtimeSummaryCreation(obj);
   //} 
   return updatePlaybook;
