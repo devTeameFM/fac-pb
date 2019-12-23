@@ -308,7 +308,7 @@ const getPlayBookFromId = async (contractId) => {
                         var pos=cells[c+(r*3)].indexOf("SELECT");
                         var app=cells[c+(r*3)].substring(pos+7,cells[c+(r*3)].length);                        
                         for (nest=0;nest<nestedSelect.length;nest++) {
-                          nestedSelect[nest].isParameter=true;
+                          nestedSelect[nest].isParameter=false;
                           nestedSelect[nest].updated=false;
                           if (nestedSelect[nest].code==app) {
                               row.push(nestedSelect[nest]);
