@@ -348,6 +348,7 @@ const getPlayBookFromId = async (contractId) => {
     obj["surveys"].push(temp_survey);
   }
   //let updatePlaybook = await runtimeSummaryCreation(obj);
+  let updatePlaybook=obj;
   return updatePlaybook;
 
 }
