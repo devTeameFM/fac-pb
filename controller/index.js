@@ -1162,37 +1162,16 @@ const penaltiesRelatedMonitoringSystem = async (parameters,playBookId,surveyCode
   let rows=[]
   let header=["KPI (KEY PERFORMANCE INDICATORS)","SLA","PENALTY"]
   
-  if (serviceLevelAgreementId !=-1) {
-    let query="SELECT \"PB_Services\".\"serviceName\", \"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and \"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\"";    
-    console.log("KPI (KEY PERFORMANCE INDICATORS)" + " SLA " + "PENALTY ");
-    consoleLog(query);
-    console.log("KPI (KEY PERFORMANCE INDICATORS)" + " SLA " + "PENALTY ");
+  if ((serviceLevelAgreementId !=-1) && (serviceTypeDetailsId !=-1)) {
+    let query="SELECT \"PB_Services\".\"serviceName\",\"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\",\"PB_ServiceSlaPenalties\".\"value\" as penalty FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\",\"PB_ServiceSlaKPIs\",\"PB_Frequencies\",\"PB_ServiceSlaPenalties\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and 	\"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\" and \"PB_ServiceSlaPenalties\".\"idKPI\" = \"PB_ServiceKPIs\".\"id\" and	\"PB_Services\".\"id\" = " + serviceTypeDetailsId +  " and \"PB_ServiceLevelAgreements\".\"id\" = " + serviceLevelAgreementId + ";";    
     let results = await models.sequelize.query(query);
     
-    let cont=0;
     let info=results[0];
-    for (r in info) {      
-      if ((info[r].kpiName==="A.1 AVAILABILITY INDEX") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["A.1 AVAILABILITY INDEX",await generateDynamicQuestionTemplate("prSLA" +cont,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
-        rows.push(row);
-        cont++
-      }
-      if ((info[r].kpiName==="B.1 Cold satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.1 Cold satisfaction",await generateDynamicQuestionTemplate("prSLA" +cont,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
-        rows.push(row);
-        cont++
-      }
-      if ((info[r].kpiName==="B.2 Hot satisfaction") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.2 Hot satisfaction",await generateDynamicQuestionTemplate("prSLA" +cont,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
-        rows.push(row);
-        cont++
-      }
-      if ((info[r].kpiName==="B.3 Compliance with the agreed Scheduled Activities Plan") && (info[r].serviceLevelAgreementName===serviceLevelAgreement.value)) {
-        row=["B.3 Compliance with the agreed Scheduled Activities Plan",await generateDynamicQuestionTemplate("prSLA" +cont,info[r].value,playBookId,sectionCode),"0,01% of the monthly fee for each percentage point under the SLA"];  
-        rows.push(row);
-        cont++
-      }                  
-         
+    for (r in info) { 
+        row=[await generateDynamicQuestionTemplate("prKPn" +r,info[r].kpiName,playBookId,sectionCode),
+        await generateDynamicQuestionTemplate("prSLA" +r,info[r].value,playBookId,sectionCode),
+        await generateDynamicQuestionTemplate("prPEN" +r,info[r].penalty,playBookId,sectionCode)];  
+        rows.push(row);                             
     }
   }
 
