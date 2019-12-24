@@ -472,7 +472,7 @@ const runtimeSummaryCreation = async (playBook) => {
   let availabilityInfo =await availability(parameters,playBook.id,"review","keyPerformanceIndicators"); // OK
   let correctionTimeForUrgencyRequestInfo =await correctionTimeForUrgencyRequest(parameters,playBook.id,"review","keyPerformanceIndicators"); // OK
   let systemConditionIndexInfo =await systemConditionIndex(parameters,playBook.id,"review","keyPerformanceIndicators");
-  let availabilityIndexInfo =await availabilityIndex(parameters,playBook.id,"review","keyPerformanceIndicators");
+  //let availabilityIndexInfo =await availabilityIndex(parameters,playBook.id,"review","keyPerformanceIndicators");
   let qualityProvidedInfo =await qualityProvided(parameters,playBook.id,"review","keyPerformanceIndicators");
   let penaltiesRelatedMonitoringSystemInfo =await penaltiesRelatedMonitoringSystem(parameters,playBook.id,"review","penalties");
   let penaltiesRelatedNonConformitiesInfo =await penaltiesRelatedNonConformities(parameters,playBook.id,"review","penalties"); // OK
@@ -489,7 +489,7 @@ const runtimeSummaryCreation = async (playBook) => {
   updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",availabilityInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",correctionTimeForUrgencyRequestInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",systemConditionIndexInfo);
-  updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",availabilityIndexInfo);
+  //updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",availabilityIndexInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","keyPerformanceIndicators",qualityProvidedInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","penalties",penaltiesRelatedMonitoringSystemInfo);
   updateplaybook=addInfoTableSummary(playBook,"review","penalties",penaltiesRelatedNonConformitiesInfo);
