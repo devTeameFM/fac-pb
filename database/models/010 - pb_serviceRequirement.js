@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     serviceName: {
       type: DataTypes.STRING
     },
-
+    order: {
+      type: DataTypes.INTEGER
+    }
   }, {});
   PB_ServiceRequirement.associate = function(models) {
     PB_ServiceRequirement.belongsTo(models.PB_Service, {

@@ -17,6 +17,9 @@ module.exports = {
       serviceRequirementDescription: {
         type: Sequelize.TEXT
       },
+      order: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: true,
         type: Sequelize.DATE

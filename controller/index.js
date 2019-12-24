@@ -1305,7 +1305,7 @@ const preventiveMaintenanceProcedures = async (parameters,playBookId,surveyCode,
         "PB_PMSlaProcedures"."idSLA" = 1 and 
         "PB_PMSlaProcedures"."idservice" = 1;
       */
-      let query="select \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"activitydescription\" from \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" where \"PB_PMSlaProcedures\".\"idservice\" =  \"PB_Services\".\"id\" and \"PB_PMSlaProcedures\".\"idPMServiceAsset\" = \"PB_ServiceAssetComponents\".\"id\" and \"PB_PMSlaProcedures\".\"idFrequency\" =  \"PB_Frequencies\".\"id\" and \"PB_PMSlaProcedures\".\"idSLA\" = " + serviceLevelAgreementId +" and \"PB_PMSlaProcedures\".\"idservice\" = " + serviceTypeDetailsId + ";";
+      let query="select \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"activitydescription\" from \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" where \"PB_PMSlaProcedures\".\"idservice\" =  \"PB_Services\".\"id\" and \"PB_PMSlaProcedures\".\"idPMServiceAsset\" = \"PB_ServiceAssetComponents\".\"id\" and \"PB_PMSlaProcedures\".\"idFrequency\" =  \"PB_Frequencies\".\"id\" and \"PB_PMSlaProcedures\".\"idSLA\" = " + serviceLevelAgreementId +" and \"PB_PMSlaProcedures\".\"idservice\" = " + serviceTypeDetailsId + " order by \"PB_PMSlaProcedures\".\"idPMServiceAsset\",\"PB_PMSlaProcedures\".\"id\";";
       let results = await models.sequelize.query(query);
       console.log("preventiveMaintenanceProcedures");
       consoleLog(query);
@@ -1339,7 +1339,7 @@ const genericTechnicalRequirements = async (parameters,playBookId,surveyCode,sec
   if (p.name) {
     const results = await models.PB_ServiceRequirement.findAll({
       attributes: ['serviceName','serviceRequirementDescription'],
-      order : ['serviceRequirementDescription'],
+      order : ['order'],
       where : {
         serviceName : p.value,
       }
