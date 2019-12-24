@@ -1354,10 +1354,11 @@ const genericTechnicalRequirements = async (parameters,playBookId,surveyCode,sec
    // parametri --> serviceTypeDetails
    // idService => query --> SELECT from PB_ServiceClasses WHERE name == parametro ('HVAC')
    // TABLE => select * from PB_ServiceRequirements where 'idService' = idService
+  
+  let p=getParameterValue(parameters,"serviceTypeDetails");
   let row=[]
   let rows=[]
-  let header=["HVAC System"]
-  let p=getParameterValue(parameters,"serviceTypeDetails");
+  let header=[p.value]
   if (p.name) {
     const results = await models.PB_ServiceRequirement.findAll({
       attributes: ['serviceName','serviceRequirementDescription'],
