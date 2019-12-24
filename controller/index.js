@@ -271,23 +271,23 @@ const getPlayBookFromId = async (contractId) => {
                       "defaultValue" : survey[sur].sections[sec].questions[que].options[opt].defaultValue
                     }
                     //
-                    if  (temp_option.name === "51 Melcher St") {
+                    if  (temp_question.code === "building") {
+                        let build=await models['MS_Building'].findOne(
+                          {
+                            
+                            where : {
+                              name : temp_option.name
+                            }
+                          }  
+                        )
                       temp_option["hasExtendedInfo"] = {
-                        "address" : "51 Melcher St",
-                        "city" : "Boston",
-                        "state" : "MA",
-                        "zip" : "02116"
+                        "address" : build.address,
+                        "city" : build.city,
+                        "state" : build.state,
+                        "zip" : build.zip
                       }
                     }
-                    if  (temp_option.name === "625 Massachusetts Ave") {
-                      temp_option["hasExtendedInfo"] = {
-                        "address" : "625 Massachusetts Ave",
-                        "city" : "Cambridge",
-                        "state" : "MA",
-                        "zip" : "02139"
-                      }
-                    }
-                    //
+                    
                     temp_question.options.push(temp_option)
                 }
             }
@@ -2691,24 +2691,12 @@ const updateParams = async (answer,questionCode,playbookId,updated) => {
   });
 }
 const updateBuilding = async (answerValue,playbookId) => {
-  switch(answerValue) {
-    // da togliere la cablatura a codice
-    case "51 Melcher St":
-      //UPDATE cover
-      var pb={
+       var pb={
         "id" : playbookId,
         "coverImg" : "facility/fort-point-office-space-15.jpg"
       }
-      break;
-    case "625 Massachusetts Ave":
-      //UPDATE cover
-      var pb={
-        "id" : playbook.id,
-        "coverImg" : "facility/WEBSITE-IMAGE-1.jpg"
-      }
-      break;
-  }
-  const [updated] = await models.PB_Playbook.update(pb, {
+
+    const [updated] = await models.PB_Playbook.update(pb, {
     where: { id: playbookId }
   });
 }

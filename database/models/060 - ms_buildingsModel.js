@@ -7,6 +7,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     idMember: DataTypes.STRING,
     name: DataTypes.STRING,
+    address: {
+      type: DataTypes.STRING
+    },
+    city: {
+      type: DataTypes.STRING
+    },
+    state: {
+      type: DataTypes.STRING
+    },
+    zip: {
+      type: DataTypes.STRING
+    },
 
   }, {});
   MS_Building.associate = function(models) {
