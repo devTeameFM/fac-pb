@@ -919,7 +919,21 @@ const correctionTimeForUrgencyRequest = async (parameters,playBookId,surveyCode,
 }
 const systemConditionIndex = async (parameters,playBookId,surveyCode,sectionCode) => {
   
+  let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");  
   let facilityServiceCondition=getParameterValue(parameters,"facilityServiceCondition");
+
+  let serviceTypeDetailsId = await models.PB_Service.findAll({
+    attributes: ['idServiceClass'],
+    where : {
+      serviceName : serviceTypeDetails.value
+    }
+  });
+  if (serviceTypeDetailsId.length) {
+    serviceTypeDetailsId=serviceTypeDetailsId[0].dataValues.idServiceClass;
+  } else {
+   serviceTypeDetailsId=-1;
+  }
+  
   let facilityServiceConditionId = await models.PB_ConditionIndex.findAll({
     attributes: ['id'],
     where : {
@@ -931,19 +945,27 @@ const systemConditionIndex = async (parameters,playBookId,surveyCode,sectionCode
    } else {
     facilityServiceConditionId=-1;
    }
-  
+
   let row=[]
   let rows=[]
   let header=["Facility Condition value","No. of estimated on demand activities","DEFINITION"]
-  if (facilityServiceConditionId !=-1) {
-    row=["Activities/Month","8","estimation of the number of on demand/correction activities related to the system maintenance conditionthis number will be re-evaluate each months in order to increase the applicability and truthfulness of the related KPI (availability index)"];
-    rows.push(row);
-    row=["Activities/Year","96","*each time we have an on demand request or a corrective intervention (emergency and/or Urgency level) the system is considered non available"];
+
+  if ((serviceTypeDetailsId !=-1) && (facilityServiceCondition !=-1)) {
+  let estimatedactivities = await models.PB_AvailabilityFCI.findAll({
+    where : {
+      idFci : facilityServiceConditionId,
+      idServiceName : serviceTypeDetailsId
+    }
+  });
+  for (act in estimatedactivities) {
+    row=[
+      await generateDynamicQuestionTemplate("eaTy" +act,estimatedactivities[act].type,playBookId,sectionCode),
+      await generateDynamicQuestionTemplate("eaEs" +act,estimatedactivities[act].estimated,playBookId,sectionCode),
+      await generateDynamicQuestionTemplate("eaDe" +act,estimatedactivities[act].definition,playBookId,sectionCode)
+    ];
     rows.push(row);
   }
-
-  
-
+}
 
   let response={
     tableName :"systemConditionIndex",
