@@ -1898,7 +1898,7 @@ const updateContract = async (req, res) => {
     for (a in answers) {
       for (b in answers[a]) {
         for (c in answers[a][b]) {   
-          const findAnswer=await models.SM_SurveyAnswer.findOne({where: { questionId: answers[a][b][c].questionId }});       
+          //const findAnswer=await models.SM_SurveyAnswer.findOne({where: { questionId: answers[a][b][c].questionId }});       
           //console.log("Find One answer questionId --> " + answers[a][b][c].questionId + " status : ")
           //consoleLog(findAnswer)
           const status=await models.SM_SurveyAnswer.update(answers[a][b][c], {where: { questionId: answers[a][b][c].questionId }});
