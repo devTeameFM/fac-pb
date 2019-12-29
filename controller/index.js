@@ -63,13 +63,15 @@ function addInfoTableSummary(playbook,surveyCode,sectionCode,infos) {
   for (sur in playbook.surveys) {
     if (playbook.surveys[sur].code===surveyCode) {
       for (sec in playbook.surveys[sur].sections) {
-
           if (playbook.surveys[sur].sections[sec].code===sectionCode) {
             //consoleLog(playbook.surveys[sur].sections[sec]);
             for (q in playbook.surveys[sur].sections[sec].questions) {
-              if (playbook.surveys[sur].sections[sec].questions[q].code===infos.tableName) {
-
-                playbook.surveys[sur].sections[sec].questions[q].updated=false;
+              if (playbook.surveys[sur].sections[sec].questions[q].code===infos.tableName) { 
+                if (infos.updated) {          
+                  playbook.surveys[sur].sections[sec].questions[q].updated=infos.updated;
+                } else {
+                  playbook.surveys[sur].sections[sec].questions[q].updated=false;
+                }
                 //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
                 if (playbook.surveys[sur].sections[sec].questions[q].tableHeader) {
                   //consoleLog(playbook.surveys[sur].sections[sec].questions[q]);
@@ -103,9 +105,14 @@ function getParameterValue(parameters,parameterName) {
   let value={
     name:"",
     value:"",
+    updated:false
   };
   for (p in parameters) {
-    if (parameters[p].name===parameterName) value= parameters[p];
+    if (parameters[p].name===parameterName) {
+      value.name=parameters[p].name;
+      value.value= parameters[p].value;
+      value.updated=parameters[p].updated;
+    }
   }
   return value;
 }
@@ -503,7 +510,8 @@ const priorityDefinition = async (parameters,playBookId,surveyCode,sectionCode) 
 
    let row=[]
    let rows=[]
-   let header=["PRIORITY","DEFINITION"]
+   let header=["PRIORITY","DEFINITION"];
+   let updated=false;
 
    row=["Emergency","Activities that, if not performed, may create an immediate risk to people’s health or may damage the building installations/equipment."];
    rows.push(row);
@@ -515,7 +523,8 @@ const priorityDefinition = async (parameters,playBookId,surveyCode,sectionCode) 
    let response={
      tableName :"priorityDefinition",
      tableHeader :header,
-     tableRows : rows
+     tableRows : rows,
+     updated : updated
    }
    return response;
 }
@@ -523,7 +532,8 @@ const responseTime = async (parameters,playBookId,surveyCode,sectionCode) => {
   // TABELLA STATICA
    let row=[]
    let rows=[]
-   let header=["Response Time","RELATED KPI"]
+   let header=["Response Time","RELATED KPI"];
+   let updated=false;
 
    row=["The time used by the Service Provider to take charge of the activity (from client request creation to on site intervention)","B.3 Compliance with the agreed response service time"];
    rows.push(row);
@@ -532,7 +542,8 @@ const responseTime = async (parameters,playBookId,surveyCode,sectionCode) => {
    let response={
      tableName :"responseTime",
      tableHeader :header,
-     tableRows : rows
+     tableRows : rows,
+     updated : false
    }
    return response;
 }
@@ -567,7 +578,8 @@ const contractLevelResponseTime = async (parameters,playBookId,surveyCode,sectio
 
   let row=[]
   let rows=[]
-  let header=["PRIORITY","CONTRACT LEVEL","RESPONSE TIME (Working Hours)"]
+  let header=["PRIORITY","CONTRACT LEVEL","RESPONSE TIME (Working Hours)"];
+  let updated=false;
 
   if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
     let results = await models.PB_ServiceSlaResponseType.findAll({
@@ -594,12 +606,14 @@ const contractLevelResponseTime = async (parameters,playBookId,surveyCode,sectio
         break;        
       }
     }
+    if (serviceLevelAgreement.updated || serviceTypeDetails.updated) updated=true;
   }
 
    let response={
      tableName :"contractLevelResponseTime",
      tableHeader :header,
-     tableRows : rows
+     tableRows : rows,
+     updated : updated
    }
 
    return response;
@@ -609,6 +623,7 @@ const correctionTime = async (parameters,playBookId,surveyCode,sectionCode) => {
   let row=[]
   let rows=[]
   let header=["Correction Time","RELATED KPI"]
+  let updated = false;
 
   row=["The time used by the Service Provider to close the client request (from the beginning of the on-site intervention to the functional recovery)","B.4 Compliance with the agreed correction service time"];
   rows.push(row);
@@ -617,7 +632,8 @@ const correctionTime = async (parameters,playBookId,surveyCode,sectionCode) => {
   let response={
     tableName :"correctionTime",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
    return response;
 }
@@ -651,7 +667,8 @@ const contractLevelCorrectionTime = async (parameters,playBookId,surveyCode,sect
 
  let row=[]
  let rows=[]
- let header=["PRIORITY","CONTRACT LEVEL","CORRECTION TIME (Working Hours)"]
+ let header=["PRIORITY","CONTRACT LEVEL","CORRECTION TIME (Working Hours)"];
+ let updated=false;
 
  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
    let results = await models.PB_ServiceSlaResponseType.findAll({
@@ -678,12 +695,14 @@ const contractLevelCorrectionTime = async (parameters,playBookId,surveyCode,sect
        break;        
      }
    }
+   if (serviceLevelAgreement.updated || serviceTypeDetails.updated) updated=true;
  }
 
   let response={
     tableName :"contractLevelCorrectionTime",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
   /*
   for (r in results) {
@@ -695,7 +714,8 @@ const estimationTime = async (parameters,playBookId,surveyCode,sectionCode) => {
  
   let row=[]
   let rows=[]
-  let header=["Delivery of the Budget Estimate","RELATED KPI"]
+  let header=["Delivery of the Budget Estimate","RELATED KPI"];
+  let updated = false;
 
   row=["Depending on the urgency level of the specific request (only for extra fee activities) the service provider should respect a predetermined time frame to deliver the budget estimation, as described below","B.9 Compliance with Budget Estimate Time Limit "];
   rows.push(row);
@@ -704,7 +724,8 @@ const estimationTime = async (parameters,playBookId,surveyCode,sectionCode) => {
   let response={
     tableName :"estimationTime",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
 
   return response;
@@ -740,6 +761,7 @@ const contractLevelEstimationTime = async (parameters,playBookId,surveyCode,sect
  let row=[]
  let rows=[]
  let header=["PRIORITY","CONTRACT LEVEL","ESTIMATE TIME (Working Hours)"]
+ let updated=false;
 
  if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
    let results = await models.PB_ServiceSlaResponseType.findAll({
@@ -766,12 +788,14 @@ const contractLevelEstimationTime = async (parameters,playBookId,surveyCode,sect
        break;        
      }
    }
+   if (serviceLevelAgreement.updated || serviceTypeDetails.updated) updated=true;
  }
 
   let response={
     tableName :"contractLevelEstimationTime",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
   /*
   for (r in results) {
@@ -822,7 +846,8 @@ const availability = async (parameters,playBookId,surveyCode,sectionCode) => {
 
    let row=[]
    let rows=[]
-   let header=["","Time"]
+   let header=["","Time"];
+   let updated=false;
   if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1) && (facilityServiceConditionId !=-1)) {
     let results = await models.PB_AvailableCorrectionTime.findAll({
       attributes: ['typeName','value'],
@@ -837,12 +862,14 @@ const availability = async (parameters,playBookId,surveyCode,sectionCode) => {
       row=[await generateDynamicQuestionTemplate("avTn" +r,results[r].typeName,playBookId,sectionCode),await generateDynamicQuestionTemplate("avVa" +r,results[r].value,playBookId,sectionCode)];
       rows.push(row);
     }
+    if (serviceLevelAgreement.updated || serviceTypeDetails.updated || facilityServiceCondition.updated) updated=true;
   }
 
   let response={
     tableName :"availability",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
   /*
   for (r in results) {
@@ -880,7 +907,8 @@ const correctionTimeForUrgencyRequest = async (parameters,playBookId,surveyCode,
 
   let row=[]
   let rows=[]
-  let header=["Urgency Level","Contract SLA","Correction Time (Hours)"]
+  let header=["Urgency Level","Contract SLA","Correction Time (Hours)"];
+  let updated=false;
 
   if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
     let results = await models.PB_CorrectionTime.findAll({
@@ -902,6 +930,7 @@ const correctionTimeForUrgencyRequest = async (parameters,playBookId,surveyCode,
         break;     
       }
     }
+    if (serviceLevelAgreement.updated || serviceTypeDetails.updated) updated=true;
   }
   
 
@@ -909,7 +938,8 @@ const correctionTimeForUrgencyRequest = async (parameters,playBookId,surveyCode,
   let response={
     tableName :"correctionTimeForUrgencyRequest",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
   /*
   for (r in results) {
@@ -948,29 +978,32 @@ const systemConditionIndex = async (parameters,playBookId,surveyCode,sectionCode
 
   let row=[]
   let rows=[]
-  let header=["Facility Condition value","No. of estimated on demand activities","DEFINITION"]
-
-  if ((serviceTypeDetailsId !=-1) && (facilityServiceCondition !=-1)) {
-  let estimatedactivities = await models.PB_AvailabilityFCI.findAll({
-    where : {
-      idFci : facilityServiceConditionId,
-      idServiceName : serviceTypeDetailsId
+  let header=["Facility Condition value","No. of estimated on demand activities","DEFINITION"];
+  let updated=false;
+  
+  if ((serviceTypeDetailsId !=-1) && (facilityServiceConditionId !=-1)) {
+    let estimatedactivities = await models.PB_AvailabilityFCI.findAll({
+      where : {
+        idFci : facilityServiceConditionId,
+        idServiceName : serviceTypeDetailsId
+      }
+    });
+    for (act in estimatedactivities) {
+      row=[
+        await generateDynamicQuestionTemplate("eaTy" +act,estimatedactivities[act].type,playBookId,sectionCode),
+        await generateDynamicQuestionTemplate("eaEs" +act,estimatedactivities[act].estimated,playBookId,sectionCode),
+        await generateDynamicQuestionTemplate("eaDe" +act,estimatedactivities[act].definition,playBookId,sectionCode)
+      ];
+      rows.push(row);
     }
-  });
-  for (act in estimatedactivities) {
-    row=[
-      await generateDynamicQuestionTemplate("eaTy" +act,estimatedactivities[act].type,playBookId,sectionCode),
-      await generateDynamicQuestionTemplate("eaEs" +act,estimatedactivities[act].estimated,playBookId,sectionCode),
-      await generateDynamicQuestionTemplate("eaDe" +act,estimatedactivities[act].definition,playBookId,sectionCode)
-    ];
-    rows.push(row);
-  }
+    if (serviceTypeDetails.updated || facilityServiceCondition.updated) updated=true;
 }
 
   let response={
     tableName :"systemConditionIndex",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
  
   return response;
@@ -1019,7 +1052,8 @@ const availabilityIndex = async (parameters,playBookId,surveyCode,sectionCode) =
   
   let row=[]
   let rows=[]
-  let header=["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE","FREQUENCY","SLA"]
+  let header=["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE","FREQUENCY","SLA"];
+  let updated=false;
   
   if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1) && (facilityServiceConditionId !=-1)) {
     //let query="SELECT \"PB_Services\".\"serviceName\", \"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and \"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\"";    
@@ -1035,12 +1069,14 @@ const availabilityIndex = async (parameters,playBookId,surveyCode,sectionCode) =
         cont++;
       }      
     }
+    if (serviceLevelAgreement.updated || serviceTypeDetails.updated || facilityServiceCondition.updated) updated=true;
   }
 
   let response={
     tableName :"availabilityIndex",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
   
   return response;
@@ -1090,6 +1126,7 @@ const qualityProvided = async (parameters,playBookId,surveyCode,sectionCode) => 
    let row=[]
    let rows=[]
    let header=["KPI (KEY PERFORMANCE INDICATORS)","YES/NO","MEASURING PROCEDURE","MEASUREMENT METHOD","CALCULATION PROCEDURE","FREQUENCY","SLA"]
+   let updated=false;
   
   if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1) && (facilityServiceConditionId !=-1)) {
     //let query="SELECT \"PB_Services\".\"serviceName\", \"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\" FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\", \"PB_ServiceSlaKPIs\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and \"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\"";    
@@ -1105,12 +1142,14 @@ const qualityProvided = async (parameters,playBookId,surveyCode,sectionCode) => 
 
 
     }
+    if (serviceLevelAgreement.updated || serviceTypeDetails.updated || facilityServiceCondition.updated) updated=true;
   }
   
   let response={
     tableName :"qualityProvided",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
 
   return response;
@@ -1160,7 +1199,8 @@ const penaltiesRelatedMonitoringSystem = async (parameters,playBookId,surveyCode
   
   let row=[]
   let rows=[]
-  let header=["KPI (KEY PERFORMANCE INDICATORS)","SLA","PENALTY"]
+  let header=["KPI (KEY PERFORMANCE INDICATORS)","SLA","PENALTY"];
+  let updated=false;
   
   if ((serviceLevelAgreementId !=-1) && (serviceTypeDetailsId !=-1)) {
     let query="SELECT \"PB_Services\".\"serviceName\",\"PB_ServiceLevelAgreements\".\"serviceLevelAgreementName\",\"PB_ServiceKPIs\".\"kpiName\",\"PB_Frequencies\".\"frequency\", \"PB_ServiceSlaKPIs\".\"value\",\"PB_ServiceSlaPenalties\".\"value\" as penalty FROM \"PB_ServiceKPIs\",\"PB_ServiceLevelAgreements\",\"PB_Services\",\"PB_ServiceSlaKPIs\",\"PB_Frequencies\",\"PB_ServiceSlaPenalties\" WHERE \"PB_Services\".\"id\" = \"PB_ServiceSlaKPIs\".\"idService\" and \"PB_ServiceLevelAgreements\".\"id\" = \"PB_ServiceSlaKPIs\".\"idSLA\" and 	\"PB_ServiceKPIs\".\"id\" =  \"PB_ServiceSlaKPIs\".\"idKPI\" and \"PB_Frequencies\".\"id\" = \"PB_ServiceSlaKPIs\".\"idFrequency\" and \"PB_ServiceSlaPenalties\".\"idKPI\" = \"PB_ServiceKPIs\".\"id\" and	\"PB_Services\".\"id\" = " + serviceTypeDetailsId +  " and \"PB_ServiceLevelAgreements\".\"id\" = " + serviceLevelAgreementId + ";";    
@@ -1173,6 +1213,7 @@ const penaltiesRelatedMonitoringSystem = async (parameters,playBookId,surveyCode
         await generateDynamicQuestionTemplate("prPEN" +r,info[r].penalty,playBookId,sectionCode)];  
         rows.push(row);                             
     }
+    if (serviceLevelAgreement.updated || serviceTypeDetails.updated) updated=true;
   }
 
   
@@ -1181,7 +1222,8 @@ const penaltiesRelatedMonitoringSystem = async (parameters,playBookId,surveyCode
   let response={
     tableName :"penaltiesRelatedMonitoringSystem",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
   return response;
 }
@@ -1199,9 +1241,6 @@ const penaltiesRelatedNonConformities = async (parameters,playBookId,surveyCode,
     serviceLevelAgreementId=-1;
   }
 
-  let row=[]
-  let rows=[]
-  let header=["SPECIFIC INDICATOR AREA","DESCRIPTION","PERIMETER","PENALTY"]
   let serviceTypeDetailsId=-1;
   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");  
   if (serviceTypeDetails.value.length>0) {    
@@ -1215,6 +1254,11 @@ const penaltiesRelatedNonConformities = async (parameters,playBookId,surveyCode,
         serviceTypeDetailsId=serviceTypeDetailsName[0].dataValues.idServiceClass;
       }     
   }
+
+  let row=[]
+  let rows=[]
+  let header=["SPECIFIC INDICATOR AREA","DESCRIPTION","PERIMETER","PENALTY"];
+  let updated=false;
 
   if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
     /*
@@ -1248,11 +1292,13 @@ const penaltiesRelatedNonConformities = async (parameters,playBookId,surveyCode,
           row=[await generateDynamicQuestionTemplate("ncNa" +r,info[r].penaltyName,playBookId,sectionCode),await generateDynamicQuestionTemplate("ncDe" +r,info[r].penaltyDescription,playBookId,sectionCode),await generateDynamicQuestionTemplate("ncPP" +r,info[r].penaltyPerimeterDescription,playBookId,sectionCode),await generateDynamicQuestionTemplate("ncVa" +r,info[r].value,playBookId,sectionCode)]
           rows.push(row);                     
       }
+      if (serviceLevelAgreement.updated || serviceTypeDetails.updated) updated=true;
     }
   let response={
     tableName :"penaltiesRelatedNonConformities",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
   }
   return response;
 }
@@ -1269,10 +1315,7 @@ const preventiveMaintenanceProcedures = async (parameters,playBookId,surveyCode,
   } else {
     serviceLevelAgreementId=-1;
   }
-
   
-  let rows=[];
-  let header=["SYSTEM","COMPONENT","ACTIVITY","FREQUENCES"];
   let serviceTypeDetailsId=-1;
   let serviceTypeDetails=getParameterValue(parameters,"serviceTypeDetails");  
   if (serviceTypeDetails.value.length>0) {    
@@ -1287,25 +1330,10 @@ const preventiveMaintenanceProcedures = async (parameters,playBookId,surveyCode,
       }     
   }
 
-  //let query="SELECT \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\", \"PB_PMSlaProcedures\".\"activitydescription\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"idSLA\" FROM \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" WHERE \"PB_Services\".\"id\" = \"PB_PMSlaProcedures\".\"idservice\" and \"PB_ServiceAssetComponents\".\"id\" = \"PB_PMSlaProcedures\".\"idPMServiceAsset\" and \"PB_Frequencies\".\"id\" = \"PB_PMSlaProcedures\".\"idFrequency\" order by \"PB_ServiceAssetComponents\".\"assetComponentType\"";    
+  let rows=[];
+  let header=["SYSTEM","COMPONENT","ACTIVITY","FREQUENCES"];
+  let updated=false;
   if ((serviceTypeDetailsId !=-1) && (serviceLevelAgreementId !=-1)) {
-      /*
-      select 
-      "PB_Services"."serviceName",
-      "PB_ServiceAssetComponents"."assetComponentType",
-      "PB_Frequencies"."frequency",
-      "PB_PMSlaProcedures"."activitydescription"
-      from 
-        "PB_PMSlaProcedures",
-        "PB_Services",
-        "PB_ServiceAssetComponents",
-        "PB_Frequencies"
-      where
-        "PB_PMSlaProcedures"."idservice" =  "PB_Services"."id" and			
-        "PB_PMSlaProcedures"."idPMServiceAsset" = "PB_ServiceAssetComponents"."id" and	
-        "PB_PMSlaProcedures"."idSLA" = 1 and 
-        "PB_PMSlaProcedures"."idservice" = 1;
-      */
       let query="select \"PB_Services\".\"serviceName\",\"PB_ServiceAssetComponents\".\"assetComponentType\",\"PB_Frequencies\".\"frequency\",\"PB_PMSlaProcedures\".\"activitydescription\" from \"PB_PMSlaProcedures\",\"PB_Services\",\"PB_ServiceAssetComponents\",\"PB_Frequencies\" where \"PB_PMSlaProcedures\".\"idservice\" =  \"PB_Services\".\"id\" and \"PB_PMSlaProcedures\".\"idPMServiceAsset\" = \"PB_ServiceAssetComponents\".\"id\" and \"PB_PMSlaProcedures\".\"idFrequency\" =  \"PB_Frequencies\".\"id\" and \"PB_PMSlaProcedures\".\"idSLA\" = " + serviceLevelAgreementId +" and \"PB_PMSlaProcedures\".\"idservice\" = " + serviceTypeDetailsId + " order by \"PB_PMSlaProcedures\".\"idPMServiceAsset\",\"PB_PMSlaProcedures\".\"id\";";
       let results = await models.sequelize.query(query);
       console.log("preventiveMaintenanceProcedures");
@@ -1318,12 +1346,15 @@ const preventiveMaintenanceProcedures = async (parameters,playBookId,surveyCode,
           row=[info[r].serviceName,info[r].assetComponentType,info[r].activitydescription,await generateDynamicQuestionTemplate("acFr" +r,info[r].frequency,playBookId,sectionCode)]
           rows.push(row);                     
       }
+      if (serviceLevelAgreement.updated || serviceTypeDetails.updated) updated=true;
   }
  
   let response={
     tableName :"preventiveMaintenanceProcedures",
     tableHeader :header,
-    tableRows : rows
+    tableRows : rows,
+    updated : updated
+
   }
   return response
 }
@@ -1354,7 +1385,8 @@ const genericTechnicalRequirements = async (parameters,playBookId,surveyCode,sec
   let response={
     tableName :"genericTechnicalRequirements",
     tableHeader : header,
-    tableRows : rows
+    tableRows : rows,
+    updated : p.updated
   }
    return response;
 }
@@ -1895,10 +1927,11 @@ const updateContract = async (req, res) => {
     //UPDATE answers
     var answers=playbook.answers;
 
+
     for (a in answers) {
       for (b in answers[a]) {
         for (c in answers[a][b]) {   
-          //const findAnswer=await models.SM_SurveyAnswer.findOne({where: { questionId: answers[a][b][c].questionId }});       
+          const findAnswer=await models.SM_SurveyAnswer.findOne({where: { questionId: answers[a][b][c].questionId }});       
           //console.log("Find One answer questionId --> " + answers[a][b][c].questionId + " status : ")
           //consoleLog(findAnswer)
           const status=await models.SM_SurveyAnswer.update(answers[a][b][c], {where: { questionId: answers[a][b][c].questionId }});
@@ -1933,16 +1966,17 @@ const updateContract = async (req, res) => {
         for (b in answers[a]) {
           for (c in answers[a][b]) {
             if (answers[a][b][c].questionId==parameters[p].questionId) {
+              let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
+              
               if (answers[a][b][c].value) console.log("answer " + answers[a][b][c].value)
               if (parameters[p].value) console.log("parameter " + parameters[p].value)
               if (answers[a][b][c].value === parameters[p].value) {
-                     //console.log("no changes")
-                     let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
+                     //console.log("no changes")                     
                      await updateParams(answers[a][b][c],question.code,playbook.id,false);
       				  } else {
                     //console.log("changes found")
                     //cerco question code:
-          					let question = await models['SM_SurveySectionQuestion'].findOne({where: { id: parameters[p].questionId }});
+          					
           					//console.log("change on question code : " + question.code);
           					//console.log("change on question name : " + question.name);
           					let result;
