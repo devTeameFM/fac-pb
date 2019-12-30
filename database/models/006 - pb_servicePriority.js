@@ -11,9 +11,12 @@ module.exports = (sequelize, DataTypes) => {
     servicePriorityDescription: {
       type: DataTypes.TEXT
     },
-
   }, {});
   PB_ServicePriority.associate = function(models) {
+    PB_ServicePriority.hasMany(models.PB_CorrectionTime, {
+      foreignKey: 'idPriorityName',
+      onDelete: 'CASCADE',
+    });
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',

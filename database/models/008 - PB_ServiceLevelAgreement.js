@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'idSLA',
         onDelete: 'CASCADE',
       });
+      PB_ServiceLevelAgreement.hasMany(models.PB_CorrectionTime, {
+        foreignKey: 'idSLA',
+        onDelete: 'CASCADE',
+      });
     /*
     MS_Member.belongsToMany(models.FE_Scrum, {
       through: 'FE_MembersScrums',

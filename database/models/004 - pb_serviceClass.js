@@ -13,6 +13,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'idServiceClass',
         onDelete: 'CASCADE',
       });
+    PB_ServiceClass.hasMany(models.PB_AvailabilityFCI, {
+      foreignKey: 'idServiceName',
+      onDelete: 'CASCADE',
+    });
+    PB_ServiceClass.hasMany(models.PB_CorrectionTime, {
+      foreignKey: 'idServiceName',
+      onDelete: 'CASCADE',
+    });    
   };
   return PB_ServiceClass;
 };

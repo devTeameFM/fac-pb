@@ -32,8 +32,14 @@ module.exports = (sequelize, DataTypes) => {
       }
   }, {});
   PB_AvailabilityFCI.associate = function(models) {
-    
-
+    PB_AvailabilityFCI.belongsTo(models.PB_ConditionIndex, {
+      foreignKey: 'id',
+      onDelete: 'CASCADE'
+    });
+    PB_AvailabilityFCI.belongsTo(models.PB_ServiceClass, {
+      foreignKey: 'id',
+      onDelete: 'CASCADE'
+    });
   };
   return PB_AvailabilityFCI;
 };

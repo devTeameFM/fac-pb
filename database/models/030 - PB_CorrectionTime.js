@@ -32,8 +32,18 @@ module.exports = (sequelize, DataTypes) => {
       }
   }, {});
   PB_CorrectionTime.associate = function(models) {
-    
-
+    PB_CorrectionTime.belongsTo(models.PB_ServiceClass, {
+      foreignKey: 'id',
+      onDelete: 'CASCADE'
+    });
+    PB_CorrectionTime.belongsTo(models.PB_ServiceLevelAgreement, {
+      foreignKey: 'id',
+      onDelete: 'CASCADE'
+    });    
+    PB_CorrectionTime.belongsTo(models.PB_ServicePriority, {
+      foreignKey: 'id',
+      onDelete: 'CASCADE'
+    });
   };
   return PB_CorrectionTime;
 };

@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'idCondition',
         onDelete: 'CASCADE',
       });
+    PB_ConditionIndex.hasMany(models.PB_AvailabilityFCI, {
+        foreignKey: 'idFci',
+        onDelete: 'CASCADE',
+      });
   };
   return PB_ConditionIndex;
 };
