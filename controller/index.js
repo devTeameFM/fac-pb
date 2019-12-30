@@ -357,7 +357,9 @@ const getPlayBookFromId = async (contractId) => {
 
   //let updatePlaybook=obj;
   //if (obj["status"] === "REVIEW") {
+  console.log(" ------> PLAYBOOK STATUS <-------");
   consoleLog(obj["status"]);
+  console.log(" ------> PLAYBOOK STATUS <-------");
   let updatePlaybook = await runtimeSummaryCreation(obj);
   //} 
   return updatePlaybook;
