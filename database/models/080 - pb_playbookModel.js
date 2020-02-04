@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     coverImg:DataTypes.STRING,
     name: DataTypes.STRING,
     description:DataTypes.STRING,
-    status:DataTypes.STRING
+    status:DataTypes.STRING,
+    blId:DataTypes.INTEGER
   }, {});
   PB_Playbook.associate = function(models) {
 
