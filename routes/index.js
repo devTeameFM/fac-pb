@@ -3,9 +3,11 @@ const { Router } = require('express');
 const controllers = require('../controller');
 const scrumControllers = require('../controller/scrumController.js')
 //const scrumController = require('../controller').scrum;
+const authRequired = require('../controller/authRequired')
 
 const router = Router();
 
+router.get('/auth',authRequired.getLodgingsByPlaceId);
 
 router.get('/scrums/:scrumId',scrumControllers.getScrumById);
 router.get('/scrums',scrumControllers.getAllScrums);
@@ -21,9 +23,9 @@ router.get('/playbook/:contractId',controllers.getContractById);
 router.put('/playbook/:playBookId',controllers.updateContract);
 
 router.delete('/clean',controllers.cleandDB)
-
-
 router.post('/surveys/import', controllers.importQuestionsFromJSON);
+
+
 //SOLO PER DEVELOP
 /*
 //router.get('/', (req, res) => res.send('Welcome'))
@@ -40,11 +42,5 @@ router.get('/serviceLevelAgreement', controllers.getServiceLevelAgreement);*/
 //router.get('/view',controllers.view)
 //router.put('/contract/:playBookId',controllers.updateContract);
 //router.post('/updateQuestions', controllers.generateQuestions);
-
-
-
-
-
-
 
 module.exports = router;

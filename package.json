@@ -29,7 +29,22 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.12.3",
     "sequelize-cli": "^5.5.0",
-    "swagger-express-middleware": "^2.0.4"
+    "swagger-express-middleware": "^2.0.4",
+    "@okta/jwt-verifier": "0.0.11",
+    "@okta/okta-sdk-nodejs": "^2.0.0",
+    "babel-preset-airbnb": "^3.2.1",
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.4",
+    "dotenv-extended": "^2.4.0",
+    "ejs": "^2.6.1",
+    "eureka-js-client": "^4.4.2",
+    "method-override": "^3.0.0",
+    "morgan": "^1.9.1",
+    "ngrok": "^3.1.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "swagger-jsdoc": "^3.2.9",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "coveralls": "^3.0.6",
