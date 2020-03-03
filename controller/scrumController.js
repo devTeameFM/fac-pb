@@ -176,7 +176,7 @@ const getAllScrums = async (req, res) => {
 const getAllLists  = async (req, res) => {
   try {
     let lists = await models.FE_ScrumsList.findAll();
-    return res.status(200).json( [lists] );
+    return res.status(200).json( lists );
   } catch (error) {
     return res.status(500).send(error.message);
   }

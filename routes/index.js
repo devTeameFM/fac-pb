@@ -15,7 +15,7 @@ router.put('/task/:idTask/status/:status',scrumControllers.updateTaskStatus)
 
 router.get('/scrums/:scrumId',scrumControllers.getScrumById);
 router.get('/scrums',scrumControllers.getAllScrums);
-router.get('/scrums/lists',scrumControllers.getAllLists);
+router.get('/lists',scrumControllers.getAllLists);
 
 router.get('/members',controllers.getAllMembers);
 
