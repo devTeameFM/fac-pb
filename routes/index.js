@@ -9,8 +9,15 @@ const router = Router();
 
 router.get('/auth',authRequired.getLodgingsByPlaceId);
 
+router.post('/task',scrumControllers.newTask)
+router.put('/task/:idTask/status/:idList',scrumControllers.updateTaskStatus)
+
+
 router.get('/scrums/:scrumId',scrumControllers.getScrumById);
 router.get('/scrums',scrumControllers.getAllScrums);
+
+router.get('/lists',scrumControllers.getAllLists);
+
 router.get('/members',controllers.getAllMembers);
 
 
@@ -24,6 +31,9 @@ router.put('/playbook/:playBookId',controllers.updateContract);
 
 router.delete('/clean',controllers.cleandDB)
 router.post('/surveys/import', controllers.importQuestionsFromJSON);
+
+
+
 
 
 //SOLO PER DEVELOP

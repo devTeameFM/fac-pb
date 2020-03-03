@@ -2135,6 +2135,7 @@ const updateContract = async (req, res) => {
     return res.status(500).send(error.message);
   }
 };
+
 const cleandDB = async (req,res) => {
   try {
 
@@ -2168,6 +2169,7 @@ const cleandDB = async (req,res) => {
     return res.status(500).send(error.message);
   }
 }
+
 const generateQuestions = async (req,res) => {
   try {
     let surveys = await models['SM_Survey'].findAll({

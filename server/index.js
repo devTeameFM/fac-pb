@@ -6,12 +6,33 @@ const eureka =require('./config/eureka.js');
 const createMiddleware = require('swagger-express-middleware');
 const path = require('path');
 
+const swaggerJSDoc = require('swagger-jsdoc');
+const options = {
+  definition: {
+    openapi: '3.0.0', // Specification (optional, defaults to swagger: '2.0')
+    info: {
+      title: 'Hello World', // Title (required)
+      version: '1.0.0', // Version (required)
+    },
+  },
+  // Path to the API docs
+  apis: ['../routes/index.js'],
+};
+
+// Initialize swagger-jsdoc -> returns validated swagger spec in json format
+const swaggerSpec = swaggerJSDoc(options);
+
 
 const server = express();
 server.use(cors());
 server.use(express.json());
 server.use('/api', routes);
 
+// Serve swagger docs the way you like (Recommendation: swagger-tools)
+server.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 
 
@@ -26,7 +47,7 @@ eureka()
     });
   });
 
-*7
+*/
 /*
 // Or, if you're not using a transpiler:
 const Eureka = require('eureka-js-client').Eureka;

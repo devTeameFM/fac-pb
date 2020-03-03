@@ -1,5 +1,72 @@
 const models = require("../database/models");
 
+const newTask = async (req,res) => {
+  try {
+    let newTask=req.body;
+    newTask["status"]="";
+    newTask["idMember"]="5d494dc959860e001747eb4f";
+    
+    let task = await models.PB_Playbook.create(newTask);
+    
+
+    //UPDATE CARD Status
+    let listCard = await models.FE_ScrumsList.findOne({
+      where: { id: newTask.listId }
+    });
+
+   
+
+    newTask["status"] = listCard.status
+    const taskUpdated = await models.PB_Playbook.update(newTask, {
+      where: { id: task.id }
+    });
+
+    let newCard={
+      "idTask" : newTask.taskId,
+      "idList" : newTask.listId,
+      "createdAt" : new Date(),
+      "updatedAt" : new Date()
+    }
+    
+    let addedCard= await models.FE_CardsList.create(newCard);
+
+    
+    return res.status(200).json( newTask );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+const updateTaskStatus = async (req,res) => {
+  try {
+    let status=req.params;
+    //UPDATE CARD Status
+    let listCard = await models.FE_ScrumsList.findOne({
+      where: { id: status.idList }
+    })
+    let updateCard={
+      "idTask" : status.idList,
+      "idList" : status.idTask
+    }
+    let updateTask={
+      "status" : listCard.status
+    }
+
+    const cardUpdated = await models.FE_CardsList.update(updateCard, {
+      where: { id: status.idTask }
+    });
+
+    const taskUpdated = await models.PB_Playbook.update(updateTask, {
+      where: { taskId: status.idTask }
+    });
+
+    
+    return res.status(200).json( newTask );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
 const getScrumById = async (req,res) => {
   try {
     const { scrumId } = req.params;
@@ -106,8 +173,20 @@ const getAllScrums = async (req, res) => {
   }
 };
 
+const getAllLists  = async (req, res) => {
+  try {
+    const [lists] = await models.FE_ScrumsList.findAll();
+    return res.status(200).json( [lists] );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+};
+
 module.exports = {
   getAllScrums,
   getScrumById,
   getAllScrumsByMember,
+  newTask,
+  updateTaskStatus,
+  getAllLists
 };
