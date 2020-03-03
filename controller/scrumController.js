@@ -53,7 +53,7 @@ const updateTaskStatus = async (req,res) => {
     }
 
     const cardUpdated = await models.FE_CardsList.update(updateCard, {
-      where: { id: status.idTask }
+      where: { idTask: status.idTask }
     });
 
     const taskUpdated = await models.PB_Playbook.update(updateTask, {
