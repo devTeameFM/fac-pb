@@ -10,13 +10,12 @@ const router = Router();
 router.get('/auth',authRequired.getLodgingsByPlaceId);
 
 router.post('/task',scrumControllers.newTask)
-router.put('/task/:idTask/status/:idList',scrumControllers.updateTaskStatus)
+router.put('/task/:idTask/status/:status',scrumControllers.updateTaskStatus)
 
 
 router.get('/scrums/:scrumId',scrumControllers.getScrumById);
 router.get('/scrums',scrumControllers.getAllScrums);
-
-router.get('/lists',scrumControllers.getAllLists);
+router.get('/scrums/lists',scrumControllers.getAllLists);
 
 router.get('/members',controllers.getAllMembers);
 

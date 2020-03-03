@@ -2,8 +2,7 @@ const models = require("../database/models");
 
 const newTask = async (req,res) => {
   try {
-    let newTask=req.body;
-    newTask["status"]="";
+    let newTask=req.body;    
     newTask["idMember"]="5d494dc959860e001747eb4f";
     
     let task = await models.PB_Playbook.create(newTask);
@@ -11,19 +10,20 @@ const newTask = async (req,res) => {
 
     //UPDATE CARD Status
     let listCard = await models.FE_ScrumsList.findOne({
-      where: { id: newTask.listId }
+      where: { status: newTask.status }
     });
 
    
 
-    newTask["status"] = listCard.status
+    //newTask["status"] = listCard.id
+    /*
     const taskUpdated = await models.PB_Playbook.update(newTask, {
       where: { id: task.id }
-    });
+    });*/
 
     let newCard={
       "idTask" : newTask.taskId,
-      "idList" : newTask.listId,
+      "idList" : listCard.id,
       "createdAt" : new Date(),
       "updatedAt" : new Date()
     }
@@ -42,14 +42,14 @@ const updateTaskStatus = async (req,res) => {
     let status=req.params;
     //UPDATE CARD Status
     let listCard = await models.FE_ScrumsList.findOne({
-      where: { id: status.idList }
+      where: { status: status.status }
     })
     let updateCard={
-      "idTask" : status.idList,
-      "idList" : status.idTask
+      "idTask" : status.idTask,
+      "idList" : listCard.id,
     }
     let updateTask={
-      "status" : listCard.status
+      "status" : status.status
     }
 
     const cardUpdated = await models.FE_CardsList.update(updateCard, {
@@ -175,7 +175,7 @@ const getAllScrums = async (req, res) => {
 
 const getAllLists  = async (req, res) => {
   try {
-    const [lists] = await models.FE_ScrumsList.findAll();
+    let lists = await models.FE_ScrumsList.findAll();
     return res.status(200).json( [lists] );
   } catch (error) {
     return res.status(500).send(error.message);
