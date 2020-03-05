@@ -22,6 +22,66 @@ const newTask = async (req,res) => {
     });*/
 
     let newCard={
+      "idTask" : task.id,
+      "idList" : listCard.id,
+      "createdAt" : new Date(),
+      "updatedAt" : new Date()
+    }
+    
+    let addedCard= await models.FE_CardsList.create(newCard);
+
+    
+    return res.status(200).json( newTask );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+const deleteTask = async (req,res) => {
+  try {
+    let deleteTask=req.params;        
+    
+    let delTask = await PB_Playbook.destroy({
+      where: {
+        taskId: deleteTask.taskId
+      }
+    });
+
+    let delCard = await FE_ScrumsList.destroy({
+      where: {
+        idTask: deleteTask.taskId
+      }
+    });
+        
+    return res.status(200).json( newTask );
+  } catch (error) {
+    return res.status(500).send(error.message);
+  }
+}
+
+const updateTask = async (req,res) => {
+  try {
+    let updateTask=req.body; 
+
+    //newTask["idMember"]="5d494dc959860e001747eb4f";
+    
+    let task = await models.PB_Playbook.create(newTask);
+    
+
+    //UPDATE CARD Status
+    let listCard = await models.FE_ScrumsList.findOne({
+      where: { status: newTask.status }
+    });
+
+   
+
+    //newTask["status"] = listCard.id
+    /*
+    const taskUpdated = await models.PB_Playbook.update(newTask, {
+      where: { id: task.id }
+    });*/
+
+    let newCard={
       "idTask" : newTask.taskId,
       "idList" : listCard.id,
       "createdAt" : new Date(),
@@ -41,24 +101,30 @@ const updateTaskStatus = async (req,res) => {
   try {
     let status=req.params;
     //UPDATE CARD Status
+    const task2update = await models.PB_Playbook.findOne( {
+      where: { taskId: status.idTask }
+    });
+
+
     let listCard = await models.FE_ScrumsList.findOne({
       where: { status: status.status }
     })
-    let updateCard={
-      "idTask" : status.idTask,
+    let updateCard={      
       "idList" : listCard.id,
     }
     let updateTask={
       "status" : status.status
     }
 
-    const cardUpdated = await models.FE_CardsList.update(updateCard, {
-      where: { idTask: status.idTask }
-    });
-
     const taskUpdated = await models.PB_Playbook.update(updateTask, {
       where: { taskId: status.idTask }
     });
+
+    const cardUpdated = await models.FE_CardsList.update(updateCard, {
+      where: { idTask: task2update.id }
+    });
+
+    
 
     
     return res.status(200).json( newTask );
@@ -188,5 +254,7 @@ module.exports = {
   getAllScrumsByMember,
   newTask,
   updateTaskStatus,
-  getAllLists
+  getAllLists,
+  deleteTask,
+  updateTask
 };
