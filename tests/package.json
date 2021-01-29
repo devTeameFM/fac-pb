@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "node-red": "^1.0.3",
-    "node-red-dashboard": "^2.19.0"
+    "node-red-dashboard": "^2.26.2"
   }
 }
