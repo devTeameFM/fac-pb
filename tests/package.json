@@ -9,7 +9,7 @@
   "author": "Matteo Masina",
   "license": "ISC",
   "dependencies": {
-    "node-red": "^1.0.3",
+    "node-red": "^3.0.2",
     "node-red-dashboard": "^2.19.0"
   }
 }
